@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Owner Sign Up - Reservo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="signup-container">
+        <div class="signup-box">
+            <h2>Create Business Owner Account</h2>
+            <form>
+                <input type="text" placeholder="Full Name" required>
+                <input type="email" placeholder="Email" required>
+                <input type="text" placeholder="Business Name" required>
+                <input type="text" placeholder="Business Location" required>
+                
+                <!-- Business Type Dropdown -->
+                <select required>
+                    <option value="" disabled selected>Select Business Type</option>
+                    <option value="barber">Barber Shop</option>
+                    <option value="salon">Salon</option>
+                    <option value="spa">Spa</option>
+                </select>
+                
+                <input type="text" placeholder="Business Open Times (e.g., 9 AM - 9 PM)" required>
+                
+                <textarea placeholder="Business Description" required></textarea>
+                
+                <input type="password" placeholder="Password" required>
+                <input type="password" placeholder="Confirm Password" required>
+                
+                <div class="terms">
+                    <input type="checkbox" required> I agree to the <a href="#">Terms and Conditions</a>
+                </div>
+                
+                <button type="submit" class="btn">Sign Up</button>
+                <p>Already have an account? <a href="login-business.html">Login now</a></p>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

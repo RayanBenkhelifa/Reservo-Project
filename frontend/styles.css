@@ -565,3 +565,13 @@ body, html {
 .forgot-password-box a:hover {
     text-decoration: underline;
 }
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    text-decoration: none; /* Remove underline */
+}
+
+.logo:hover {
+    color: #007bff; /* Optional: Change color on hover */
+}

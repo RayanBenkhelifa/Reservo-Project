@@ -55,7 +55,7 @@ const customerLogin = async (req, res) => {
 
 // Signup function for business owners
 const signupBusinessOwner = async (req, res) => {
-    const { name, email, phoneNum, password, businessName, operatingHours } = req.body;
+    const { name, email, phoneNum, password, businessName, operatingHours, category } = req.body;
   
     try {
       // Check if the business owner already exists
@@ -74,6 +74,7 @@ const signupBusinessOwner = async (req, res) => {
         phoneNum,
         password: hashedPassword,
         businessName,
+        category,
         operatingHours, // This stores the operating hours
       });
   

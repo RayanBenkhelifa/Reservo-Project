@@ -20,6 +20,8 @@ const businessOwnerSchema = new mongoose.Schema({
   phoneNum: { type: String, required: true },
   password: { type: String, required: true },
   businessName: { type: String, required: true },
+  location: { type: String, required: true },
+  description: {type: String, required:true},
   category: { type: String, required: true },  // Category for the business (e.g., spa, salon)
   operatingHours: {
     start: { type: String, required: true },  // Business start time (e.g., "09:00 AM")

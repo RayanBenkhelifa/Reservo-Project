@@ -575,3 +575,241 @@ body, html {
 .logo:hover {
     color: #007bff; /* Optional: Change color on hover */
 }
+/* Dashboard Layout */
+.dashboard-container {
+    display: flex;
+    height: 100vh; /* Full viewport height */
+    background-color: #f9fafc; /* Consistent background */
+}
+
+/* Sidebar Navigation */
+.sidebar {
+    width: 250px;
+    background-color: #2d3e50; /* Dark sidebar background */
+    padding: 20px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar .logo {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 40px;
+    color: #fff; /* White logo text */
+    text-align: center;
+}
+
+.nav-links {
+    list-style-type: none;
+    padding: 0;
+    flex-grow: 1;
+}
+
+.nav-links li {
+    margin-bottom: 15px;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 12px 15px;
+    display: block;
+    border-radius: 8px; /* Rounded corners for links */
+    transition: background-color 0.3s ease;
+}
+
+.nav-links a:hover, .nav-links active {
+    background-color: #4a6572; /* Hover background */
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    padding: 40px;
+    background-color: #f9fafc;
+    overflow-y: auto;
+}
+
+/* Main Header */
+.main-header {
+    margin-bottom: 40px;
+    text-align: left;
+}
+
+.main-header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #333;
+}
+
+.main-header p {
+    font-size: 16px;
+    color: #666;
+}
+
+/* Section Styles */
+section.card {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px; /* Smooth, consistent rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+    margin-bottom: 30px;
+}
+
+section.card h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+section.card p {
+    font-size: 16px;
+    color: #555;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dashboard-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: 10px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 10px;
+    }
+
+    .main-content {
+        padding: 20px;
+    }
+}
+/* General card styling for sections (like calendar) */
+/* General card styling for sections (like calendar) */
+.card {
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px; /* Add some space between cards */
+}
+
+/* Specific form card styling for centering the service form */
+.form-card {
+    max-width: 600px;
+    margin: 0 auto; /* Center the form card */
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Form labels and inputs (as you already have) */
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+/* Inputs and Textareas */
+input, textarea {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+input:focus, textarea:focus {
+    border-color: #5d5fef;
+    outline: none;
+}
+
+/* Button styling */
+button.btn {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background-color: #5d5fef;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.btn:hover {
+    background-color: #4a4ad4;
+}
+.form-card {
+    max-width: 600px;
+    margin: 0 auto; /* Center the form card */
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Form labels and inputs */
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+/* Input fields and Select fields */
+input, select {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+input:focus, select:focus {
+    border-color: #5d5fef;
+    outline: none;
+}
+
+/* Button styling */
+button.btn {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background-color: #5d5fef;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.btn:hover {
+    background-color: #4a4ad4;
+}

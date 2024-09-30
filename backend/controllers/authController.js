@@ -55,8 +55,8 @@ const customerLogin = async (req, res) => {
 
 // Signup function for business owners
 const signupBusinessOwner = async (req, res) => {
-    const { name, email, phoneNum, password, businessName, operatingHours, category } = req.body;
-  
+  const { name, email, phoneNum, businessName, location, description, category, operatingHoursStart, operatingHoursEnd, password } = req.body;
+  console.log(name, email, phoneNum, businessName, location, description, category, operatingHoursStart, operatingHoursEnd, password)
     try {
       // Check if the business owner already exists
       const existingBusinessOwner = await BusinessOwner.findOne({ email });
@@ -71,11 +71,16 @@ const signupBusinessOwner = async (req, res) => {
       const newBusinessOwner = new BusinessOwner({
         name,
         email,
+        location,
+        description,
         phoneNum,
         password: hashedPassword,
         businessName,
         category,
-        operatingHours, // This stores the operating hours
+        operatingHours: {
+          start: operatingHoursStart, // "9:00 AM"
+          end: operatingHoursEnd      // "6:00 PM"
+      },
       });
   
       // Save the new business owner to the database

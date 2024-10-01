@@ -28,6 +28,9 @@ const businessOwnerSchema = new mongoose.Schema({
     end: { type: String, required: true }     // Business end time (e.g., "06:00 PM")
   },
   providers: [providerSchema],  // Array of providers working for the business
+  services: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Service' }]  // Array of services offered by this business
+
 });
 
 module.exports = mongoose.model('BusinessOwner', businessOwnerSchema);
+

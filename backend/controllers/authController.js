@@ -63,7 +63,8 @@ const customerLogin = async (req, res) => {
 
 // Signup function for business owners
 const signupBusinessOwner = async (req, res) => {
-  const { name, email, phoneNum, password, businessName, operatingHours, category } = req.body;
+  const { name, email, phoneNum, password, businessName, operatingHoursStart,operatingHoursEnd , category , description, location } = req.body;
+  console.log(name, email, phoneNum, password, businessName, operatingHoursStart,operatingHoursEnd , category , description, location)
   
   try {
     // Check if the business owner already exists
@@ -83,7 +84,12 @@ const signupBusinessOwner = async (req, res) => {
       password: hashedPassword,
       businessName,
       category,
-      operatingHours
+      description,
+      location,
+      operatingHours:{
+        start: operatingHoursStart,
+        end: operatingHoursEnd,
+      }
     });
 
     // Save the new business owner to the database
@@ -99,7 +105,7 @@ const signupBusinessOwner = async (req, res) => {
     // Send the token back to log in
     res.status(201).json({ message: 'Business owner created successfully', token });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: `Server error ${error}` });
   }
 };
   

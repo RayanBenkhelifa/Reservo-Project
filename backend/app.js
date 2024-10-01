@@ -5,11 +5,17 @@ const authRoutes = require('./routes/authRoutes');
 const businessRoutes = require('./routes/businessRoutes')
 const bookingRoutes = require('./routes/bookingRoutes');
 const customerRoutes = require('./routes/customerRoutes')
+const bodyParser = require('body-parser');
+const path = require('path');
+
+
 dotenv.config();
 const app = express();
 
 // Middleware to parse JSON
 app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Import routes
 app.use('/auth', authRoutes);

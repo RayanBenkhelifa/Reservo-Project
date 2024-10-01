@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add a Provider</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to your existing CSS file -->
+    <title>Add a Service</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
 </head>
 
 <body>
@@ -25,31 +25,34 @@
         <!-- Main Content Area -->
         <div class="main-content">
             <header class="main-header">
-                <h1>Add a New Provider</h1>
-                <p>Fill out the form below to add a new provider.</p>
+                <h1>Add a New Service</h1>
+                <p>Fill out the form below to add a new service.</p>
             </header>
 
-            <!-- Provider Form -->
-            <section id="add-provider" class="form-card">
-                <form action="/add-provider" method="POST" id="addProviderForm">
+            <!-- Service Form -->
+            <section id="add-service" class="form-card">
+                <form action="/services/add" method="POST" id="addServiceForm">
                     <div class="form-group">
-                        <label for="providerName">Provider Name</label>
-                        <input type="text" id="providerName" name="providerName" placeholder="Enter provider name" required>
+                        <label for="serviceName">Service Name</label>
+                        <input type="text" id="serviceName" name="serviceName" placeholder="Enter service name" required>
                     </div>
-
+            
                     <div class="form-group">
-                        <label for="services">Services</label>
-                        <select id="services" name="serviceIds[]" multiple required>
-                            <!-- You would dynamically generate these options from your database -->
-                            <option value="1">Service 1</option>
-                            <option value="2">Service 2</option>
-                            <option value="3">Service 3</option>
-                            <option value="4">Service 4</option>
-                        </select>
-                        <small>Hold down the Ctrl (Windows) or Command (Mac) button to select multiple services.</small>
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" placeholder="Enter service description" rows="4" required></textarea>
                     </div>
-
-                    <button type="submit" class="btn">Add Provider</button>
+            
+                    <div class="form-group">
+                        <label for="duration">Duration (in minutes)</label>
+                        <input type="number" id="duration" name="duration" placeholder="Enter duration" required>
+                    </div>
+            
+                    <div class="form-group">
+                        <label for="price">Price ($)</label>
+                        <input type="number" step="0.01" id="price" name="price" placeholder="Enter price" required>
+                    </div>
+            
+                    <button type="submit" class="btn">Add Service</button>
                 </form>
             </section>
         </div>

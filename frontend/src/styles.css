@@ -813,3 +813,336 @@ button.btn {
 button.btn:hover {
     background-color: #4a4ad4;
 }
+/* General container for the page */
+.container {
+    width: 85%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Main Header */
+.main-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.main-header h1 {
+    font-size: 36px;
+    color: #333;
+}
+
+.main-header p {
+    font-size: 18px;
+    color: #666;
+    margin-top: 10px;
+}
+
+/* Business Category Sections */
+.business-category {
+    margin-bottom: 40px;
+}
+
+.business-category h2 {
+    font-size: 28px;
+    color: #5d5fef;
+    margin-bottom: 20px;
+}
+
+.business-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Business Card Styling */
+.business-card {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: calc(33.333% - 20px); /* Makes sure 3 cards fit in a row */
+    box-sizing: border-box;
+}
+
+.business-card h3 {
+    font-size: 20px;
+    color: #333;
+}
+
+.business-card p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+/* Button Styling */
+.business-card .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.business-card .btn:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+    .business-card {
+        width: calc(50% - 20px); /* For smaller screens, 2 cards per row */
+    }
+}
+
+@media (max-width: 480px) {
+    .business-card {
+        width: 100%; /* For mobile, 1 card per row */
+    }
+}
+.business-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.business-header h1 {
+    font-size: 36px;
+    color: #333;
+}
+
+.business-header p {
+    font-size: 16px;
+    color: #666;
+    margin-top: 10px;
+}
+
+/* Services List Section */
+.service-category {
+    margin-bottom: 40px;
+}
+
+.service-category h2 {
+    font-size: 28px;
+    color: #5d5fef;
+    margin-bottom: 20px;
+}
+
+.service-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Service Card Styling */
+.service-card {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: calc(33.333% - 20px); /* Makes sure 3 service cards fit in a row */
+    box-sizing: border-box;
+}
+
+.service-card h3 {
+    font-size: 20px;
+    color: #333;
+}
+
+.service-card p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+/* Button Styling */
+.service-card .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.service-card .btn:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+    .service-card {
+        width: calc(50% - 20px); /* For smaller screens, 2 service cards per row */
+    }
+}
+
+@media (max-width: 480px) {
+    .service-card {
+        width: 100%; /* For mobile, 1 service card per row */
+    }
+}
+/* Provider Header */
+.provider-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.provider-header h1 {
+    font-size: 36px;
+    color: #333;
+}
+
+.provider-header p {
+    font-size: 16px;
+    color: #666;
+    margin-top: 10px;
+}
+
+/* Providers List Section */
+.provider-category {
+    margin-bottom: 40px;
+}
+
+.provider-category h2 {
+    font-size: 28px;
+    color: #5d5fef;
+    margin-bottom: 20px;
+}
+
+.provider-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Provider Card Styling */
+.provider-card {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: calc(33.333% - 20px); /* Makes sure 3 provider cards fit in a row */
+    box-sizing: border-box;
+}
+
+.provider-card h3 {
+    font-size: 20px;
+    color: #333;
+}
+
+.provider-card p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+/* Button Styling */
+.provider-card .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.provider-card .btn:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+    .provider-card {
+        width: calc(50% - 20px); /* For smaller screens, 2 provider cards per row */
+    }
+}
+
+@media (max-width: 480px) {
+    .provider-card {
+        width: 100%; /* For mobile, 1 provider card per row */
+    }
+}
+/* General container styles */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header styles */
+.main-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* Time Slot Section */
+.time-slots-list {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.time-slot {
+    padding: 15px;
+    background-color: #f5f5f5;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+    min-width: 180px;
+    text-align: center;
+}
+
+.time-slot:hover {
+    background-color: #5d5fef;
+    color: #fff;
+    border: 2px solid #5d5fef;
+}
+
+.time-slot:focus {
+    background-color: #5d5fef;
+    color: #fff;
+    outline: none;
+}
+
+/* Style for selected time slot */
+.time-slot.selected {
+    background-color: #5d5fef;
+    color: #fff;
+    border: 2px solid #5d5fef;
+}
+
+/* Continue Booking Button */
+.continue-booking {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.continue-booking .btn {
+    width: 100%;
+    max-width: 400px;
+    padding: 15px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 18px;
+    text-align: center;
+}
+
+.continue-booking .btn:hover {
+    background-color: #0056b3;
+}
+

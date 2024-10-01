@@ -21,7 +21,6 @@ import './styles.css';
 function App() {
   return (
     <Router>
-
         <div className="App">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -30,8 +29,8 @@ function App() {
             <Route path="/business-services" element={<BusinessServices />} />
             <Route path="/select-provider/:id" element={<SelectProvider />} />
             <Route path="/timeslots/:id" element={<TimeSlots />} />
-            <Route path="/business-details/:id" element={<BusinessDetails />} />
-            <Route path="/business-provider" element={<BusinessProvider />} />
+            <Route path="/business-details/:businessId" element={<BusinessDetails />} />
+            <Route path="/business-provider/:businessId/:serviceId" element={<BusinessProvider />} />
             <Route path="/browse-businesses" element={<BrowseBusinesses />} />
             <Route path="/login-business" element={<LoginBusiness />} />
             <Route path="/login-customer" element={<LoginCustomer />} />

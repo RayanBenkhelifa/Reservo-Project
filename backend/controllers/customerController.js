@@ -14,22 +14,30 @@ const getAllBusinesses = async (req, res) => {
 const getBusinessServices = async (req, res) => {
   try {
     const { businessId } = req.params;
+    console.log(businessId)
+    // Find the business by ID and populate the services in providers
     const business = await BusinessOwner.findById(businessId).populate('providers.services');
-    
+
     if (!business) {
       return res.status(404).json({ error: 'Business not found' });
     }
-    
+
+    // Set to avoid duplicate services (since multiple providers might offer the same service)
     const services = new Set();
+
+    // Loop through each provider to collect their services
     business.providers.forEach(provider => {
-      provider.services.forEach(service => services.add(service));
+      provider.services.forEach(service => services.add(service));  // Add each service to the Set
     });
 
-    res.status(200).json([...services]);  // Convert Set to Array
+    // Convert Set to Array and send back the response
+    res.status(200).json(Array.from(services));
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Failed to fetch services' });
   }
 };
+
 
 // View Providers for a Selected Service
 const getServiceProviders = async (req, res) => {

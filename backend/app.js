@@ -16,6 +16,8 @@ const app = express();
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, '../frontend/public')));
+
 
 // Import routes
 app.use('/auth', authRoutes);
@@ -24,7 +26,7 @@ app.use('/booking', bookingRoutes);  // New booking routes
 app.use('/customer', customerRoutes);  // Adding customer routes
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 
 mongoose.connect(process.env.MONGO_URI)

@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 // Signup function for customers (with immediate login)
 const signupCustomer = async (req, res) => {
   const { name, email, phoneNum, password } = req.body;
-  
+  console.log("sdasdas")
   try {
     const hashedPassword = await bcrypt.hash(password, 12);
     const newCustomer = new Customer({

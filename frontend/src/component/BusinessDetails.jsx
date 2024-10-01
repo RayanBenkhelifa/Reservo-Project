@@ -1,84 +1,79 @@
-import React, { useState, useEffect } from 'react';
-import '../styles.css'; // Ensure your CSS file is linked
+import React, { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom"; // Use Link for navigation
+import "../styles.css"; // Ensure your CSS file is linked
 
 const BusinessDetails = () => {
-  // Set initial state for business and services
+  const { businessId } = useParams(); // Get the business id from the URL
   const [business, setBusiness] = useState(null);
   const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Simulate fetching business data
+  // Fetch business details and services using the business id
   useEffect(() => {
-    // Here you would normally fetch data from an API
     const fetchBusinessDetails = async () => {
-      // Simulating fetching data from API
-      const businessData = {
-        businessName: 'Example Barber Shop',
-        location: 'Downtown',
-        openingHours: '9:00 AM - 5:00 PM',
-      };
-      const servicesData = [
-        {
-          _id: 1,
-          serviceName: 'Haircut',
-          description: 'Professional haircut and styling',
-          duration: 30,
-          price: 50,
-        },
-        {
-          _id: 2,
-          serviceName: 'Shaving',
-          description: 'Beard shaving and trimming',
-          duration: 45,
-          price: 35,
-        },
-        {
-          _id: 3,
-          serviceName: 'Full Grooming',
-          description: 'Complete grooming package',
-          duration: 60,
-          price: 80,
-        },
-      ];
+      try {
+        const response = await fetch(
+          `/customer/businesses/${businessId}/services`
+        );
+        const servicesData = await response.json();
 
-      setBusiness(businessData);
-      setServices(servicesData);
+        if (response.ok) {
+          setServices(servicesData); // Update the state with fetched services
+        } else {
+          setError("Failed to fetch services");
+        }
+
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load business details");
+        setLoading(false);
+      }
     };
 
     fetchBusinessDetails();
-  }, []);
+  }, [businessId]);
+
+  if (loading) {
+    return <p>Loading business details...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
     <div className="container">
-      {/* Render business details */}
-      {business ? (
-        <>
-          <header className="business-header">
-            <h1>{business.businessName}</h1>
-            <p>Location: {business.location}</p>
-            <p>Opening Hours: {business.openingHours}</p>
-          </header>
+      <header className="business-header">
+        <h1>{business?.businessName || "Business Name"}</h1>
+        <p>Location: {business?.location || "Location"}</p>
+        <p>Opening Hours: {business?.openingHours || "Opening Hours"}</p>
+      </header>
 
-          {/* Render service list */}
-          <section id="services" className="service-category">
-            <h2>Available Services</h2>
-            <div className="service-list">
-              {services.map((service) => (
-                <div className="service-card" key={service._id}>
-                  <h3>{service.serviceName}</h3>
-                  <p>Description: {service.description}</p>
-                  <p>Duration: {service.duration} minutes</p>
-                  <p>Price: ${service.price}</p>
-                  <a href={`/select-provider/${service._id}`} className="btn">
-                    Book Now
-                  </a>
-                </div>
-              ))}
-            </div>
-          </section>
-        </>
-      ) : (
-        <p>Loading business details...</p>
-      )}
+      <section id="services" className="service-category">
+        <h2>Available Services</h2>
+        <div className="service-list">
+          {services.length > 0 ? (
+            services.map((service) => (
+              <div className="service-card" key={service._id}>
+                <h3>{service.serviceName}</h3>
+                <p>Description: {service.description}</p>
+                <p>Duration: {service.duration} minutes</p>
+                <p>Price: ${service.price}</p>
+                <Link
+                  to={`/business-provider/${businessId}/${service._id}`}
+                  className="btn"
+                >
+                  Book Now
+                </Link>
+              </div>
+            ))
+          ) : (
+            <p>No services available for this business.</p>
+          )}
+        </div>
+      </section>
     </div>
   );
 };

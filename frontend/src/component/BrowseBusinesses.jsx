@@ -1,7 +1,50 @@
-import React from 'react';
-import '../styles.css';
+import React, { useEffect, useState } from "react";
+import "../styles.css";
 
 function BrowseBusinesses() {
+  const [businesses, setBusinesses] = useState([]); // State to hold businesses
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
+
+  useEffect(() => {
+    // Fetch businesses from the backend using the Fetch API
+    const fetchBusinesses = async () => {
+      try {
+        const response = await fetch("/customer/businesses"); // Make the GET request
+        if (!response.ok) {
+          throw new Error("Failed to fetch businesses"); // Throw an error if the response is not ok
+        }
+        const data = await response.json(); // Parse the JSON response
+        setBusinesses(data); // Update the state with the fetched businesses
+        setLoading(false); // Set loading to false once the data is fetched
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load businesses"); // Set the error message in case of failure
+        setLoading(false); // Stop loading when error occurs
+      }
+    };
+
+    fetchBusinesses(); // Call the fetch function when the component mounts
+  }, []); // The empty dependency array means this useEffect runs only once after the initial render
+
+  if (loading) {
+    return <div>Loading...</div>; // Render this while data is being fetched
+  }
+
+  if (error) {
+    return <div>{error}</div>; // Render this if there is an error
+  }
+
+  // Group businesses by category (assuming each business has a 'category' field)
+  const categorizedBusinesses = businesses.reduce((acc, business) => {
+    const { category } = business;
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(business);
+    return acc;
+  }, {});
+
   return (
     <div className="container">
       <header className="main-header">
@@ -9,57 +52,27 @@ function BrowseBusinesses() {
         <p>Select a category to explore businesses near you.</p>
       </header>
 
-      {/* Barber Shops Section */}
-      <section id="barber-shops" className="business-category">
-        <h2>Barber Shops</h2>
-        <div className="business-list">
-          {/* Business cards could be dynamically rendered here */}
-          <div className="business-card">
-            <h3>Barber Shop 1</h3>
-            <p>Location: Downtown</p>
-            <a href="/business-details/1" className="btn">View Details</a>
+      {/* Render categories dynamically */}
+      {Object.keys(categorizedBusinesses).map((category) => (
+        <section
+          key={category}
+          id={category.toLowerCase()}
+          className="business-category"
+        >
+          <h2>{category}</h2>
+          <div className="business-list">
+            {categorizedBusinesses[category].map((business) => (
+              <div className="business-card" key={business._id}>
+                <h3>{business.name}</h3>
+                <p>Location: {business.location}</p>
+                <a href={`/business-details/${business._id}`} className="btn">
+                  View Details
+                </a>
+              </div>
+            ))}
           </div>
-          <div className="business-card">
-            <h3>Barber Shop 2</h3>
-            <p>Location: Uptown</p>
-            <a href="/business-details/2" className="btn">View Details</a>
-          </div>
-        </div>
-      </section>
-
-      {/* Salons Section */}
-      <section id="salons" className="business-category">
-        <h2>Salons</h2>
-        <div className="business-list">
-          <div className="business-card">
-            <h3>Salon 1</h3>
-            <p>Location: City Center</p>
-            <a href="/business-details/3" className="btn">View Details</a>
-          </div>
-          <div className="business-card">
-            <h3>Salon 2</h3>
-            <p>Location: Suburb</p>
-            <a href="/business-details/4" className="btn">View Details</a>
-          </div>
-        </div>
-      </section>
-
-      {/* Spas Section */}
-      <section id="spas" className="business-category">
-        <h2>Spas</h2>
-        <div className="business-list">
-          <div className="business-card">
-            <h3>Spa 1</h3>
-            <p>Location: Lakeside</p>
-            <a href="/business-details/5" className="btn">View Details</a>
-          </div>
-          <div className="business-card">
-            <h3>Spa 2</h3>
-            <p>Location: Riverside</p>
-            <a href="/business-details/6" className="btn">View Details</a>
-          </div>
-        </div>
-      </section>
+        </section>
+      ))}
     </div>
   );
 }

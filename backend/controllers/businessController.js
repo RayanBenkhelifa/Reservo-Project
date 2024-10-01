@@ -47,9 +47,17 @@ const addProvider = async (req, res) => {
     }
 
     // Ensure the services being added are owned by the business
-    const validServiceIds = serviceIds.filter(serviceId =>
-      business.services.includes(serviceId)
-    );
+    const validServiceIds = serviceIds.filter(serviceId => {
+      // Use .some() to check if the serviceId exists in business.services
+      const serviceExists = business.services.some(service => service._id.toString() === serviceId.toString());
+    
+      // Debugging output
+      // console.log(business.services);
+      // console.log(serviceId);
+    
+      return serviceExists; // Only keep serviceIds that exist in business.services
+    });
+
 
     if (validServiceIds.length !== serviceIds.length) {
       return res.status(400).json({ error: 'Some services are not part of this business' });
@@ -67,11 +75,11 @@ const addProvider = async (req, res) => {
         timeSlots
       });
     }
-
+    console.log(availability)
     // Create the provider object
     const newProvider = {
       name: providerName,
-      services: validServiceIds,  // Only add valid service IDs linked to the provider
+      services: serviceIds,  // Array of service IDs linked to the provider
       availability  // Generated availability for the next 7 days
     };
 
@@ -87,6 +95,39 @@ const addProvider = async (req, res) => {
   }
 };
 
+// Function to generate time slots between start and end times (assumes 1-hour intervals)
+const generateTimeSlots = (start, end) => {
+  const slots = [];
+  
+  // Convert start and end times to Date objects to handle hours and minutes
+  const startTime = new Date(`1970-01-01T${convertTo24Hour(start)}:00`);
+  const endTime = new Date(`1970-01-01T${convertTo24Hour(end)}:00`);
+  
+  let currentTime = startTime;
+  
+  // Loop through and add 1-hour intervals to the timeSlots array until the end time is reached
+  while (currentTime < endTime) {
+    slots.push(currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    currentTime = new Date(currentTime.getTime() + 60 * 60 * 1000); // Add 1 hour
+  }
 
+  return slots;
+};
+
+// Helper function to convert 12-hour format (e.g., "9:00 AM") to 24-hour format
+const convertTo24Hour = (time) => {
+  const [hour, minute, period] = time.match(/(\d+):(\d+)\s*(AM|PM)/i).slice(1);
+  let hours = parseInt(hour, 10);
+  const minutes = parseInt(minute, 10);
+  
+  if (period.toUpperCase() === 'PM' && hours < 12) {
+    hours += 12;
+  }
+  if (period.toUpperCase() === 'AM' && hours === 12) {
+    hours = 0;
+  }
+  
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+};
 
 module.exports = {addService, addProvider}

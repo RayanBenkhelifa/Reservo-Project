@@ -94,7 +94,7 @@ const getAvailableSlots = async (req, res) => {
 const createBooking = async (req, res) => {
   try {
       const { customerId, providerId, serviceId, selectedDate, startTime } = req.body;
-
+      console.log(customerId, providerId, serviceId, selectedDate, startTime)
       // Step 1: Find the service to get the service duration
       const service = await Service.findById(serviceId);
       const serviceDuration = service.duration; // Duration is in minutes

@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom"; // To get businessId and serviceId from the URL
-import "../styles.css"; // Ensure your CSS file is linked
+import { useParams, useLocation, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const BusinessProvider = () => {
-  const { businessId, serviceId } = useParams(); // Get the businessId and serviceId from the URL
-  const [providers, setProviders] = useState([]);
+  const { businessId, serviceId } = useParams(); // Extract businessId and serviceId from URL params
+  const location = useLocation(); // Get query parameters from URL
+
+  // Parse the query parameters to get serviceDuration
+  const queryParams = new URLSearchParams(location.search);
+  const serviceDuration = queryParams.get("duration"); // Extract the service duration
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [providers, setProviders] = useState([]);
 
-  // Fetch providers for the selected business and service
   useEffect(() => {
     const fetchProviders = async () => {
       try {
@@ -33,7 +36,6 @@ const BusinessProvider = () => {
 
     fetchProviders();
   }, [businessId, serviceId]);
-
   if (loading) {
     return <p>Loading providers...</p>;
   }
@@ -55,8 +57,21 @@ const BusinessProvider = () => {
             providers.map((provider) => (
               <div className="service-card" key={provider._id}>
                 <h3>{provider.name}</h3>
-                <p>Available Services: {provider.services.length}</p>
-                <button className="btn">Book {provider.name}</button>
+                {/* Safely check if provider.services exists before accessing length */}
+                <p>
+                  Available Services:{" "}
+                  {provider.services
+                    ? provider.services.length
+                    : "No services available"}
+                </p>
+
+                {/* Pass providerId in the URL and serviceId, serviceDuration as query params */}
+                <Link
+                  to={`/time-slots/${provider._id}?serviceId=${serviceId}&duration=${serviceDuration}`}
+                  className="btn"
+                >
+                  Book {provider.name}
+                </Link>
               </div>
             ))
           ) : (

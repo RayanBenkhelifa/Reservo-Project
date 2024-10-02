@@ -61,8 +61,10 @@ const BusinessDetails = () => {
                 <p>Description: {service.description}</p>
                 <p>Duration: {service.duration} minutes</p>
                 <p>Price: ${service.price}</p>
+
+                {/* Pass businessId, serviceId, and serviceDuration to BusinessProvider */}
                 <Link
-                  to={`/business-provider/${businessId}/${service._id}`}
+                  to={`/business-provider/${businessId}/${service._id}?duration=${service.duration}`}
                   className="btn"
                 >
                   Book Now

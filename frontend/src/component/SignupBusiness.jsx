@@ -1,41 +1,187 @@
-import React from 'react';
-import '../styles.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // For navigation
+import "../styles.css";
 
 function SignupBusiness() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phoneNum: "",
+    businessName: "",
+    location: "",
+    category: "",
+    description: "",
+    operatingHoursStart: "",
+    operatingHoursEnd: "",
+    password: "",
+  });
+
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  // Check if token exists in localStorage and redirect to dashboard if already authenticated
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      navigate("/business-dashboard"); // Redirect if already logged in
+    }
+  }, [navigate]);
+
+  // Handle input changes
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("/auth/signup/businessOwner", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Store the token and business details
+        localStorage.setItem("authToken", data.token);
+
+        // Redirect using useNavigate after successful signup
+        navigate("/business-dashboard");
+      } else {
+        setError(data.message || "Signup failed");
+      }
+    } catch (err) {
+      console.error("Signup error:", err);
+      setError("An error occurred. Please try again.");
+    }
+  };
+
   return (
     <div className="signup-container">
       <div className="signup-box">
         <h2>Create Business Owner Account</h2>
-        <form action="/auth/signup/businessOwner" method="POST">
-          <input type="text" name="name" placeholder="Full Name" required />
-          <input type="email" name="email" placeholder="Email" required />
-          <input type="text" name="phoneNum" placeholder="Phone Number" required pattern="\d{10,15}" title="Phone number must be 10-15 digits" />
-          <input type="text" name="businessName" placeholder="Business Name" required />
-          <input type="text" name="location" placeholder="Business Location" required />
-          
-          <select name="category" required>
-            <option value="" disabled selected>Select Business Type</option>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="phoneNum"
+            placeholder="Phone Number"
+            pattern="\d{10,15}"
+            title="Phone number must be 10-15 digits"
+            value={formData.phoneNum}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="businessName"
+            placeholder="Business Name"
+            value={formData.businessName}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="location"
+            placeholder="Business Location"
+            value={formData.location}
+            onChange={handleChange}
+            required
+          />
+
+          <select
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            required
+          >
+            <option value="" disabled>
+              Select Business Type
+            </option>
             <option value="barber">Barber Shop</option>
             <option value="salon">Salon</option>
             <option value="spa">Spa</option>
           </select>
 
-          <textarea name="description" placeholder="Business Description" required></textarea>
+          <textarea
+            name="description"
+            placeholder="Business Description"
+            value={formData.description}
+            onChange={handleChange}
+            required
+          ></textarea>
 
           <label htmlFor="operatingHoursStart">Operating Hours Start</label>
-          <input type="text" name="operatingHoursStart" id="operatingHoursStart" placeholder="Start Time (e.g., 9:00 AM)" required />
+          <input
+            type="text"
+            name="operatingHoursStart"
+            id="operatingHoursStart"
+            placeholder="Start Time (e.g., 9:00 AM)"
+            value={formData.operatingHoursStart}
+            onChange={handleChange}
+            required
+          />
 
           <label htmlFor="operatingHoursEnd">Operating Hours End</label>
-          <input type="text" name="operatingHoursEnd" id="operatingHoursEnd" placeholder="End Time (e.g., 6:00 PM)" required />
+          <input
+            type="text"
+            name="operatingHoursEnd"
+            id="operatingHoursEnd"
+            placeholder="End Time (e.g., 6:00 PM)"
+            value={formData.operatingHoursEnd}
+            onChange={handleChange}
+            required
+          />
 
-          <input type="password" name="password" placeholder="Password" required pattern="(?=.*\d)(?=.*[a-zA-Z]).{8,}" title="Password must be at least 8 characters long and contain at least one letter and one number" />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            pattern="(?=.*\d)(?=.*[a-zA-Z]).{8,}"
+            title="Password must be at least 8 characters long and contain at least one letter and one number"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
 
           <div className="terms">
-            <input type="checkbox" required /> I agree to the <a href="#">Terms and Conditions</a>
+            <input type="checkbox" required /> I agree to the{" "}
+            <a href="#">Terms and Conditions</a>
           </div>
 
-          <button type="submit" className="btn">Sign Up</button>
-          <p>Already have an account? <a href="/login-business">Login now</a></p>
+          <button type="submit" className="btn">
+            Sign Up
+          </button>
+
+          {error && <p className="error">{error}</p>}
+
+          <p>
+            Already have an account? <a href="/login-business">Login now</a>
+          </p>
         </form>
       </div>
     </div>

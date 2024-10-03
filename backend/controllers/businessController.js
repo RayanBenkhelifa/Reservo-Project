@@ -113,6 +113,26 @@ const getBusinessServices = async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch services' });
   }
 };
+
+const getDashboard = async (req,res) => {
+  try {
+    const businessId = req.userId
+    console.log(businessId)
+    const businessOwner = await BusinessOwner.findById(businessId);
+    if (!businessOwner) {
+      return res.status(404).json({ message: 'Business Owner not found' });
+    }
+
+    // Send back the business owner's name and other data
+    res.status(200).json({
+      name: businessOwner.name,
+      message: `Welcome to the dashboard, ${businessOwner.name}`,
+    });
+  } catch (error) {
+    console.error('Error in business-dashboard route:', error.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
 // Function to generate time slots between start and end times (assumes 1-hour intervals)
 const generateTimeSlots = (start, end) => {
   const slots = [];
@@ -148,4 +168,4 @@ const convertTo24Hour = (time) => {
   return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
 };
 
-module.exports = {addService, addProvider, getBusinessServices}
+module.exports = {addService, addProvider, getBusinessServices, getDashboard}

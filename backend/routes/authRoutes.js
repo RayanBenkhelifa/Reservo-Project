@@ -1,9 +1,11 @@
 const express = require('express');
 const authController = require('../controllers/authController');
 const router = express.Router();
+const verifyToken = require('../middleware/verifyToken')
+
 
 // Routes for customer and business owner signup/login
-router.post('/signup/customer', authController.signupCustomer);
+router.post('/signup/customer',authController.signupCustomer);
 router.post('/signup/businessOwner', authController.signupBusinessOwner);
 
 router.post('/login/customer', authController.customerLogin);  // Customer login route

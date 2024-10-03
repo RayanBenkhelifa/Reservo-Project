@@ -13,9 +13,6 @@ router.post('/add-provider', verifyToken ,businessController.addProvider);
 router.get('/services', verifyToken, businessController.getBusinessServices);
 
 
-router.get('/business-dashboard', verifyToken, (req, res) => {
-    // Only accessible if the token is valid
-    res.status(200).json({ message: `Welcome to the dashboard, Business Owner ID: ${req.userId}` });
-  });
+router.get('/business-dashboard', verifyToken, businessController.getDashboard);
 
 module.exports = router;

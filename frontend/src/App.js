@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes,Navigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
 import BusinessProvider from './component/BusinessProvider';
 import BusinessDashboard from './component/BusinessDashboard';
 import BusinessServices from './component/BusinessServices';
@@ -20,29 +21,56 @@ import AddProvider from './component/AddProvider'
 import './styles.css';
 
 function App() {
-  const isAuthenticated = () => {
-    const token = localStorage.getItem('authToken');
-    return !!token; // Return true if the token exists, false otherwise
-  };
+  const [authenticated, setAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true); // Add a loading state
+
+  useEffect(() => {
+    console.log("Checking authentication status...");  // <-- Check if this fires
+  
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      console.log("Token exists, setting authenticated to true.");  // <-- Log token check
+      setAuthenticated(true);
+    } else {
+      console.log("No token found, setting authenticated to false.");  // <-- Log when no token
+      setAuthenticated(false);
+    }
+  
+    setLoading(false); // Set loading to false after checking token
+  }, []);
+
+  // If still checking authentication, display loading message (or spinner)
+  if (loading) {
+    console.log("Loading state active, awaiting token check.");  // <--- Add this log
+    return <div>Loading...</div>;
+  }
+
   return (
     <Router>
-        <div className="App">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/index" element={<Home />} />
-            <Route 
-          path="/business-dashboard" 
-          element={
-            isAuthenticated() ? <BusinessDashboard /> : <Navigate to="/login-business" />
-          }
-        />            
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/index" element={<Home />} />
           <Route
-          path="/business-services"
-          element={
-            isAuthenticated() ? <BusinessServices /> : <Navigate to="/login-business" />
-          }
-        />
-            <Route path="/business-add-provider" element={isAuthenticated() ? <AddProvider /> : <Navigate to="/login-business" /> } /> 
+  path="/business-dashboard"
+  element={
+    !loading ? (
+      authenticated ? <BusinessDashboard /> : <Navigate to="/login-business" />
+    ) : (
+      <div>Loading...</div>  // While loading, show this
+    )
+  }
+/>
+          <Route
+            path="/business-services"
+            element={
+              authenticated ? <BusinessServices /> : <Navigate to="/login-business" />
+            }
+          />
+          <Route
+            path="/business-add-provider"
+            element={authenticated ? <AddProvider /> : <Navigate to="/login-business" />} />
+            <Route path="/business-add-provider" element={authenticated ? <AddProvider /> : <Navigate to="/login-business" /> } /> 
             <Route path="/select-provider/:id" element={<SelectProvider />} />
             <Route path="/business-details/:businessId" element={<BusinessDetails />} />
             <Route path="/business-provider/:businessId/:serviceId" element={<BusinessProvider />} />

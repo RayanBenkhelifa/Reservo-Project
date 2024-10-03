@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "./AuthContext"; // Import AuthContext
 
 function AddProvider() {
   const [services, setServices] = useState([]);
   const [providerName, setProviderName] = useState("");
   const [selectedServices, setSelectedServices] = useState([]);
-  const token = localStorage.getItem("authToken"); // Get the correct token name
+  const { authState } = useContext(AuthContext); // Get the token from AuthContext
   const navigate = useNavigate();
 
   // Fetch services for the business
@@ -13,7 +14,7 @@ function AddProvider() {
     try {
       const response = await fetch("/business/services", {
         headers: {
-          Authorization: `Bearer ${token}`, // Attach the token correctly
+          Authorization: `Bearer ${authState.token}`, // Attach the token correctly
         },
       });
 
@@ -37,7 +38,7 @@ function AddProvider() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Attach the token in the header
+          Authorization: `Bearer ${authState.token}`, // Attach the token in the header
         },
         body: JSON.stringify({
           providerName,

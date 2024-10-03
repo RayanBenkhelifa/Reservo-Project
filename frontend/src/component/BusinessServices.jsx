@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles.css";
+import { AuthContext } from "./AuthContext"; // Import the AuthContext
 
 function BusinessServices() {
   const [serviceName, setServiceName] = useState("");
@@ -8,23 +9,22 @@ function BusinessServices() {
   const [duration, setDuration] = useState("");
   const [price, setPrice] = useState("");
   const [error, setError] = useState("");
+
+  const { authState } = useContext(AuthContext); // Access the token from AuthContext
   const navigate = useNavigate();
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Get token from localStorage
-    const token = localStorage.getItem("authToken");
-
     try {
       const response = await fetch("/business/add-service", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Include token in request header
+          Authorization: `Bearer ${authState.token}`, // Use the token from AuthContext
         },
-        body: JSON.stringify({ serviceName, description, duration, price }), // We no longer need to pass businessId
+        body: JSON.stringify({ serviceName, description, duration, price }),
       });
 
       const data = await response.json();

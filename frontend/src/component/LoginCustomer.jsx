@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom"; // For navigation and redirecting after login
 import "../styles.css";
+import { AuthContext } from "./AuthContext"; // Import the AuthContext
 
 function LoginCustomer() {
   const [email, setEmail] = useState("");
@@ -8,6 +9,7 @@ function LoginCustomer() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
+  const { login } = useContext(AuthContext); // Get login function from AuthContext
 
   // Handle form submission
   const handleLogin = async (e) => {
@@ -24,8 +26,8 @@ function LoginCustomer() {
       const data = await response.json();
 
       if (response.ok) {
-        // Store the JWT token in localStorage
-        localStorage.setItem("authToken", data.token);
+        // Use the login function from AuthContext to store the token and userType
+        login(data.token, "customer");
 
         // If there's state passed from the previous page, extract it
         const {

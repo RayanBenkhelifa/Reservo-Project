@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // For navigation
 import "../styles.css";
+import { AuthContext } from "./AuthContext"; // Import AuthContext
 
 function SignupBusiness() {
   const [formData, setFormData] = useState({
@@ -18,6 +19,7 @@ function SignupBusiness() {
 
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext); // Get the login function from context
 
   // Check if token exists in localStorage and redirect to dashboard if already authenticated
   useEffect(() => {
@@ -51,8 +53,8 @@ function SignupBusiness() {
       const data = await response.json();
 
       if (response.ok) {
-        // Store the token and business details
-        localStorage.setItem("authToken", data.token);
+        // Use the login function from AuthContext to store the token and user type
+        login(data.token, "businessOwner");
 
         // Redirect using useNavigate after successful signup
         navigate("/business-dashboard");

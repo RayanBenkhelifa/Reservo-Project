@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles.css";
+import { AuthContext } from "./AuthContext"; // Import AuthContext
 
 function LoginBusiness() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext); // Get login function from context
 
-  // Handle form submission
   // Handle form submission
   const handleLogin = async (e) => {
     e.preventDefault(); // Prevent default form submission (reload)
@@ -24,26 +25,14 @@ function LoginBusiness() {
         body: JSON.stringify({ email, password }),
       });
 
-      console.log("Response received:", response);
-
       const data = await response.json();
       console.log("Response JSON data:", data);
 
       if (response.ok) {
-        // Store the JWT token in localStorage
-        console.log("Storing token in localStorage:", data.token);
-        localStorage.setItem("authToken", data.token);
-
-        // Verify the token was stored correctly
-        const storedToken = localStorage.getItem("authToken");
-        console.log("Token in localStorage after storing:", storedToken);
+        // Store the JWT token and userType in context
+        login(data.token, "businessOwner");
 
         // Delay redirect to avoid race conditions
-        setTimeout(() => {
-          console.log("Redirecting to /business-dashboard");
-          navigate("/business-dashboard");
-          window.location.reload(); // <-- This will ensure App.js `useEffect` fires
-        }, 1000); // 500ms delay, you can adjust this as needed
       } else {
         console.log("Login failed:", data.message);
         setError(data.message || "Login failed");

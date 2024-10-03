@@ -15,18 +15,34 @@ import Contact from './component/Contact';
 import BrowseBusinesses from './component/BrowseBusinesses'
 import SelectProvider from './component/SelectProvider'
 import TimeSlots from './component/TimeSlots'
+import AddProvider from './component/AddProvider'
 
 import './styles.css';
 
 function App() {
+  const isAuthenticated = () => {
+    const token = localStorage.getItem('authToken');
+    return !!token; // Return true if the token exists, false otherwise
+  };
   return (
     <Router>
         <div className="App">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/index" element={<Home />} />
-            <Route path="/business-dashboard" element={<BusinessDashboard />} />
-            <Route path="/business-services" element={<BusinessServices />} />
+            <Route 
+          path="/business-dashboard" 
+          element={
+            isAuthenticated() ? <BusinessDashboard /> : <Navigate to="/login-business" />
+          }
+        />            
+          <Route
+          path="/business-services"
+          element={
+            isAuthenticated() ? <BusinessServices /> : <Navigate to="/login-business" />
+          }
+        />
+            <Route path="/business-add-provider" element={isAuthenticated() ? <AddProvider /> : <Navigate to="/login-business" /> } /> 
             <Route path="/select-provider/:id" element={<SelectProvider />} />
             <Route path="/business-details/:businessId" element={<BusinessDetails />} />
             <Route path="/business-provider/:businessId/:serviceId" element={<BusinessProvider />} />

@@ -5,7 +5,9 @@ const BusinessOwner = require('../models/BusinessOwner');
 // Add Service to Business
 const addService = async (req, res) => {
   try {
-    const { businessId, serviceName, description, duration, price } = req.body;
+    const { serviceName, description, duration, price } = req.body;
+    const businessId = req.userId; // Extracted from the verified token (businessId)
+
 
     // Find the business
     const business = await BusinessOwner.findById(businessId);
@@ -38,8 +40,8 @@ const addService = async (req, res) => {
 // Add Provider and Link Services
 const addProvider = async (req, res) => {
   try {
-    const { businessId, providerName, serviceIds } = req.body;
-
+    const { providerName, serviceIds } = req.body;
+    const businessId = req.userId
     // Find the business
     const business = await BusinessOwner.findById(businessId).populate('services');
     if (!business) {
@@ -95,6 +97,22 @@ const addProvider = async (req, res) => {
   }
 };
 
+const getBusinessServices = async (req, res) => {
+  try {
+    const businessId = req.userId; // Extracted from the JWT token
+    console.log(businessId)
+    const business = await BusinessOwner.findById(businessId).populate('services');
+    console.log(business)
+
+    if (!business) {
+      return res.status(404).json({ message: 'Business not found' });
+    }
+
+    res.status(200).json({ services: business.services });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to fetch services' });
+  }
+};
 // Function to generate time slots between start and end times (assumes 1-hour intervals)
 const generateTimeSlots = (start, end) => {
   const slots = [];
@@ -130,4 +148,4 @@ const convertTo24Hour = (time) => {
   return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
 };
 
-module.exports = {addService, addProvider}
+module.exports = {addService, addProvider, getBusinessServices}

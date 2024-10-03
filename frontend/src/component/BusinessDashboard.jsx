@@ -1,5 +1,5 @@
-import React from 'react';
-import '../styles.css';
+import React from "react";
+import "../styles.css";
 
 function BusinessDashboard() {
   return (
@@ -9,9 +9,15 @@ function BusinessDashboard() {
           <h2>Reservo</h2>
         </div>
         <ul className="nav-links">
-          <li><a href="/business-dashboard">Calendar</a></li>
-          <li><a href="/business-services">Services</a></li>
-          <li><a href="/business-provider">Providers</a></li>
+          <li>
+            <a href="/business-dashboard">Calendar</a>
+          </li>
+          <li>
+            <a href="/business-services">Services</a>
+          </li>
+          <li>
+            <a href="/business-add-provider">Providers</a>
+          </li>
         </ul>
       </nav>
 

@@ -44,6 +44,7 @@ const addProvider = async (req, res) => {
     const businessId = req.userId
     // Find the business
     const business = await BusinessOwner.findById(businessId).populate('services');
+    console.log(business)
     if (!business) {
       return res.status(404).json({ error: 'Business not found' });
     }

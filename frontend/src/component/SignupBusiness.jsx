@@ -21,11 +21,10 @@ function SignupBusiness() {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext); // Get the login function from context
 
-  // Check if token exists in localStorage and redirect to dashboard if already authenticated
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (token) {
-      navigate("/business-dashboard"); // Redirect if already logged in
+      navigate("/business-dashboard");
     }
   }, [navigate]);
 
@@ -37,9 +36,24 @@ function SignupBusiness() {
     });
   };
 
+  // Validate and format the time input to ensure it includes AM/PM
+  const validateTimeFormat = (time) => {
+    const timePattern = /^(1[0-2]|0?[1-9]):([0-5][0-9])\s?(AM|PM)$/i;
+    return timePattern.test(time);
+  };
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate operating hours format
+    if (
+      !validateTimeFormat(formData.operatingHoursStart) ||
+      !validateTimeFormat(formData.operatingHoursEnd)
+    ) {
+      setError("Invalid time format. Please use the format H:MM AM/PM.");
+      return;
+    }
 
     try {
       const response = await fetch("/auth/signup/businessOwner", {
@@ -47,16 +61,13 @@ function SignupBusiness() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData), // Send time in H:MM AM/PM format
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        // Use the login function from AuthContext to store the token and user type
         login(data.token, "businessOwner");
-
-        // Redirect using useNavigate after successful signup
         navigate("/business-dashboard");
       } else {
         setError(data.message || "Signup failed");
@@ -170,16 +181,12 @@ function SignupBusiness() {
             required
           />
 
-          <div className="terms">
-            <input type="checkbox" required /> I agree to the{" "}
-            <a href="#">Terms and Conditions</a>
-          </div>
+          {/* Display error message in red and styled */}
+          {error && <p className="error-message">{error}</p>}
 
           <button type="submit" className="btn">
             Sign Up
           </button>
-
-          {error && <p className="error">{error}</p>}
 
           <p>
             Already have an account? <a href="/login-business">Login now</a>

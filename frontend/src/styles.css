@@ -1,5 +1,6 @@
 /* General Styles */
-body, html {
+body,
+html {
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
@@ -22,6 +23,7 @@ body, html {
     position: fixed;
     width: 100%;
     z-index: 1000;
+    border: none;
 }
 
 .header .container {
@@ -58,7 +60,8 @@ body, html {
     font-weight: 700;
 }
 
-.nav .btn, .nav .btn-secondary {
+.nav .btn,
+.nav .btn-secondary {
     padding: 10px 20px;
     border-radius: 5px;
     font-weight: 600;
@@ -89,7 +92,8 @@ body, html {
 /* Hero Section Styles */
 .hero {
     position: relative;
-    background-image: url('img/barbershop_vs_salon_hero.jpg'); /* Update path if needed */
+    background-image: url('img/barbershop_vs_salon_hero.jpg');
+    /* Update path if needed */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -106,7 +110,8 @@ body, html {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Dark overlay */
 }
 
 .hero-content {
@@ -136,7 +141,8 @@ body, html {
     font-weight: 600;
     transition: background-color 0.3s ease;
     margin-right: 15px;
-    text-decoration: none; /* Remove underline */
+    text-decoration: none;
+    /* Remove underline */
 }
 
 .hero .btn:hover {
@@ -152,7 +158,8 @@ body, html {
     text-transform: uppercase;
     font-weight: 600;
     transition: background-color 0.3s ease;
-    text-decoration: none; /* Remove underline */
+    text-decoration: none;
+    /* Remove underline */
 }
 
 .hero .btn-secondary:hover {
@@ -217,7 +224,8 @@ body, html {
 }
 
 /* Login & Sign-Up Page Styles */
-.login-container, .signup-container {
+.login-container,
+.signup-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -225,7 +233,8 @@ body, html {
     background-color: #f9fafc;
 }
 
-.login-box, .signup-box {
+.login-box,
+.signup-box {
     background-color: #ffffff;
     padding: 40px;
     border-radius: 12px;
@@ -235,37 +244,63 @@ body, html {
     transition: transform 0.3s ease;
 }
 
-.login-box:hover, .signup-box:hover {
+.login-box:hover,
+.signup-box:hover {
     transform: translateY(-5px);
 }
 
-.login-box h2, .signup-box h2 {
-    margin-bottom: 20px; /* Reduced spacing for better layout */
+.login-box h2,
+.signup-box h2 {
+    margin-bottom: 20px;
+    /* Reduced spacing for better layout */
     color: #5d5fef;
-    font-size: 24px; /* Increased font size for better readability */
-    font-weight: 600; /* Bold text for better emphasis */
+    font-size: 24px;
+    /* Increased font size for better readability */
+    font-weight: 600;
+    /* Bold text for better emphasis */
 }
 
 /* Input and Text Area Styles */
-.login-box input, .signup-box input, .signup-box select, .signup-box textarea {
+.login-box input,
+.signup-box input,
+.signup-box select,
+.signup-box textarea {
     width: 100%;
     padding: 12px;
-    margin: 12px 0; /* Consistent margin between fields */
+    margin: 12px 0;
+    /* Consistent margin between fields */
     border: 1px solid #ddd;
     border-radius: 8px;
     box-sizing: border-box;
-    font-size: 16px; /* Increased font size for better readability */
+    font-size: 16px;
+    /* Increased font size for better readability */
 }
 
-.login-box input:focus, .signup-box input:focus, .signup-box select:focus, .signup-box textarea:focus {
-    border-color: #5d5fef; /* Border color on focus for better UX */
+.login-box input:focus,
+.signup-box input:focus,
+.signup-box select:focus,
+.signup-box textarea:focus {
+    border-color: #5d5fef;
+    /* Border color on focus for better UX */
     outline: none;
 }
 
+.error-message {
+    color: red;
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 20px;
+    /* Add space below the error message */
+    text-align: center;
+    /* Center the error message */
+}
+
 /* Button Styles */
-.login-box .btn, .signup-box .btn {
+.login-box .btn,
+.signup-box .btn {
     width: 100%;
-    padding: 14px; /* Increased padding for better button size */
+    padding: 14px;
+    /* Increased padding for better button size */
     margin-top: 20px;
     background-color: #5d5fef;
     color: #fff;
@@ -278,7 +313,8 @@ body, html {
     font-size: 14px;
 }
 
-.login-box .btn:hover, .signup-box .btn:hover {
+.login-box .btn:hover,
+.signup-box .btn:hover {
     background-color: #4a4ad4;
 }
 
@@ -286,11 +322,13 @@ body, html {
 .social-buttons {
     display: flex;
     justify-content: space-between;
-    margin: 20px 0; /* Added space between form elements */
+    margin: 20px 0;
+    /* Added space between form elements */
 }
 
 .social-buttons .btn {
-    width: 48%; /* Even distribution for social buttons */
+    width: 48%;
+    /* Even distribution for social buttons */
     background-color: #f5f5f5;
     color: #333;
     border-radius: 8px;
@@ -316,16 +354,19 @@ body, html {
 }
 
 /* General Link Styles */
-.login-box p, .signup-box p {
+.login-box p,
+.signup-box p {
     font-size: 14px;
 }
 
-.login-box p a, .signup-box p a {
+.login-box p a,
+.signup-box p a {
     color: #5d5fef;
     text-decoration: none;
 }
 
-.login-box p a:hover, .signup-box p a:hover {
+.login-box p a:hover,
+.signup-box p a:hover {
     text-decoration: underline;
 }
 
@@ -336,13 +377,15 @@ body, html {
         align-items: center;
     }
 
-    .signup-box, .login-box {
+    .signup-box,
+    .login-box {
         width: 90%;
     }
 
     .social-buttons {
         flex-direction: column;
-        gap: 10px; /* Space between social buttons */
+        gap: 10px;
+        /* Space between social buttons */
     }
 
     .social-buttons .btn {
@@ -372,14 +415,17 @@ body, html {
 .signup-type-box h2 {
     margin-bottom: 20px;
     color: #5d5fef;
-    font-size: 28px; /* Larger font for heading */
-    font-weight: 600; /* Bold text for heading */
+    font-size: 28px;
+    /* Larger font for heading */
+    font-weight: 600;
+    /* Bold text for heading */
 }
 
 .signup-type-box p {
     font-size: 16px;
     color: #666;
-    margin-bottom: 30px; /* Increased spacing for better layout */
+    margin-bottom: 30px;
+    /* Increased spacing for better layout */
 }
 
 .btn-group {
@@ -410,94 +456,148 @@ body, html {
 .contact-form {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center the form elements */
-    gap: 15px; /* Space between form elements */
-    max-width: 600px; /* Limit form width */
-    margin: 30px auto; /* Center form within section */
-    padding: 30px; /* Add padding around the form */
-    background-color: #ffffff; /* White background */
-    border-radius: 12px; /* Rounded corners */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    align-items: center;
+    /* Center the form elements */
+    gap: 15px;
+    /* Space between form elements */
+    max-width: 600px;
+    /* Limit form width */
+    margin: 30px auto;
+    /* Center form within section */
+    padding: 30px;
+    /* Add padding around the form */
+    background-color: #ffffff;
+    /* White background */
+    border-radius: 12px;
+    /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
 }
 
-.contact-form input, .contact-form textarea {
+.contact-form input,
+.contact-form textarea {
     width: 100%;
-    padding: 15px; /* Consistent padding for all fields */
-    border: 1px solid #ddd; /* Light border */
-    border-radius: 8px; /* Rounded corners */
-    font-size: 16px; /* Consistent font size */
-    box-sizing: border-box; /* Include padding in width */
-    margin-bottom: 15px; /* Space between fields */
+    padding: 15px;
+    /* Consistent padding for all fields */
+    border: 1px solid #ddd;
+    /* Light border */
+    border-radius: 8px;
+    /* Rounded corners */
+    font-size: 16px;
+    /* Consistent font size */
+    box-sizing: border-box;
+    /* Include padding in width */
+    margin-bottom: 15px;
+    /* Space between fields */
 }
 
 .contact-form textarea {
-    height: 120px; /* Set height for textarea */
-    resize: none; /* Prevent resizing */
+    height: 120px;
+    /* Set height for textarea */
+    resize: none;
+    /* Prevent resizing */
 }
 
 .contact-form .btn {
-    width: 100%; /* Full width button */
-    padding: 15px; /* Padding inside button */
-    background-color: #5d5fef; /* Button color */
-    color: #fff; /* Text color */
-    border: none; /* Remove border */
-    border-radius: 30px; /* Rounded corners */
-    font-weight: 600; /* Bold text */
-    cursor: pointer; /* Pointer cursor */
-    transition: background-color 0.3s ease; /* Smooth transition */
+    width: 100%;
+    /* Full width button */
+    padding: 15px;
+    /* Padding inside button */
+    background-color: #5d5fef;
+    /* Button color */
+    color: #fff;
+    /* Text color */
+    border: none;
+    /* Remove border */
+    border-radius: 30px;
+    /* Rounded corners */
+    font-weight: 600;
+    /* Bold text */
+    cursor: pointer;
+    /* Pointer cursor */
+    transition: background-color 0.3s ease;
+    /* Smooth transition */
 }
 
 .contact-form .btn:hover {
-    background-color: #4a4ad4; /* Darker hover color */
+    background-color: #4a4ad4;
+    /* Darker hover color */
 }
 
 /* About Us Section */
 .about-us {
-    padding: 80px 0; /* Add spacing around the section */
-    background-color: #f9fafc; /* Light background */
-    text-align: center; /* Center-align the text */
+    padding: 80px 0;
+    /* Add spacing around the section */
+    background-color: #f9fafc;
+    /* Light background */
+    text-align: center;
+    /* Center-align the text */
 }
 
 .about-us .container {
-    max-width: 800px; /* Limit the width of the content */
-    margin: 0 auto; /* Center the container */
+    max-width: 800px;
+    /* Limit the width of the content */
+    margin: 0 auto;
+    /* Center the container */
 }
 
 .about-us h1 {
-    font-size: 36px; /* Larger heading size */
-    margin-bottom: 20px; /* Space below heading */
-    color: #333; /* Darker text color */
-    font-weight: 700; /* Bold text */
+    font-size: 36px;
+    /* Larger heading size */
+    margin-bottom: 20px;
+    /* Space below heading */
+    color: #333;
+    /* Darker text color */
+    font-weight: 700;
+    /* Bold text */
 }
 
 .about-us p {
-    font-size: 18px; /* Increase font size */
-    color: #666; /* Lighter text color */
-    line-height: 1.6; /* Increase line spacing */
-    margin-bottom: 30px; /* Space between paragraphs */
+    font-size: 18px;
+    /* Increase font size */
+    color: #666;
+    /* Lighter text color */
+    line-height: 1.6;
+    /* Increase line spacing */
+    margin-bottom: 30px;
+    /* Space between paragraphs */
 }
 
 .about-us h2 {
-    font-size: 28px; /* Subheading size */
-    margin-top: 40px; /* Space above subheading */
-    margin-bottom: 15px; /* Space below subheading */
-    color: #333; /* Darker text color */
-    font-weight: 600; /* Semi-bold text */
+    font-size: 28px;
+    /* Subheading size */
+    margin-top: 40px;
+    /* Space above subheading */
+    margin-bottom: 15px;
+    /* Space below subheading */
+    color: #333;
+    /* Darker text color */
+    font-weight: 600;
+    /* Semi-bold text */
 }
 
 .about-us ul {
-    text-align: left; /* Align list items to the left */
-    list-style-type: disc; /* Use disc list style */
-    padding-left: 40px; /* Indent the list */
-    margin-top: 20px; /* Space above the list */
+    text-align: left;
+    /* Align list items to the left */
+    list-style-type: disc;
+    /* Use disc list style */
+    padding-left: 40px;
+    /* Indent the list */
+    margin-top: 20px;
+    /* Space above the list */
 }
 
 .about-us ul li {
-    font-size: 18px; /* Increase font size */
-    color: #666; /* Lighter text color */
-    line-height: 1.8; /* Increase line height */
-    margin-bottom: 10px; /* Space between list items */
+    font-size: 18px;
+    /* Increase font size */
+    color: #666;
+    /* Lighter text color */
+    line-height: 1.8;
+    /* Increase line height */
+    margin-bottom: 10px;
+    /* Space between list items */
 }
+
 /* Forgot Password Page Styles */
 .forgot-password-container {
     display: flex;
@@ -565,27 +665,34 @@ body, html {
 .forgot-password-box a:hover {
     text-decoration: underline;
 }
+
 .logo {
     font-size: 24px;
     font-weight: 700;
     color: #333;
-    text-decoration: none; /* Remove underline */
+    text-decoration: none;
+    /* Remove underline */
 }
 
 .logo:hover {
-    color: #007bff; /* Optional: Change color on hover */
+    color: #007bff;
+    /* Optional: Change color on hover */
 }
+
 /* Dashboard Layout */
 .dashboard-container {
     display: flex;
-    height: 100vh; /* Full viewport height */
-    background-color: #f9fafc; /* Consistent background */
+    height: 100vh;
+    /* Full viewport height */
+    background-color: #f9fafc;
+    /* Consistent background */
 }
 
 /* Sidebar Navigation */
 .sidebar {
     width: 250px;
-    background-color: #2d3e50; /* Dark sidebar background */
+    background-color: #2d3e50;
+    /* Dark sidebar background */
     padding: 20px;
     color: #fff;
     display: flex;
@@ -596,7 +703,8 @@ body, html {
     font-size: 22px;
     font-weight: 600;
     margin-bottom: 40px;
-    color: #fff; /* White logo text */
+    color: #fff;
+    /* White logo text */
     text-align: center;
 }
 
@@ -616,12 +724,15 @@ body, html {
     font-size: 16px;
     padding: 12px 15px;
     display: block;
-    border-radius: 8px; /* Rounded corners for links */
+    border-radius: 8px;
+    /* Rounded corners for links */
     transition: background-color 0.3s ease;
 }
 
-.nav-links a:hover, .nav-links active {
-    background-color: #4a6572; /* Hover background */
+.nav-links a:hover,
+.nav-links active {
+    background-color: #4a6572;
+    /* Hover background */
 }
 
 /* Main Content */
@@ -653,8 +764,10 @@ body, html {
 section.card {
     background-color: #ffffff;
     padding: 30px;
-    border-radius: 10px; /* Smooth, consistent rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+    border-radius: 10px;
+    /* Smooth, consistent rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    /* Subtle shadow */
     margin-bottom: 30px;
 }
 
@@ -692,6 +805,7 @@ section.card p {
         padding: 20px;
     }
 }
+
 /* General card styling for sections (like calendar) */
 /* General card styling for sections (like calendar) */
 .card {
@@ -699,13 +813,15 @@ section.card p {
     background-color: #ffffff;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px; /* Add some space between cards */
+    margin-bottom: 30px;
+    /* Add some space between cards */
 }
 
 /* Specific form card styling for centering the service form */
 .form-card {
     max-width: 600px;
-    margin: 0 auto; /* Center the form card */
+    margin: 0 auto;
+    /* Center the form card */
     padding: 30px;
     background-color: #ffffff;
     border-radius: 12px;
@@ -726,7 +842,8 @@ label {
 }
 
 /* Inputs and Textareas */
-input, textarea {
+input,
+textarea {
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -736,7 +853,8 @@ input, textarea {
     transition: border-color 0.3s ease;
 }
 
-input:focus, textarea:focus {
+input:focus,
+textarea:focus {
     border-color: #5d5fef;
     outline: none;
 }
@@ -758,9 +876,11 @@ button.btn {
 button.btn:hover {
     background-color: #4a4ad4;
 }
+
 .form-card {
     max-width: 600px;
-    margin: 0 auto; /* Center the form card */
+    margin: 0 auto;
+    /* Center the form card */
     padding: 30px;
     background-color: #ffffff;
     border-radius: 12px;
@@ -781,7 +901,8 @@ label {
 }
 
 /* Input fields and Select fields */
-input, select {
+input,
+select {
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -791,7 +912,8 @@ input, select {
     transition: border-color 0.3s ease;
 }
 
-input:focus, select:focus {
+input:focus,
+select:focus {
     border-color: #5d5fef;
     outline: none;
 }
@@ -813,6 +935,7 @@ button.btn {
 button.btn:hover {
     background-color: #4a4ad4;
 }
+
 /* General container for the page */
 .container {
     width: 85%;
@@ -861,7 +984,8 @@ button.btn:hover {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: calc(33.333% - 20px); /* Makes sure 3 cards fit in a row */
+    width: calc(33.333% - 20px);
+    /* Makes sure 3 cards fit in a row */
     box-sizing: border-box;
 }
 
@@ -894,15 +1018,18 @@ button.btn:hover {
 /* Responsive styling */
 @media (max-width: 768px) {
     .business-card {
-        width: calc(50% - 20px); /* For smaller screens, 2 cards per row */
+        width: calc(50% - 20px);
+        /* For smaller screens, 2 cards per row */
     }
 }
 
 @media (max-width: 480px) {
     .business-card {
-        width: 100%; /* For mobile, 1 card per row */
+        width: 100%;
+        /* For mobile, 1 card per row */
     }
 }
+
 .business-header {
     text-align: center;
     margin-bottom: 40px;
@@ -942,7 +1069,8 @@ button.btn:hover {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: calc(33.333% - 20px); /* Makes sure 3 service cards fit in a row */
+    width: calc(33.333% - 20px);
+    /* Makes sure 3 service cards fit in a row */
     box-sizing: border-box;
 }
 
@@ -975,15 +1103,18 @@ button.btn:hover {
 /* Responsive styling */
 @media (max-width: 768px) {
     .service-card {
-        width: calc(50% - 20px); /* For smaller screens, 2 service cards per row */
+        width: calc(50% - 20px);
+        /* For smaller screens, 2 service cards per row */
     }
 }
 
 @media (max-width: 480px) {
     .service-card {
-        width: 100%; /* For mobile, 1 service card per row */
+        width: 100%;
+        /* For mobile, 1 service card per row */
     }
 }
+
 /* Provider Header */
 .provider-header {
     text-align: center;
@@ -1024,7 +1155,8 @@ button.btn:hover {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: calc(33.333% - 20px); /* Makes sure 3 provider cards fit in a row */
+    width: calc(33.333% - 20px);
+    /* Makes sure 3 provider cards fit in a row */
     box-sizing: border-box;
 }
 
@@ -1057,15 +1189,18 @@ button.btn:hover {
 /* Responsive styling */
 @media (max-width: 768px) {
     .provider-card {
-        width: calc(50% - 20px); /* For smaller screens, 2 provider cards per row */
+        width: calc(50% - 20px);
+        /* For smaller screens, 2 provider cards per row */
     }
 }
 
 @media (max-width: 480px) {
     .provider-card {
-        width: 100%; /* For mobile, 1 provider card per row */
+        width: 100%;
+        /* For mobile, 1 provider card per row */
     }
 }
+
 /* General container styles */
 .container {
     width: 90%;
@@ -1145,6 +1280,7 @@ button.btn:hover {
 .continue-booking .btn:hover {
     background-color: #0056b3;
 }
+
 .date-list {
     display: flex;
     justify-content: center;
@@ -1181,4 +1317,87 @@ button.btn:hover {
     background-color: #5d5fef;
     color: #fff;
     border-color: #5d5fef;
+}
+
+/* Styles for Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+table thead {
+    background-color: #5d5fef;
+    /* Primary color for the header */
+    color: #fff;
+}
+
+table th,
+table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+table th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #f9fafc;
+    /* Light background for even rows */
+}
+
+table tbody tr:hover {
+    background-color: #e0e0e0;
+    /* Row highlight on hover */
+}
+
+tfoot td {
+    font-weight: 600;
+    text-align: center;
+    background-color: #f5f5f5;
+    padding: 15px;
+}
+
+.business_logo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.business_logo .logo-image {
+    width: 200px;
+    /* Adjust size as needed */
+    height: auto;
+    cursor: pointer;
+    /* Cursor indicates clickable */
+}
+
+.header-business-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 0;
+    height: 60px;
+    background-color: #ffffff;
+    border-bottom: none;
+    /* Remove any bottom border */
+    box-shadow: none;
+    /* Ensure no shadow */
+}
+
+/* Logo Styling */
+.header-business-logo .logo-image {
+    width: 200px;
+    /* Adjust size as needed */
+    height: 150px;
+    cursor: pointer;
+    border: none;
+    /* Remove borders */
+    background: none;
+    /* Ensure no background */
+    box-shadow: none;
+    /* Ensure no shadow */
 }

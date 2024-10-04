@@ -64,16 +64,26 @@ function AddProvider() {
     fetchServices(); // Fetch services when component mounts
   }, []);
 
+  // Function to handle logo click and redirect to the Home page
+  const handleLogoClick = () => {
+    navigate("/home"); // Navigate to Home page
+  };
+
   return (
     <div className="dashboard-container">
       {/* Sidebar Navigation */}
       <nav className="sidebar">
-        <div className="logo">
-          <h2>Reservo</h2>
+        <div
+          className="business_logo"
+          onClick={handleLogoClick}
+          style={{ cursor: "pointer" }}
+        >
+          {/* Replace the <h2>Reservo</h2> with the logo */}
+          <img src="/logo.png" alt="Reservo Logo" className="logo-image" />
         </div>
         <ul className="nav-links">
           <li>
-            <a href="/business-dashboard">Calendar</a>
+            <a href="/business-dashboard">Up Next</a>
           </li>
           <li>
             <a href="/business-services">Services</a>

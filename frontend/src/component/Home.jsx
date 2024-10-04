@@ -7,9 +7,9 @@ function Home() {
     <>
       <header className="header">
         <div className="container">
-          <a href="/index" className="logo">
-            Reservo
-          </a>
+          <Link to="/index" className="header-business-logo">
+            <img src="/logo.png" alt="Reservo Logo" className="logo-image" />
+          </Link>
           <nav className="nav">
             <Link to="/index" className="active">
               Home
@@ -62,7 +62,7 @@ function Home() {
       </section>
       <footer className="footer">
         <div className="container">
-          <p>© 2024 Reservo. All rights reserved.</p>
+          <p>Â© 2024 Reservo. All rights reserved.</p>
         </div>
       </footer>
     </>

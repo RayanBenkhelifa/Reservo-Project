@@ -42,7 +42,7 @@ function AddProvider() {
         },
         body: JSON.stringify({
           providerName,
-          serviceIds: selectedServices,
+          serviceIds: selectedServices, // Send selected service IDs as an array
         }),
       });
 

@@ -1,8 +1,7 @@
-// controllers/bookingController.js
 const Service = require('../models/Service');
 const BusinessOwner = require('../models/BusinessOwner');
+const Provider = require('../models/Provider');  // New Provider model
 const Booking = require('../models/Booking');
-
 
 // Function to exclude booked slots
 const filterBookedSlots = (timeSlots, bookings, serviceDuration) => {
@@ -19,7 +18,6 @@ const filterBookedSlots = (timeSlots, bookings, serviceDuration) => {
       let bookingStart = new Date(`1970-01-01 ${booking.startTime}`);
       let bookingEnd = new Date(`1970-01-01 ${booking.endTime}`);
 
-      
       // Check for overlap
       return slotStartTime < bookingEnd && slotEndTime > bookingStart;
     });
@@ -54,13 +52,13 @@ const getAvailableSlots = async (req, res) => {
   try {
     const { providerId, selectedDate, serviceDuration } = req.body;
 
-    // Find the provider's business and operating hours
-    const business = await BusinessOwner.findOne({ "providers._id": providerId });
+    // Find the provider and its associated business
+    const business = await BusinessOwner.findOne({ "providers": providerId });
     if (!business) {
       return res.status(404).json({ message: "Business not found" });
     }
 
-    const provider = business.providers.id(providerId);
+    const provider = await Provider.findById(providerId);  // New lookup for provider
     const { start: startTime, end: endTime } = business.operatingHours;
 
     console.log("Operating hours:", startTime, endTime);
@@ -93,62 +91,60 @@ const getAvailableSlots = async (req, res) => {
 // Function to create a booking
 const createBooking = async (req, res) => {
   try {
-      const { customerId, providerId, serviceId, selectedDate, startTime } = req.body;
-      console.log(customerId, providerId, serviceId, selectedDate, startTime)
-      // Step 1: Find the service to get the service duration
-      const service = await Service.findById(serviceId);
-      const serviceDuration = service.duration; // Duration is in minutes
+    const { customerId, providerId, serviceId, selectedDate, startTime } = req.body;
+    console.log(customerId, providerId, serviceId, selectedDate, startTime);
 
-      // Step 2: Parse start time properly by combining selectedDate and startTime
-      const startDateTime = new Date(`${selectedDate} ${startTime}`);
-      if (isNaN(startDateTime.getTime())) {
-          return res.status(400).json({ error: 'Invalid start time format' });
-      }
+    // Step 1: Find the service to get the service duration
+    const service = await Service.findById(serviceId);
+    const serviceDuration = service.duration; // Duration is in minutes
 
-      // Step 3: Calculate the end time by adding service duration
-      const endDateTime = new Date(startDateTime.getTime() + serviceDuration * 60000);
-      const formattedEndTime = endDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    // Step 2: Parse start time properly by combining selectedDate and startTime
+    const startDateTime = new Date(`${selectedDate} ${startTime}`);
+    if (isNaN(startDateTime.getTime())) {
+      return res.status(400).json({ error: 'Invalid start time format' });
+    }
 
-      console.log("Start time:", startTime);
-      console.log("End time:", formattedEndTime); // Check that this is a valid time
+    // Step 3: Calculate the end time by adding service duration
+    const endDateTime = new Date(startDateTime.getTime() + serviceDuration * 60000);
+    const formattedEndTime = endDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-      // Step 4: Check if the slot is available before booking
-      const existingBooking = await Booking.findOne({
-          provider: providerId,
-          date: selectedDate,
-          startTime: { $lt: formattedEndTime} , // Start time overlaps with an existing booking
-          endTime: { $gt: startTime}     // End time overlaps with an existing booking
-          
-      });
+    console.log("Start time:", startTime);
+    console.log("End time:", formattedEndTime); // Check that this is a valid time
 
-      console.log("Existing booking found:", existingBooking);  // Log the found booking
+    // Step 4: Check if the slot is available before booking
+    const existingBooking = await Booking.findOne({
+      provider: providerId,
+      date: selectedDate,
+      startTime: { $lt: formattedEndTime },
+      endTime: { $gt: startTime }
+    });
 
-      if (existingBooking) {
-          return res.status(400).json({ error: 'Selected time slot is not available' });
-      }
+    console.log("Existing booking found:", existingBooking);  // Log the found booking
 
-      // Step 5: Create a new booking
-      const newBooking = new Booking({
-          customer: customerId,
-          provider: providerId,
-          service: serviceId,
-          date: selectedDate,
-          startTime,
-          endTime: formattedEndTime // Store the correctly formatted end time
-      });
+    if (existingBooking) {
+      return res.status(400).json({ error: 'Selected time slot is not available' });
+    }
 
-      await newBooking.save();
+    // Step 5: Create a new booking
+    const newBooking = new Booking({
+      customer: customerId,
+      provider: providerId,
+      service: serviceId,
+      date: selectedDate,
+      startTime,
+      endTime: formattedEndTime // Store the correctly formatted end time
+    });
 
-      res.status(201).json({
-          message: 'Booking created successfully',
-          booking: newBooking
-      });
+    await newBooking.save();
+
+    res.status(201).json({
+      message: 'Booking created successfully',
+      booking: newBooking
+    });
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Failed to create booking' });
+    console.error(error);
+    res.status(500).json({ error: 'Failed to create booking' });
   }
 };
-
-
 
 module.exports = { getAvailableSlots, createBooking };

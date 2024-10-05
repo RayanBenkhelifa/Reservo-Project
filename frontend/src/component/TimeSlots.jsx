@@ -87,7 +87,7 @@ const TimeSlots = () => {
       alert("Please select a time slot to continue.");
       return;
     }
-    console.log(selectedTimeSlot);
+
     const bookingData = {
       customerId,
       providerId,

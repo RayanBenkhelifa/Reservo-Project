@@ -15,20 +15,24 @@ const BusinessProvider = () => {
   useEffect(() => {
     const fetchProviders = async () => {
       try {
+        console.log('Fetching providers from API...');
         const response = await fetch(
           `/customer/businesses/${businessId}/services/${serviceId}/providers`
         );
+
         const providersData = await response.json();
+        console.log('API response:', providersData);
 
         if (response.ok) {
           setProviders(providersData); // Update the state with fetched providers
         } else {
+          console.error('Failed response status:', response.status);
           setError("Failed to fetch providers");
         }
 
         setLoading(false);
       } catch (err) {
-        console.error(err);
+        console.error('Error fetching providers:', err);
         setError("Failed to load providers");
         setLoading(false);
       }
@@ -36,6 +40,7 @@ const BusinessProvider = () => {
 
     fetchProviders();
   }, [businessId, serviceId]);
+
   if (loading) {
     return <p>Loading providers...</p>;
   }
@@ -57,7 +62,6 @@ const BusinessProvider = () => {
             providers.map((provider) => (
               <div className="service-card" key={provider._id}>
                 <h3>{provider.name}</h3>
-                {/* Safely check if provider.services exists before accessing length */}
                 <p>
                   Available Services:{" "}
                   {provider.services

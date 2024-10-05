@@ -1,57 +1,52 @@
-const BusinessOwner = require('../models/BusinessOwner');
+const BusinessOwner = require('../models/BusinessOwner'); // Assuming this is the business model
+const Provider = require('../models/Provider'); // Assuming you have a Provider model
 
-// View All Businesses
+// Controller to fetch all businesses
 const getAllBusinesses = async (req, res) => {
   try {
-    const businesses = await BusinessOwner.find();
+    const businesses = await BusinessOwner.find(); // Fetch all businesses
     res.status(200).json(businesses);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch businesses' });
   }
 };
 
-// View Services for a Selected Business
+// Controller to fetch services of a specific business
 const getBusinessServices = async (req, res) => {
   try {
     const { businessId } = req.params;
-    console.log(businessId)
-    // Find the business by ID and populate the services in providers
-    const business = await BusinessOwner.findById(businessId).populate('providers.services');
+
+    // Fetch the business and populate its services
+    const business = await BusinessOwner.findById(businessId).populate('services');
 
     if (!business) {
       return res.status(404).json({ error: 'Business not found' });
     }
 
-    // Set to avoid duplicate services (since multiple providers might offer the same service)
-    const services = new Set();
-
-    // Loop through each provider to collect their services
-    business.providers.forEach(provider => {
-      provider.services.forEach(service => services.add(service));  // Add each service to the Set
-    });
-
-    // Convert Set to Array and send back the response
-    res.status(200).json(Array.from(services));
+    res.status(200).json(business.services);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: 'Failed to fetch services' });
   }
 };
 
-
-// View Providers for a Selected Service
+// Controller to fetch providers for a specific service within a business
 const getServiceProviders = async (req, res) => {
   try {
     const { businessId, serviceId } = req.params;
-    const business = await BusinessOwner.findById(businessId).populate('providers.services');
-    
+
+    // Fetch the business and filter the providers based on the serviceId
+    const business = await BusinessOwner.findById(businessId).populate({
+      path: 'providers',
+      match: { services: serviceId }, // Match providers offering the serviceId
+      populate: { path: 'services' }  // Populate the services inside the provider
+    });
+
     if (!business) {
       return res.status(404).json({ error: 'Business not found' });
     }
 
-    const providers = business.providers.filter(provider =>
-      provider.services.some(service => service._id.toString() === serviceId)
-    );
+    // Return the providers offering the specified service
+    const providers = business.providers;
 
     if (providers.length === 0) {
       return res.status(404).json({ error: 'No providers found for this service' });
@@ -63,4 +58,4 @@ const getServiceProviders = async (req, res) => {
   }
 };
 
-module.exports = {getAllBusinesses, getBusinessServices, getServiceProviders}
+module.exports = { getAllBusinesses, getBusinessServices, getServiceProviders };

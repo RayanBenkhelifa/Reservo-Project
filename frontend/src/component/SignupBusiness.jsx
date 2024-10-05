@@ -36,9 +36,9 @@ function SignupBusiness() {
     });
   };
 
-  // Validate and format the time input to ensure it includes AM/PM
+  // Strictly validate time format to ensure it includes H:MM AM/PM with uppercase AM/PM
   const validateTimeFormat = (time) => {
-    const timePattern = /^(1[0-2]|0?[1-9]):([0-5][0-9])\s?(AM|PM)$/i;
+    const timePattern = /^(1[0-2]|0?[1-9]):([0-5][0-9])\s(AM|PM)$/; // Uppercase AM/PM only
     return timePattern.test(time);
   };
 
@@ -51,7 +51,7 @@ function SignupBusiness() {
       !validateTimeFormat(formData.operatingHoursStart) ||
       !validateTimeFormat(formData.operatingHoursEnd)
     ) {
-      setError("Invalid time format. Please use the format H:MM AM/PM.");
+      setError("Invalid time format. Please use the format H:MM AM/PM with a space before AM or PM in uppercase.");
       return;
     }
 

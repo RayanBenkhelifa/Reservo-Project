@@ -4,12 +4,14 @@ import "../styles.css";
 
 function BusinessDashboard() {
   const [businessOwner, setBusinessOwner] = useState(null);
+  const [upNextAppointments, setUpNextAppointments] = useState([]); // State to hold upcoming appointments
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Function to fetch dashboard data (business owner information)
     const fetchDashboardData = async () => {
       const token = localStorage.getItem("authToken");
-      console.log("Token in BusinessDashboard: ", token);
+      console.log("Token in BusinessDashboard: ", token); // Log the token to verify it's present
 
       if (!token) {
         console.log("Token missing, redirecting to login...");
@@ -26,27 +28,52 @@ function BusinessDashboard() {
 
         if (response.ok) {
           const data = await response.json();
-          console.log("Dashboard data fetched: ", data);
+          console.log("Dashboard data fetched: ", data); // Log the fetched dashboard data
           setBusinessOwner(data);
         } else {
-          console.log(
-            "Failed to fetch dashboard data, clearing token and redirecting to login."
-          );
+          console.log("Failed to fetch dashboard data, clearing token and redirecting to login.");
           localStorage.removeItem("authToken");
           navigate("/login-business");
         }
       } catch (error) {
-        console.error("Error fetching dashboard data:", error);
+        console.error("Error fetching dashboard data:", error); // Log any fetch errors
         localStorage.removeItem("authToken");
         navigate("/login-business");
       }
     };
 
-    fetchDashboardData();
+    // Function to fetch upcoming appointments
+    const fetchUpNextAppointments = async () => {
+      const token = localStorage.getItem("authToken");
+      if (!token) return;
+
+      try {
+        console.log("Fetching upcoming appointments..."); // Log when fetching starts
+        const response = await fetch("/business/up-next", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const appointmentsData = await response.json();
+          console.log("Appointments fetched: ", appointmentsData); // Log fetched appointments
+          setUpNextAppointments(appointmentsData);
+        } else {
+          console.error("Failed to fetch upcoming appointments."); // Log any non-200 responses
+        }
+      } catch (error) {
+        console.error("Error fetching upcoming appointments:", error); // Log any fetch errors
+      }
+    };
+
+    fetchDashboardData(); // Fetch business owner data
+    fetchUpNextAppointments(); // Fetch upcoming appointments
   }, [navigate]);
 
-  // Rename EmptyTable to UpNext and ensure proper capitalization
+  // Component to render the upcoming appointments in a table
   function UpNext() {
+    console.log("Rendering UpNext table with appointments: ", upNextAppointments); // Log appointments data
     return (
       <table border="1">
         <thead>
@@ -61,8 +88,26 @@ function BusinessDashboard() {
             <th>Price</th>
           </tr>
         </thead>
-        <tbody>{/* Table body is intentionally left empty */}</tbody>
-        <tfoot>{/* Table footer is intentionally left empty */}</tfoot>
+        <tbody>
+          {upNextAppointments.length > 0 ? (
+            upNextAppointments.map((appointment) => (
+              <tr key={appointment._id}>
+                <td>{appointment.customerName}</td>
+                <td>{appointment.providerName}</td>
+                <td>{appointment.serviceName}</td>
+                <td>{appointment.date}</td>
+                <td>{appointment.startTime}</td>
+                <td>{appointment.endTime}</td>
+                <td>{appointment.duration}</td>
+                <td>{appointment.price}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="8">No upcoming appointments.</td>
+            </tr>
+          )}
+        </tbody>
       </table>
     );
   }

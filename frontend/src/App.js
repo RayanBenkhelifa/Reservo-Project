@@ -15,7 +15,10 @@ import Contact from './component/Contact';
 import BrowseBusinesses from './component/BrowseBusinesses';
 import SelectProvider from './component/SelectProvider';
 import TimeSlots from './component/TimeSlots';
+import SuccessPage from './component/SuccessPage';  // Import the SuccessPage component
+import BookingConfirmation from './component/BookingConfirmation';  // Confirmation page component
 import AddProvider from './component/AddProvider';
+import ReviewAndPayment from './component/ReviewAndPayment';
 import { AuthContext } from './component/AuthContext';
 import './styles.css';
 
@@ -103,9 +106,12 @@ function App() {
           <Route path="/browse-businesses" element={<BrowseBusinesses />} />
           <Route path="/services" element={<BrowseBusinesses />} />
           <Route path="/user-type" element={<UserType />} />
+          <Route path="/success" element={<SuccessPage />} />  {/* Success page */}
+          <Route path="/booking-confirmation" element={<BookingConfirmation />} /> {/* Confirmation page */}
+          <Route path="/review-payment/:providerId" element={<ReviewAndPayment />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/contact" element={<Contact />} />
-          
+  /          
           {/* Handle unknown routes */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

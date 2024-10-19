@@ -1,6 +1,7 @@
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);  // Ensure your Stripe secret key is set
 const Service = require('../models/Service');
 const BusinessOwner = require('../models/BusinessOwner');
-const Provider = require('../models/Provider');  // New Provider model
+const Provider = require('../models/Provider');
 const Booking = require('../models/Booking');
 
 // Function to exclude booked slots
@@ -58,7 +59,7 @@ const getAvailableSlots = async (req, res) => {
       return res.status(404).json({ message: "Business not found" });
     }
 
-    const provider = await Provider.findById(providerId);  // New lookup for provider
+    const provider = await Provider.findById(providerId);
     const { start: startTime, end: endTime } = business.operatingHours;
 
     console.log("Operating hours:", startTime, endTime);
@@ -88,7 +89,7 @@ const getAvailableSlots = async (req, res) => {
   }
 };
 
-// Function to create a booking
+// Function to create a booking with Stripe integration
 const createBooking = async (req, res) => {
   try {
     const { customerId, providerId, serviceId, selectedDate, startTime } = req.body;
@@ -125,22 +126,51 @@ const createBooking = async (req, res) => {
       return res.status(400).json({ error: 'Selected time slot is not available' });
     }
 
-    // Step 5: Create a new booking
+    // Step 5: Find the associated business owner
+    const business = await BusinessOwner.findOne({ providers: providerId });
+    if (!business) {
+      return res.status(404).json({ error: "Business owner not found" });
+    }
+    
+    // Step 6: Create a new booking (without payment completed yet)
     const newBooking = new Booking({
       customer: customerId,
       provider: providerId,
       service: serviceId,
+      businessOwner: business._id,  // Assign the business owner from the business
       date: selectedDate,
       startTime,
-      endTime: formattedEndTime // Store the correctly formatted end time
+      endTime: formattedEndTime, // Store the correctly formatted end time
+      paymentStatus: 'pending', // Set initial payment status as pending
     });
 
     await newBooking.save();
 
-    res.status(201).json({
-      message: 'Booking created successfully',
-      booking: newBooking
+    // Step 7: Create a Stripe Checkout session
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      mode: 'payment',
+      line_items: [{
+        price_data: {
+          currency: 'SAR',
+          product_data: {
+            name: service.serviceName,
+            description: `Service by ${providerId}`,
+          },
+          unit_amount: service.price * 100, // Amount in cents
+        },
+        quantity: 1,
+      }],
+      success_url: `${process.env.CLIENT_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.CLIENT_URL}/cancel`,
     });
+
+    // Step 8: Store Stripe session ID in the booking
+    newBooking.stripeSessionId = session.id;
+    await newBooking.save();
+
+    // Step 9: Send Stripe checkout URL to the client
+    res.json({ url: session.url });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to create booking' });

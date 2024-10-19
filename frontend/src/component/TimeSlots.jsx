@@ -8,8 +8,9 @@ const TimeSlots = () => {
 
   // Parse query parameters using URLSearchParams
   const queryParams = new URLSearchParams(location.search);
-  const serviceId = queryParams.get("serviceId"); // Extract serviceId from query parameters
-  const serviceDuration = parseInt(queryParams.get("duration"), 10); // Extract serviceDuration and convert to a number
+  const businessId = queryParams.get("businessId");  // Extract businessId from query parameters
+  const serviceId = queryParams.get("serviceId");
+  const serviceDuration = parseInt(queryParams.get("duration"), 10);
 
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
@@ -65,60 +66,35 @@ const TimeSlots = () => {
   };
 
   // Handle booking creation
-  const handleContinueBooking = async () => {
-    const token = localStorage.getItem("authToken"); // Check if the user is authenticated
+  const handleContinueBooking = () => {
+    const token = localStorage.getItem("authToken");
     if (!token) {
       navigate("/login-customer", {
         state: {
-          from: location.pathname, // Current path
-          providerId, // Pass providerId
-          serviceId, // Pass serviceId
-          serviceDuration, // Pass service duration
-          selectedDate, // Pass selected date
-          selectedTimeSlot, // Pass the selected time slot
+          from: location.pathname,
+          providerId,
+          serviceId,
+          serviceDuration,
+          selectedDate,
+          selectedTimeSlot,
+          businessId,  // Pass businessId
         },
       });
       return;
     }
-
-    const customerId = extractCustomerIdFromToken(token); // Extract customer ID from the token
-
+  
     if (!selectedTimeSlot) {
       alert("Please select a time slot to continue.");
       return;
     }
-
-    const bookingData = {
-      customerId,
-      providerId,
-      serviceId,
-      selectedDate,
-      startTime: selectedTimeSlot, // Only pass the actual selected start time
-    };
-
-    try {
-      const response = await fetch("/booking/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Send token for authentication
-        },
-        body: JSON.stringify(bookingData),
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        alert("Booking successful!");
-        navigate("/booking-confirmation");
-      } else {
-        alert(`Booking failed: ${data.error}`);
-      }
-    } catch (error) {
-      console.error("Error creating booking:", error);
-      alert("An error occurred while creating the booking.");
-    }
+  
+    // Log values to verify they are correct
+    console.log(providerId, serviceId, serviceDuration, selectedDate, selectedTimeSlot, businessId);
+  
+    // Redirect to Review and Payment page, passing necessary data in the URL
+    navigate(`/review-payment/${providerId}?businessId=${businessId}&serviceId=${serviceId}&duration=${serviceDuration}&date=${selectedDate}&time=${selectedTimeSlot}`);
   };
-
+  
   // Helper function to extract customer ID from the token
   const extractCustomerIdFromToken = (token) => {
     try {
@@ -161,9 +137,8 @@ const TimeSlots = () => {
             timeSlots.map((timeSlot, index) => (
               <button
                 key={index}
-                className={`time-slot ${
-                  selectedTimeSlot === timeSlot ? "selected" : ""
-                }`}
+                className={`time-slot ${selectedTimeSlot === timeSlot ? "selected" : ""
+                  }`}
                 onClick={() => handleTimeSlotSelection(timeSlot)}
               >
                 {timeSlot}

@@ -71,7 +71,7 @@ const BusinessProvider = () => {
 
                 {/* Pass providerId in the URL and serviceId, serviceDuration as query params */}
                 <Link
-                  to={`/time-slots/${provider._id}?serviceId=${serviceId}&duration=${serviceDuration}`}
+                  to={`/time-slots/${provider._id}?businessId=${businessId}&serviceId=${serviceId}&duration=${serviceDuration}`}
                   className="btn"
                 >
                   Book {provider.name}

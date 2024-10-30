@@ -11,7 +11,7 @@ const bookingSchema = new mongoose.Schema({
     endTime: { type: String, required: true },
     paymentStatus: {
         type: String,
-        enum: ['pending', 'completed', 'failed'],
+        enum: ['pending', 'completed', 'failed','unpaid'],
         default: 'pending'
     },
     stripeSessionId: { type: String }

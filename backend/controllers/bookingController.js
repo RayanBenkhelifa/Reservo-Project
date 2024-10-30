@@ -1,4 +1,6 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);  // Ensure your Stripe secret key is set
+// bookingController.js
+
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const Service = require('../models/Service');
 const BusinessOwner = require('../models/BusinessOwner');
 const Provider = require('../models/Provider');
@@ -8,238 +10,370 @@ const nodemailer = require('nodemailer');
 
 // Setup transporter for SendGrid using nodemailer
 const transporter = nodemailer.createTransport({
-    service: 'SendGrid',
-    auth: {
-        user: process.env.EMAIL_USERNAME,  // This is always 'apikey' for SendGrid
-        pass: process.env.EMAIL_PASSWORD   // Your SendGrid API key
-    }
+  host: 'smtp.sendgrid.net',
+  port: 587,
+  secure: false, // Use TLS
+  auth: {
+    user: process.env.EMAIL_USERNAME,  // This is always 'apikey' for SendGrid
+    pass: process.env.EMAIL_PASSWORD   // Your SendGrid API key
+  },
 });
 
 // Send confirmation email
 const sendConfirmationEmail = async (customerEmail, bookingDetails) => {
-    const mailOptions = {
-        from: 'reservoreminder@hotmail.com',  // Use the verified email address
-        to: customerEmail,
-        subject: 'Booking Confirmation - Reservo',
-        text: `Your booking has been confirmed.\nDetails:\nService: ${bookingDetails.serviceName}\nProvider: ${bookingDetails.providerName}\nDate: ${bookingDetails.date}\nTime: ${bookingDetails.startTime}`
-    };
+  const mailOptions = {
+    from: 'reservoreminder@hotmail.com', // Use your verified sender email
+    to: customerEmail,
+    subject: 'Booking Confirmation - Reservo',
+    text: `Your booking has been confirmed.\n\nDetails:\nService: ${bookingDetails.serviceName}\nProvider: ${bookingDetails.providerName}\nDate: ${bookingDetails.date}\nTime: ${bookingDetails.startTime}`,
+  };
 
-    try {
-        await transporter.sendMail(mailOptions);
-        console.log('Confirmation email sent successfully');
-    } catch (error) {
-        console.error('Error sending confirmation email:', error.message);
-    }
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Confirmation email sent successfully');
+  } catch (error) {
+    console.error('Error sending confirmation email:', error.message);
+  }
 };
 
 // Send reminder email 1 hour before the appointment
 const sendReminderEmail = async (customerEmail, bookingDetails) => {
-    const mailOptions = {
-        from: 'reservoreminder@hotmail.com',  // Use the verified email address
-        to: customerEmail,
-        subject: 'Reminder - Upcoming Appointment in 1 Hour',
-        text: `Reminder: Your appointment is scheduled in 1 hour.\nDetails:\nService: ${bookingDetails.serviceName}\nProvider: ${bookingDetails.providerName}\nDate: ${bookingDetails.date}\nTime: ${bookingDetails.startTime}`
-    };
+  const mailOptions = {
+    from: 'reservoreminder@hotmail.com', // Use your verified sender email
+    to: customerEmail,
+    subject: 'Reminder - Upcoming Appointment in 1 Hour',
+    text: `Reminder: Your appointment is scheduled in 1 hour.\n\nDetails:\nService: ${bookingDetails.serviceName}\nProvider: ${bookingDetails.providerName}\nDate: ${bookingDetails.date}\nTime: ${bookingDetails.startTime}`,
+  };
 
-    try {
-        await transporter.sendMail(mailOptions);
-        console.log('Reminder email sent successfully');
-    } catch (error) {
-        console.error('Error sending reminder email:', error.message);
-    }
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Reminder email sent successfully');
+  } catch (error) {
+    console.error('Error sending reminder email:', error.message);
+  }
 };
 
-// Function to exclude booked slots
+// Generate time slots
+const generateTimeSlots = (startTime, endTime, interval) => {
+  const slots = [];
+  let start = new Date(`1970-01-01 ${startTime}`);
+  let end = new Date(`1970-01-01 ${endTime}`);
+
+  while (start < end) {
+    slots.push(
+      start.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+    );
+    start = new Date(start.getTime() + interval * 60000);
+  }
+  return slots;
+};
+
+// Filter booked slots
 const filterBookedSlots = (timeSlots, bookings, serviceDuration) => {
-    const availableSlots = [];
+  const availableSlots = [];
+  const serviceDurationMs = serviceDuration * 60000;
 
-    // Convert service duration from minutes to milliseconds
-    const serviceDurationMs = serviceDuration * 60000;
+  timeSlots.forEach((slot) => {
+    let slotStartTime = new Date(`1970-01-01 ${slot}`);
+    let slotEndTime = new Date(slotStartTime.getTime() + serviceDurationMs);
 
-    timeSlots.forEach(slot => {
-        let slotStartTime = new Date(`1970-01-01 ${slot}`);
-        let slotEndTime = new Date(slotStartTime.getTime() + serviceDurationMs);
-
-        let hasOverlap = bookings.some(booking => {
-            let bookingStart = new Date(`1970-01-01 ${booking.startTime}`);
-            let bookingEnd = new Date(`1970-01-01 ${booking.endTime}`);
-
-            // Check for overlap
-            return slotStartTime < bookingEnd && slotEndTime > bookingStart;
-        });
-
-        if (!hasOverlap) {
-            availableSlots.push(slot);
-        }
+    let hasOverlap = bookings.some((booking) => {
+      let bookingStart = new Date(`1970-01-01 ${booking.startTime}`);
+      let bookingEnd = new Date(`1970-01-01 ${booking.endTime}`);
+      return slotStartTime < bookingEnd && slotEndTime > bookingStart;
     });
 
-    console.log("Available slots after filtering:", availableSlots);
-    return availableSlots;
-};
-
-const generateTimeSlots = (startTime, endTime, interval) => {
-    const slots = [];
-    let start = new Date(`1970-01-01 ${startTime}`);
-    let end = new Date(`1970-01-01 ${endTime}`);
-
-    console.log("Parsed Start Time:", start);
-    console.log("Parsed End Time:", end);
-
-    while (start < end) {
-        slots.push(start.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }));
-        start = new Date(start.getTime() + interval * 60000);
+    if (!hasOverlap) {
+      availableSlots.push(slot);
     }
-    console.log("Generated time slots:", slots);
-    return slots;
+  });
+  return availableSlots;
 };
 
-// Route handler to get available slots for a provider and a specific date
+// Controller to get available slots
 const getAvailableSlots = async (req, res) => {
-    try {
-        const { providerId, selectedDate, serviceDuration } = req.body;
+  try {
+    const { providerId, selectedDate, serviceDuration } = req.body;
 
-        // Find the provider and its associated business
-        const business = await BusinessOwner.findOne({ "providers": providerId });
-        if (!business) {
-            return res.status(404).json({ message: "Business not found" });
-        }
-
-        const provider = await Provider.findById(providerId);
-        const { start: startTime, end: endTime } = business.operatingHours;
-
-        console.log("Operating hours:", startTime, endTime);
-
-        // Generate the time slots based on 10-minute intervals
-        let timeSlots = generateTimeSlots(startTime.trim(), endTime.trim(), 10);
-
-        // Find existing bookings for the provider on the selected date
-        const bookingsOnDate = await Booking.find({
-            provider: providerId,
-            date: selectedDate
-        });
-
-        console.log("Existing bookings on selected date:", bookingsOnDate);
-
-        // Filter out booked slots
-        const availableSlots = filterBookedSlots(timeSlots, bookingsOnDate, serviceDuration);
-
-        // Respond with available slots
-        res.status(200).json({
-            message: "Available slots fetched successfully",
-            availableSlots
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Failed to fetch available slots" });
+    const business = await BusinessOwner.findOne({ providers: providerId });
+    if (!business) {
+      return res.status(404).json({ message: 'Business not found' });
     }
+
+    const provider = await Provider.findById(providerId);
+    const { start: startTime, end: endTime } = business.operatingHours;
+
+    let timeSlots = generateTimeSlots(startTime.trim(), endTime.trim(), 10);
+
+    const bookingsOnDate = await Booking.find({
+      provider: providerId,
+      date: selectedDate,
+    });
+
+    const availableSlots = filterBookedSlots(
+      timeSlots,
+      bookingsOnDate,
+      serviceDuration
+    );
+
+    res.status(200).json({
+      message: 'Available slots fetched successfully',
+      availableSlots,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to fetch available slots' });
+  }
 };
 
-// Function to create a booking with Stripe integration and email notifications
+// Controller to create a booking
 const createBooking = async (req, res) => {
-    try {
-        const { customerId, providerId, serviceId, selectedDate, startTime } = req.body;
-        console.log(customerId, providerId, serviceId, selectedDate, startTime);
+  try {
+    const {
+      customerId,
+      providerId,
+      serviceId,
+      selectedDate,
+      startTime,
+      paymentOption,
+      items,
+    } = req.body;
 
-        // Step 1: Find the service to get the service duration
-        const service = await Service.findById(serviceId);
+    const service = await Service.findById(serviceId);
+    const provider = await Provider.findById(providerId);
 
-        // Fetch the provider data (fix for the error)
-        const provider = await Provider.findById(providerId);  // This line was missing and caused the error
+    if (!service || !provider) {
+      return res.status(400).json({ error: 'Invalid service or provider' });
+    }
 
-        const serviceDuration = service.duration; // Duration is in minutes
+    const serviceDuration = service.duration;
 
-        // Step 2: Parse start time properly by combining selectedDate and startTime
-        const startDateTime = new Date(`${selectedDate} ${startTime}`);
-        if (isNaN(startDateTime.getTime())) {
-            return res.status(400).json({ error: 'Invalid start time format' });
-        }
+    const startDateTime = new Date(`${selectedDate} ${startTime}`);
+    if (isNaN(startDateTime.getTime())) {
+      return res.status(400).json({ error: 'Invalid start time format' });
+    }
 
-        // Step 3: Calculate the end time by adding service duration
-        const endDateTime = new Date(startDateTime.getTime() + serviceDuration * 60000);
-        const formattedEndTime = endDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const endDateTime = new Date(
+      startDateTime.getTime() + serviceDuration * 60000
+    );
+    const formattedEndTime = endDateTime.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
 
-        // Step 4: Check if the slot is available before booking
-        const existingBooking = await Booking.findOne({
-            provider: providerId,
-            date: selectedDate,
-            startTime: { $lt: formattedEndTime },
-            endTime: { $gt: startTime }
-        });
+    const existingBooking = await Booking.findOne({
+      provider: providerId,
+      date: selectedDate,
+      startTime: { $lt: formattedEndTime },
+      endTime: { $gt: startTime },
+    });
 
-        if (existingBooking) {
-            return res.status(400).json({ error: 'Selected time slot is not available' });
-        }
+    if (existingBooking) {
+      return res
+        .status(400)
+        .json({ error: 'Selected time slot is not available' });
+    }
 
-        // Step 5: Find the associated business owner
-        const business = await BusinessOwner.findOne({ providers: providerId });
-        if (!business) {
-            return res.status(404).json({ error: "Business owner not found" });
-        }
+    const business = await BusinessOwner.findOne({ providers: providerId });
+    if (!business) {
+      return res.status(404).json({ error: 'Business owner not found' });
+    }
 
-        const customer = await Customer.findById(customerId);
+    const customer = await Customer.findById(customerId);
 
-        // Step 6: Create a new booking
-        const newBooking = new Booking({
-            customer: customerId,
-            provider: providerId,
-            service: serviceId,
-            businessOwner: business._id,
-            date: selectedDate,
-            startTime,
-            endTime: formattedEndTime,
-            paymentStatus: 'pending'
-        });
+    // Determine payment status based on payment option
+    let paymentStatus = 'pending';
+    if (paymentOption === 'venue') {
+      paymentStatus = 'unpaid'; // Set to 'unpaid' for 'Pay at Venue'
+    } else if (paymentOption === 'stripe') {
+      paymentStatus = 'pending';
+    }
 
-        await newBooking.save();
 
-        // Step 7: Send confirmation email
-        const bookingDetails = {
-            serviceName: service.serviceName,
-            providerName: provider.name,  // Use the provider's name here after fetching it from the database
-            date: selectedDate,
-            startTime
-        };
-        await sendConfirmationEmail(customer.email, bookingDetails);
+    // Create a new booking
+    const newBooking = new Booking({
+      customer: customerId,
+      provider: providerId,
+      service: serviceId,
+      businessOwner: business._id,
+      date: selectedDate,
+      startTime,
+      endTime: formattedEndTime,
+      paymentStatus,
+    });
 
-        // Step 8: Schedule reminder email 1 hour before the appointment
-        const appointmentTime = new Date(`${selectedDate} ${startTime}`);
-        const reminderTime = new Date(appointmentTime.getTime() - 60 * 60 * 1000); // 1 hour before
-        const timeUntilReminder = reminderTime - new Date();  // Calculate delay in milliseconds
+    await newBooking.save();
 
+    // Prepare booking details for email
+    const bookingDetails = {
+      serviceName: service.serviceName,
+      providerName: provider.name,
+      date: selectedDate,
+      startTime,
+    };
+
+    if (paymentOption === 'venue') {
+      // Send confirmation email immediately
+      await sendConfirmationEmail(customer.email, bookingDetails);
+
+      // Schedule reminder email
+      const appointmentTime = new Date(`${selectedDate} ${startTime}`);
+      const reminderTime = new Date(
+        appointmentTime.getTime() - 60 * 60 * 1000
+      ); // 1 hour before
+      const timeUntilReminder = reminderTime - new Date();
+
+      if (timeUntilReminder > 0) {
         setTimeout(async () => {
-            await sendReminderEmail(customer.email, bookingDetails);
+          await sendReminderEmail(customer.email, bookingDetails);
         }, timeUntilReminder);
-
-        // Step 9: Create a Stripe Checkout session
-        const session = await stripe.checkout.sessions.create({
-            payment_method_types: ['card'],
-            mode: 'payment',
-            line_items: [{
-                price_data: {
-                    currency: 'SAR',
-                    product_data: {
-                        name: service.serviceName,
-                        description: `Service by ${provider.name}`,  // Use the provider's name in Stripe checkout description
-                    },
-                    unit_amount: service.price * 100, // Amount in cents
-                },
-                quantity: 1,
-            }],
-            success_url: `${process.env.CLIENT_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${process.env.CLIENT_URL}/cancel`,
-        });
-
-        // Step 10: Store Stripe session ID in the booking
-        newBooking.stripeSessionId = session.id;
-        await newBooking.save();
-
-        // Step 11: Send Stripe checkout URL to the client
-        res.json({ url: session.url });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Failed to create booking' });
       }
-  };
-  
-  module.exports = { getAvailableSlots, createBooking };
-  
+
+      res.json({
+        message: 'Booking created successfully',
+        bookingId: newBooking._id,
+      });
+    } else if (paymentOption === 'stripe') {
+      // Create Stripe Checkout session
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        mode: 'payment',
+        line_items: items.map((item) => ({
+          price_data: {
+            currency: 'SAR',
+            product_data: {
+              name: item.name,
+              description: `Service by ${provider.name}`,
+            },
+            unit_amount: item.price * 100, // Amount in cents
+          },
+          quantity: item.quantity,
+        })),
+        success_url: `${process.env.CLIENT_URL}/success?session_id={CHECKOUT_SESSION_ID}&bookingId=${newBooking._id}`,
+        cancel_url: `${process.env.CLIENT_URL}/cancel`,
+      });
+
+      // Update booking with Stripe session ID
+      newBooking.stripeSessionId = session.id;
+      await newBooking.save();
+
+      // Send Stripe checkout URL to the client
+      res.json({ url: session.url });
+    }
+  } catch (error) {
+    console.error('Error creating booking:', error);
+    res.status(500).json({ error: 'Failed to create booking' });
+  }
+};
+
+// Controller to update booking status after payment success
+const updateBookingStatus = async (req, res) => {
+  const { bookingId } = req.params;
+
+  try {
+    const booking = await Booking.findById(bookingId)
+      .populate('service')
+      .populate('provider')
+      .populate('customer');
+
+    if (!booking) {
+      return res
+        .status(404)
+        .json({ success: false, error: 'Booking not found' });
+    }
+
+    // Update payment status to completed
+    booking.paymentStatus = 'completed';
+    await booking.save();
+
+    // Prepare booking details for email
+    const bookingDetails = {
+      serviceName: booking.service.serviceName,
+      providerName: booking.provider.name,
+      date: booking.date,
+      startTime: booking.startTime,
+    };
+
+    // Send confirmation email to customer
+    await sendConfirmationEmail(booking.customer.email, bookingDetails);
+
+    // Schedule reminder email
+    const appointmentTime = new Date(`${booking.date} ${booking.startTime}`);
+    const reminderTime = new Date(
+      appointmentTime.getTime() - 60 * 60 * 1000
+    ); // 1 hour before
+    const timeUntilReminder = reminderTime - new Date();
+
+    if (timeUntilReminder > 0) {
+      setTimeout(async () => {
+        await sendReminderEmail(booking.customer.email, bookingDetails);
+      }, timeUntilReminder);
+    }
+
+    res.json({ success: true, booking: bookingDetails });
+  } catch (error) {
+    console.error('Error updating booking status:', error);
+    res
+      .status(500)
+      .json({ success: false, error: 'Failed to update booking status' });
+  }
+};
+
+// Controller to verify Stripe payment session
+const verifySession = async (req, res) => {
+  const { session_id } = req.query;
+
+  try {
+    const session = await stripe.checkout.sessions.retrieve(session_id);
+
+    if (session.payment_status === 'paid') {
+      res.json({ payment_status: 'paid' });
+    } else {
+      res.json({ payment_status: 'unpaid' });
+    }
+  } catch (error) {
+    console.error('Error verifying session:', error);
+    res.status(500).json({ error: 'Failed to verify payment session' });
+  }
+};
+
+// Controller to get booking details
+const getBookingDetails = async (req, res) => {
+  const { bookingId } = req.params;
+
+  try {
+    const booking = await Booking.findById(bookingId)
+      .populate('service')
+      .populate('provider')
+      .populate('customer');
+
+    if (!booking) {
+      return res
+        .status(404)
+        .json({ success: false, error: 'Booking not found' });
+    }
+
+    const bookingDetails = {
+      serviceName: booking.service.serviceName,
+      providerName: booking.provider.name,
+      date: booking.date,
+      startTime: booking.startTime,
+      paymentStatus: booking.paymentStatus, // Include payment status
+    };
+
+    res.json({ success: true, booking: bookingDetails });
+  } catch (error) {
+    console.error('Error fetching booking details:', error);
+    res
+      .status(500)
+      .json({ success: false, error: 'Failed to fetch booking details' });
+  }
+};
+
+module.exports = {
+  getAvailableSlots,
+  createBooking,
+  updateBookingStatus,
+  verifySession,
+  getBookingDetails,
+};

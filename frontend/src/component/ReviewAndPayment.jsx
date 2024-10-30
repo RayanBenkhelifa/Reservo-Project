@@ -1,3 +1,4 @@
+// src/components/ReviewAndPayment.jsx
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
@@ -6,7 +7,7 @@ const ReviewAndPayment = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Parse query parameters using URLSearchParams
+  // Parse query parameters
   const queryParams = new URLSearchParams(location.search);
   const businessId = queryParams.get("businessId");
   const serviceId = queryParams.get("serviceId");
@@ -14,12 +15,13 @@ const ReviewAndPayment = () => {
   const selectedDate = queryParams.get("date");
   const selectedTimeSlot = queryParams.get("time");
 
-  // State variables to hold service, provider, and business details
+  // State variables
   const [serviceDetails, setServiceDetails] = useState(null);
   const [providerDetails, setProviderDetails] = useState(null);
   const [businessDetails, setBusinessDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [paymentOption, setPaymentOption] = useState("stripe"); // Default to 'stripe'
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -32,33 +34,36 @@ const ReviewAndPayment = () => {
 
     const fetchDetails = async () => {
       try {
-        console.log("Provider ID:", providerId);
-        console.log("Business ID:", businessId);
-        console.log("Service ID:", serviceId);
-        console.log("Service Duration:", serviceDuration);
-        console.log("Selected Date:", selectedDate);
-        console.log("Selected Time Slot:", selectedTimeSlot);
-
         const serviceResponse = await fetch(`/customer/services/${serviceId}`);
         const serviceData = await serviceResponse.json();
         if (!serviceResponse.ok) {
-          throw new Error(`Failed to fetch service details, status: ${serviceResponse.status}`);
+          throw new Error(
+            `Failed to fetch service details, status: ${serviceResponse.status}`
+          );
         }
 
         setServiceDetails(serviceData);
 
-        const providerResponse = await fetch(`/customer/businesses/${businessId}/services/${serviceId}/providers`);
+        const providerResponse = await fetch(
+          `/customer/businesses/${businessId}/services/${serviceId}/providers`
+        );
         const providerData = await providerResponse.json();
         if (!providerResponse.ok) {
-          throw new Error(`Failed to fetch provider details, status: ${providerResponse.status}`);
+          throw new Error(
+            `Failed to fetch provider details, status: ${providerResponse.status}`
+          );
         }
 
         setProviderDetails(providerData);
 
-        const businessResponse = await fetch(`/customer/businesses/${businessId}`);
+        const businessResponse = await fetch(
+          `/customer/businesses/${businessId}`
+        );
         const businessData = await businessResponse.json();
         if (!businessResponse.ok) {
-          throw new Error(`Failed to fetch business details, status: ${businessResponse.status}`);
+          throw new Error(
+            `Failed to fetch business details, status: ${businessResponse.status}`
+          );
         }
 
         setBusinessDetails(businessData);
@@ -92,6 +97,7 @@ const ReviewAndPayment = () => {
       serviceId,
       selectedDate,
       startTime: selectedTimeSlot,
+      paymentOption, // Include payment option
       items: [
         {
           name: serviceDetails?.serviceName || "Unknown Service",
@@ -102,7 +108,7 @@ const ReviewAndPayment = () => {
     };
 
     try {
-      const response = await fetch("/payment/create-checkout-session", {
+      const response = await fetch("/booking/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -113,10 +119,15 @@ const ReviewAndPayment = () => {
 
       const data = await response.json();
       if (response.ok) {
-        localStorage.setItem("bookingData", JSON.stringify(bookingData));
-        window.location = data.url;
+        if (paymentOption === "stripe") {
+          // Redirect to Stripe checkout URL
+          window.location = data.url;
+        } else if (paymentOption === "venue") {
+          // Redirect to confirmation page
+          navigate(`/booking-confirmation?bookingId=${data.bookingId}`);
+        }
       } else {
-        console.error(`Checkout failed: ${data.error}`);
+        console.error(`Booking failed: ${data.error}`);
       }
     } catch (error) {
       console.error("Error during checkout:", error);
@@ -134,6 +145,10 @@ const ReviewAndPayment = () => {
     }
   };
 
+  const handlePaymentOptionChange = (event) => {
+    setPaymentOption(event.target.value);
+  };
+
   if (loading) return <p>Loading details...</p>;
   if (error) return <p>{error}</p>;
 
@@ -145,16 +160,51 @@ const ReviewAndPayment = () => {
 
       <section className="review-section">
         <h2>Review Your Booking</h2>
-        <p><strong>Business:</strong> {businessDetails?.businessName || 'N/A'}</p>
-        <p><strong>Provider:</strong> {providerDetails?.[0]?.name || 'N/A'}</p>
-        <p><strong>Service:</strong> {serviceDetails?.serviceName || 'N/A'}</p>
-        <p><strong>Duration:</strong> {serviceDuration} minutes</p>
-        <p><strong>Date:</strong> {selectedDate}</p>
-        <p><strong>Start Time:</strong> {selectedTimeSlot}</p>
-        <p><strong>Price:</strong> SAR {serviceDetails?.price || 'N/A'}</p>
+        <p>
+          <strong>Business:</strong> {businessDetails?.businessName || "N/A"}
+        </p>
+        <p>
+          <strong>Provider:</strong> {providerDetails?.[0]?.name || "N/A"}
+        </p>
+        <p>
+          <strong>Service:</strong> {serviceDetails?.serviceName || "N/A"}
+        </p>
+        <p>
+          <strong>Duration:</strong> {serviceDuration} minutes
+        </p>
+        <p>
+          <strong>Date:</strong> {selectedDate}
+        </p>
+        <p>
+          <strong>Start Time:</strong> {selectedTimeSlot}
+        </p>
+        <p>
+          <strong>Price:</strong> SAR {serviceDetails?.price || "N/A"}
+        </p>
+
+        <h3>Select Payment Method:</h3>
+        <div onChange={handlePaymentOptionChange}>
+          <input
+            type="radio"
+            value="stripe"
+            name="paymentOption"
+            checked={paymentOption === "stripe"}
+            onChange={handlePaymentOptionChange}
+          />{" "}
+          Pay with Card (Stripe)
+          <br />
+          <input
+            type="radio"
+            value="venue"
+            name="paymentOption"
+            checked={paymentOption === "venue"}
+            onChange={handlePaymentOptionChange}
+          />{" "}
+          Pay at Venue
+        </div>
 
         <button className="btn btn-primary" onClick={handleCheckout}>
-          Pay with Stripe
+          Confirm Booking
         </button>
       </section>
     </div>

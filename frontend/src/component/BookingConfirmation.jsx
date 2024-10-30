@@ -1,69 +1,75 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// BookingConfirmationPage.jsx
+
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const BookingConfirmationPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [bookingDetails, setBookingDetails] = useState(null);
-  const [serviceName, setServiceName] = useState('');
-  const [providerName, setProviderName] = useState('');
 
   useEffect(() => {
-    // Retrieve booking details from local storage or another method after success
-    const savedBooking = JSON.parse(localStorage.getItem('bookingData'));
+    const fetchBookingDetails = async () => {
+      const queryParams = new URLSearchParams(location.search);
+      const bookingId = queryParams.get("bookingId");
 
-    if (savedBooking) {
-      setBookingDetails(savedBooking);
-      fetchServiceName(savedBooking.serviceId);
-      fetchProviderName(savedBooking.providerId);
-    } else {
-      console.error('No booking data found');
-      // If no booking details, redirect to home or another page
-      navigate('/');
-    }
-  }, [navigate]);
+      if (bookingId) {
+        try {
+          const response = await fetch(`/booking/details/${bookingId}`);
+          const data = await response.json();
 
-  // Fetch the service name using the service ID
-  const fetchServiceName = async (serviceId) => {
-    try {
-      const response = await fetch(`/customer/services/${serviceId}`);
-      const serviceData = await response.json();
-      setServiceName(serviceData.serviceName);  // Assuming the response contains serviceName
-    } catch (error) {
-      console.error('Failed to fetch service name:', error);
-    }
-  };
+          if (response.ok && data.success) {
+            setBookingDetails(data.booking);
+          } else {
+            console.error("Failed to fetch booking details:", data.error);
+          }
+        } catch (error) {
+          console.error("Error fetching booking details:", error);
+        }
+      } else {
+        console.error("No booking ID found in URL");
+        navigate("/");
+      }
+    };
 
-  // Fetch the provider name using the provider ID
-  const fetchProviderName = async (providerId) => {
-    try {
-      const response = await fetch(`/customer/providers/${providerId}`);
-      const providerData = await response.json();
-      setProviderName(providerData.name);  // Assuming the response contains the provider's name
-    } catch (error) {
-      console.error('Failed to fetch provider name:', error);
-    }
-  };
+    fetchBookingDetails();
+  }, [location, navigate]);
+
+  if (!bookingDetails) {
+    return <p>Loading booking details...</p>;
+  }
+
+  // Determine if booking is confirmed
+  const isBookingConfirmed =
+    bookingDetails.paymentStatus === "completed" ||
+    bookingDetails.paymentStatus === "unpaid";
 
   return (
     <div className="container">
       <header className="main-header">
-        <h1>Booking Confirmed!</h1>
+        <h1>{isBookingConfirmed ? "Booking Confirmed!" : "Booking Pending"}</h1>
       </header>
-
       <section className="confirmation-section">
-        {bookingDetails ? (
+        {isBookingConfirmed ? (
           <>
             <p>Thank you for your booking!</p>
-            <p><strong>Service:</strong> {serviceName || 'Loading...'}</p>
-            <p><strong>Provider:</strong> {providerName || 'Loading...'}</p>
-            <p><strong>Date:</strong> {bookingDetails.selectedDate}</p>
-            <p><strong>Time:</strong> {bookingDetails.startTime}</p>
+            <p>
+              <strong>Service:</strong> {bookingDetails.serviceName}
+            </p>
+            <p>
+              <strong>Provider:</strong> {bookingDetails.providerName}
+            </p>
+            <p>
+              <strong>Date:</strong> {bookingDetails.date}
+            </p>
+            <p>
+              <strong>Time:</strong> {bookingDetails.startTime}
+            </p>
           </>
         ) : (
-          <p>Loading booking details...</p>
+          <p>Your booking is pending. Please complete the payment.</p>
         )}
-
-        <button className="btn btn-primary" onClick={() => navigate('/')}>
+        <button className="btn btn-primary" onClick={() => navigate("/")}>
           Return to Home
         </button>
       </section>

@@ -18,6 +18,17 @@ const TimeSlots = () => {
   const [timeSlots, setTimeSlots] = useState([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
 
+  useEffect(() => {
+    // Check for authentication
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      navigate("/login-customer", {
+        state: { from: location.pathname, providerId, serviceId, serviceDuration, selectedDate, selectedTimeSlot, businessId },
+      });
+      return;
+    }
+  }, [navigate, location, providerId, serviceId, serviceDuration, selectedDate, selectedTimeSlot, businessId]);
+
   // Fetch available time slots from backend when date, providerId, or serviceDuration changes
   useEffect(() => {
     const fetchAvailableTimeSlots = async () => {
@@ -30,13 +41,13 @@ const TimeSlots = () => {
           body: JSON.stringify({
             providerId,
             selectedDate,
-            serviceDuration, // Pass the service duration from the query parameters
+            serviceDuration,
           }),
         });
 
         const data = await response.json();
         if (response.ok) {
-          setTimeSlots(data.availableSlots); // Set available time slots
+          setTimeSlots(data.availableSlots);
         } else {
           alert("Failed to fetch available time slots.");
         }
@@ -48,62 +59,37 @@ const TimeSlots = () => {
     fetchAvailableTimeSlots();
   }, [providerId, selectedDate, serviceDuration]);
 
-  // Handle time slot selection (ensure we only select the slots that match the correct service duration)
   const handleTimeSlotSelection = (timeSlot) => {
-    setSelectedTimeSlot(timeSlot); // Update selected time slot
+    setSelectedTimeSlot(timeSlot);
   };
 
-  // Handle date selection
   const availableDates = Array.from({ length: 7 }, (_, i) => {
     const date = new Date();
     date.setDate(date.getDate() + i);
-    return date.toISOString().split("T")[0]; // Format date as 'YYYY-MM-DD'
+    return date.toISOString().split("T")[0];
   });
 
   const handleDateSelection = (date) => {
-    setSelectedDate(date); // Update selected date
-    setSelectedTimeSlot(null); // Reset the selected time slot when date changes
+    setSelectedDate(date);
+    setSelectedTimeSlot(null);
   };
 
-  // Handle booking creation
   const handleContinueBooking = () => {
     const token = localStorage.getItem("authToken");
     if (!token) {
       navigate("/login-customer", {
-        state: {
-          from: location.pathname,
-          providerId,
-          serviceId,
-          serviceDuration,
-          selectedDate,
-          selectedTimeSlot,
-          businessId,  // Pass businessId
-        },
+        state: { from: location.pathname, providerId, serviceId, serviceDuration, selectedDate, selectedTimeSlot, businessId },
       });
       return;
     }
-  
+
     if (!selectedTimeSlot) {
       alert("Please select a time slot to continue.");
       return;
     }
-  
-    // Log values to verify they are correct
+
     console.log(providerId, serviceId, serviceDuration, selectedDate, selectedTimeSlot, businessId);
-  
-    // Redirect to Review and Payment page, passing necessary data in the URL
     navigate(`/review-payment/${providerId}?businessId=${businessId}&serviceId=${serviceId}&duration=${serviceDuration}&date=${selectedDate}&time=${selectedTimeSlot}`);
-  };
-  
-  // Helper function to extract customer ID from the token
-  const extractCustomerIdFromToken = (token) => {
-    try {
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      return payload.userId; // Extract 'userId' from token payload
-    } catch (err) {
-      console.error("Error decoding token:", err);
-      return null;
-    }
   };
 
   return (
@@ -113,7 +99,6 @@ const TimeSlots = () => {
         <p>Please choose an available time slot for your appointment.</p>
       </header>
 
-      {/* Date Selection */}
       <section id="date-selection" className="date-category">
         <h2>Select a Date</h2>
         <div className="date-list">
@@ -129,7 +114,6 @@ const TimeSlots = () => {
         </div>
       </section>
 
-      {/* Time Slot Section */}
       <section id="time-slots" className="time-slots-category">
         <h2>Select a Time Slot</h2>
         <div className="time-slots-list">
@@ -137,8 +121,7 @@ const TimeSlots = () => {
             timeSlots.map((timeSlot, index) => (
               <button
                 key={index}
-                className={`time-slot ${selectedTimeSlot === timeSlot ? "selected" : ""
-                  }`}
+                className={`time-slot ${selectedTimeSlot === timeSlot ? "selected" : ""}`}
                 onClick={() => handleTimeSlotSelection(timeSlot)}
               >
                 {timeSlot}
@@ -150,7 +133,6 @@ const TimeSlots = () => {
         </div>
       </section>
 
-      {/* Continue Booking Button */}
       <div className="continue-booking">
         <button className="btn" onClick={handleContinueBooking}>
           Continue Booking

@@ -2,13 +2,13 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 const ReviewAndPayment = () => {
-  const { providerId } = useParams();  // Extract providerId from the URL path
-  const location = useLocation();  // Get the query parameters
+  const { providerId } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
 
   // Parse query parameters using URLSearchParams
   const queryParams = new URLSearchParams(location.search);
-  const businessId = queryParams.get("businessId");  // Extract businessId from query parameters
+  const businessId = queryParams.get("businessId");
   const serviceId = queryParams.get("serviceId");
   const serviceDuration = queryParams.get("duration");
   const selectedDate = queryParams.get("date");
@@ -22,6 +22,14 @@ const ReviewAndPayment = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    const token = localStorage.getItem("authToken");
+
+    // Redirect to login if user is not authenticated
+    if (!token) {
+      navigate("/login-customer", { state: { from: location.pathname } });
+      return;
+    }
+
     const fetchDetails = async () => {
       try {
         console.log("Provider ID:", providerId);
@@ -30,47 +38,40 @@ const ReviewAndPayment = () => {
         console.log("Service Duration:", serviceDuration);
         console.log("Selected Date:", selectedDate);
         console.log("Selected Time Slot:", selectedTimeSlot);
-        
+
         const serviceResponse = await fetch(`/customer/services/${serviceId}`);
         const serviceData = await serviceResponse.json();
-
         if (!serviceResponse.ok) {
           throw new Error(`Failed to fetch service details, status: ${serviceResponse.status}`);
         }
 
-        console.log("Service data fetched:", serviceData);
         setServiceDetails(serviceData);
 
         const providerResponse = await fetch(`/customer/businesses/${businessId}/services/${serviceId}/providers`);
         const providerData = await providerResponse.json();
-
         if (!providerResponse.ok) {
           throw new Error(`Failed to fetch provider details, status: ${providerResponse.status}`);
         }
 
-        console.log("Provider data fetched:", providerData);
         setProviderDetails(providerData);
 
         const businessResponse = await fetch(`/customer/businesses/${businessId}`);
         const businessData = await businessResponse.json();
-
         if (!businessResponse.ok) {
           throw new Error(`Failed to fetch business details, status: ${businessResponse.status}`);
         }
 
-        console.log("Business data fetched:", businessData);
         setBusinessDetails(businessData);
-
         setLoading(false);
       } catch (err) {
         console.error("Error fetching details:", err);
-        setError('Failed to load details.');
+        setError("Failed to load details.");
         setLoading(false);
       }
     };
 
     fetchDetails();
-  }, [providerId, serviceId, businessId]);
+  }, [providerId, serviceId, businessId, navigate, location]);
 
   const handleCheckout = async () => {
     const token = localStorage.getItem("authToken");
@@ -79,23 +80,23 @@ const ReviewAndPayment = () => {
       return;
     }
 
-    const customerId = extractCustomerIdFromToken(token);  // Extract customerId from the token
+    const customerId = extractCustomerIdFromToken(token);
     if (!customerId) {
       console.error("Failed to extract customer ID from token.");
       return;
     }
 
     const bookingData = {
-      customerId,  // Use the extracted customerId
+      customerId,
       providerId,
       serviceId,
       selectedDate,
       startTime: selectedTimeSlot,
       items: [
         {
-          name: serviceDetails?.serviceName || "Unknown Service",  // Handle case where serviceName is not available
-          price: serviceDetails?.price || 0,  // Handle case where price is not available
-          quantity: 1,  // Default to 1
+          name: serviceDetails?.serviceName || "Unknown Service",
+          price: serviceDetails?.price || 0,
+          quantity: 1,
         },
       ],
     };
@@ -105,15 +106,15 @@ const ReviewAndPayment = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,  // Include the authorization token if needed
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(bookingData),  // Ensure you stringify the body correctly
+        body: JSON.stringify(bookingData),
       });
 
       const data = await response.json();
       if (response.ok) {
-        localStorage.setItem('bookingData', JSON.stringify(bookingData)); // Store booking data in localStorage
-        window.location = data.url;  // Redirect to Stripe
+        localStorage.setItem("bookingData", JSON.stringify(bookingData));
+        window.location = data.url;
       } else {
         console.error(`Checkout failed: ${data.error}`);
       }
@@ -126,21 +127,15 @@ const ReviewAndPayment = () => {
   const extractCustomerIdFromToken = (token) => {
     try {
       const payload = JSON.parse(atob(token.split(".")[1]));
-      console.log("Token payload extracted:", payload);
-      return payload.userId;  // Extract 'userId' from token payload
+      return payload.userId;
     } catch (err) {
       console.error("Error decoding token:", err);
       return null;
     }
   };
 
-  if (loading) {
-    return <p>Loading details...</p>;
-  }
-
-  if (error) {
-    return <p>{error}</p>;
-  }
+  if (loading) return <p>Loading details...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div className="container">

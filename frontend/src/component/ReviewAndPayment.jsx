@@ -181,31 +181,30 @@ const ReviewAndPayment = () => {
         <p>
           <strong>Price:</strong> SAR {serviceDetails?.price || "N/A"}
         </p>
-
-        <h3>Select Payment Method:</h3>
-        <div onChange={handlePaymentOptionChange}>
-          <input
-            type="radio"
-            value="stripe"
-            name="paymentOption"
-            checked={paymentOption === "stripe"}
-            onChange={handlePaymentOptionChange}
-          />{" "}
-          Pay with Card (Stripe)
-          <br />
-          <input
-            type="radio"
-            value="venue"
-            name="paymentOption"
-            checked={paymentOption === "venue"}
-            onChange={handlePaymentOptionChange}
-          />{" "}
-          Pay at Venue
+        <div className="payment-toggle">
+          <h3>Select Payment Method:</h3>
+          <div className="toggle-container">
+            <div
+              className={`toggle-card ${
+                paymentOption === "stripe" ? "selected" : ""
+              }`}
+              onClick={() => setPaymentOption("stripe")}
+            >
+              Pay with Card (Stripe)
+            </div>
+            <div
+              className={`toggle-card ${
+                paymentOption === "venue" ? "selected" : ""
+              }`}
+              onClick={() => setPaymentOption("venue")}
+            >
+              Pay at Venue
+            </div>
+          </div>
+          <button className="confirm-booking-btn" onClick={handleCheckout}>
+            Confirm Booking
+          </button>
         </div>
-
-        <button className="btn btn-primary" onClick={handleCheckout}>
-          Confirm Booking
-        </button>
       </section>
     </div>
   );

@@ -31,7 +31,9 @@ function BusinessDashboard() {
           console.log("Dashboard data fetched: ", data); // Log the fetched dashboard data
           setBusinessOwner(data);
         } else {
-          console.log("Failed to fetch dashboard data, clearing token and redirecting to login.");
+          console.log(
+            "Failed to fetch dashboard data, clearing token and redirecting to login."
+          );
           localStorage.removeItem("authToken");
           navigate("/login-business");
         }
@@ -73,7 +75,18 @@ function BusinessDashboard() {
 
   // Component to render the upcoming appointments in a table
   function UpNext() {
-    console.log("Rendering UpNext table with appointments: ", upNextAppointments); // Log appointments data
+    console.log(
+      "Rendering UpNext table with appointments: ",
+      upNextAppointments
+    ); // Log appointments data
+
+    // Define styles for payment status
+    const statusStyles = {
+      completed: { color: "green", fontWeight: "bold" },
+      unpaid: { color: "red", fontWeight: "bold" },
+      pending: { color: "orange", fontWeight: "bold" },
+    };
+
     return (
       <table border="1">
         <thead>
@@ -86,6 +99,7 @@ function BusinessDashboard() {
             <th>End Time</th>
             <th>Duration (Minutes)</th>
             <th>Price</th>
+            <th>Payment Status</th>
           </tr>
         </thead>
         <tbody>
@@ -100,11 +114,18 @@ function BusinessDashboard() {
                 <td>{appointment.endTime}</td>
                 <td>{appointment.duration}</td>
                 <td>{appointment.price}</td>
+                <td
+                  style={
+                    statusStyles[appointment.paymentStatus] || { color: "gray" }
+                  }
+                >
+                  {appointment.paymentStatus}
+                </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="8">No upcoming appointments.</td>
+              <td colSpan="9">No upcoming appointments.</td>
             </tr>
           )}
         </tbody>

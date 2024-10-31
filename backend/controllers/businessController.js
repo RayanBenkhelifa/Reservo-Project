@@ -180,7 +180,7 @@ const getUpNextAppointments = async (req, res) => {
     const businessId = req.userId;  // The logged-in business owner's ID
     console.log('Business ID from token:', businessId);
 
-    // Fetch all providers for this business owner
+    // Fetch the business owner and populate providers
     const businessOwner = await BusinessOwner.findById(businessId).populate('providers');
     console.log('Business owner found:', businessOwner);
 
@@ -191,14 +191,19 @@ const getUpNextAppointments = async (req, res) => {
     const providerIds = businessOwner.providers.map(provider => provider._id);
     console.log('Provider IDs:', providerIds);
 
-    // Find all bookings involving those providers
-    const upcomingAppointments = await Booking.find({ provider: { $in: providerIds } })
+    // Find all upcoming bookings involving those providers
+    const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+
+    const upcomingAppointments = await Booking.find({
+      provider: { $in: providerIds },
+      date: { $gte: today }, // Only include appointments from today onwards
+    })
       .populate('customer provider service')
-      .sort({ date: 1 });
+      .sort({ date: 1, startTime: 1 });
 
     console.log('Appointments found:', upcomingAppointments);
 
-    // Map the bookings into a suitable format, with null checks
+    // Map the bookings into a suitable format, including paymentStatus
     const appointmentsData = upcomingAppointments.map((booking) => ({
       _id: booking._id,
       customerName: booking.customer ? booking.customer.name : "Unknown Customer",
@@ -209,6 +214,7 @@ const getUpNextAppointments = async (req, res) => {
       endTime: booking.endTime,
       duration: booking.service ? booking.service.duration : "Unknown Duration",
       price: booking.service ? booking.service.price : "Unknown Price",
+      paymentStatus: booking.paymentStatus || "Unknown", // Include paymentStatus
     }));
 
     res.status(200).json(appointmentsData);
@@ -217,5 +223,6 @@ const getUpNextAppointments = async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch upcoming appointments' });
   }
 };
+
 
 module.exports = { addService, addProvider, getBusinessServices, getDashboard, getUpNextAppointments };

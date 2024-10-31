@@ -1401,3 +1401,59 @@ tfoot td {
     box-shadow: none;
     /* Ensure no shadow */
 }
+
+.payment-toggle {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.toggle-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.toggle-card {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-weight: 500;
+    font-size: 0.9em;
+    color: #4a4ad4;
+    text-align: center;
+    background-color: #f0f4ff;
+}
+
+.toggle-card.selected {
+    background-color: #5d5fef;
+    color: white;
+}
+
+.toggle-card:hover:not(.selected) {
+    background-color: #dfe5ff;
+    color: #4a4ad4;
+}
+
+/* New Confirm Booking button class */
+button.confirm-booking-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #4a4ad4;
+    /* Darker shade aligns well with toggle-card */
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.confirm-booking-btn:hover {
+    background-color: #3c3fb5;
+}

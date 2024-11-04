@@ -4,30 +4,71 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [authState, setAuthState] = useState({
-    token: null,
+    isAuthenticated: false,
     userType: null,
   });
-  const [loading, setLoading] = useState(true); // Add a loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    const userType = localStorage.getItem("userType");
-    if (token && userType) {
-      setAuthState({ token, userType });
-    }
-    setLoading(false); // Set loading to false once authState is populated
+    // On component mount, check if the user is authenticated
+    const checkAuth = async () => {
+      try {
+        const response = await fetch("/auth/check-auth", {
+          method: "GET",
+          credentials: "include", // Include cookies
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setAuthState({
+            isAuthenticated: true,
+            userType: data.userType, // Assuming the backend returns userType
+          });
+        } else {
+          setAuthState({
+            isAuthenticated: false,
+            userType: null,
+          });
+        }
+      } catch (error) {
+        console.error("Error checking authentication:", error);
+        setAuthState({
+          isAuthenticated: false,
+          userType: null,
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuth();
   }, []);
 
-  const login = (token, userType) => {
-    localStorage.setItem("authToken", token);
-    localStorage.setItem("userType", userType);
-    setAuthState({ token, userType });
+  const login = (userType) => {
+    setAuthState({
+      isAuthenticated: true,
+      userType: userType,
+    });
   };
 
-  const logout = () => {
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("userType");
-    setAuthState({ token: null, userType: null });
+  const logout = async () => {
+    try {
+      const response = await fetch("/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        setAuthState({
+          isAuthenticated: false,
+          userType: null,
+        });
+      } else {
+        console.error("Logout failed");
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   };
 
   return (

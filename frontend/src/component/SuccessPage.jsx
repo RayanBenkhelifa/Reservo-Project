@@ -22,7 +22,10 @@ const SuccessPage = () => {
 
         // Verify the payment session with Stripe
         const sessionResponse = await fetch(
-          `/booking/verify-session?session_id=${sessionId}`
+          `/booking/verify-session?session_id=${sessionId}`,
+          {
+            credentials: "include",
+          }
         );
         const sessionData = await sessionResponse.json();
 
@@ -35,6 +38,7 @@ const SuccessPage = () => {
         // Update the booking status
         const response = await fetch(`/booking/update-status/${bookingId}`, {
           method: "POST",
+          credentials: "include",
         });
 
         const data = await response.json();

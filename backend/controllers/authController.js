@@ -1,4 +1,4 @@
-const Customer = require('../models/customer');
+const Customer = require('../models/Customer')
 const BusinessOwner = require('../models/BusinessOwner')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -18,14 +18,11 @@ const signupCustomer = async (req, res) => {
     await newCustomer.save();
 
     // Generate JWT token immediately after signup
-    const token = jwt.sign(
-      { userId: newCustomer._id, userType: 'customer' },
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' }
-    );
-
-    // Send token back so the customer can be logged in
-    res.status(201).json({ message: 'Customer registered successfully!', token });
+    req.session.userId = newCustomer._id;
+    req.session.userType = 'customer';
+    // Send success message
+    res.status(201).json({ message: 'Customer registered successfully!' });
+    
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -48,13 +45,11 @@ const customerLogin = async (req, res) => {
       }
   
       // Generate JWT token
-      const token = jwt.sign(
-        { userId: customer._id, userType: 'customer' },
-        process.env.JWT_SECRET,
-        { expiresIn: '1h' }
-      );
-  
-      return res.status(200).json({ token });
+      req.session.userId = customer._id;
+      req.session.userType = 'customer';
+      // Send success message
+      res.status(201).json({ message: 'Customer Logged In successfully!' });
+      
     } catch (error) {
       return res.status(500).json({ message: 'Server error' });
     }
@@ -96,14 +91,10 @@ const signupBusinessOwner = async (req, res) => {
     await newBusinessOwner.save();
 
     // Generate JWT token immediately after signup
-    const token = jwt.sign(
-      { userId: newBusinessOwner._id, userType: 'businessOwner' },
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' }
-    );
-
-    // Send the token back to log in
-    res.status(201).json({ message: 'Business owner created successfully', token });
+    req.session.userId = newBusinessOwner._id;
+    req.session.userType = 'businessOwner';
+    // Send success message
+    res.status(201).json({ message: 'BusinessOwner registered successfully!' });
   } catch (error) {
     res.status(500).json({ message: `Server error ${error}` });
   }
@@ -126,22 +117,70 @@ const signupBusinessOwner = async (req, res) => {
         return res.status(400).json({ message: 'Invalid credentials' });
       }
   
-      // Generate JWT token
-      const token = jwt.sign(
-        { userId: businessOwner._id, userType: 'businessOwner' },
-        process.env.JWT_SECRET,
-        { expiresIn: '1h' }
-      );
-  
-      // Send the token back to log in
-      return res.status(200).json({ token });
+      req.session.userId = businessOwner._id;
+      req.session.userType = 'businessOwner';
+      // Send success message
+      res.status(201).json({ message: 'BusinessOwner Loged In successfully!' });
     } catch (error) {
       return res.status(500).json({ message: 'Server error' });
+    }
+  };
+
+  const checkAuth = (req, res) => {
+    if (req.session && req.session.userId) {
+      res.status(200).json({
+        isAuthenticated: true,
+        userType: req.session.userType,
+      });
+    } else {
+      res.status(401).json({ isAuthenticated: false });
+    }
+  };
+
+  const getProfile = async (req, res) => {
+    try {
+      const userId = req.session.userId;
+      const userType = req.session.userType;
+  
+      if (userType === 'customer') {
+        const customer = await Customer.findById(userId);
+        if (customer) {
+          res.status(200).json({ id: customer._id, name: customer.name, email: customer.email });
+        } else {
+          res.status(404).json({ error: 'Customer not found' });
+        }
+      } else {
+        res.status(403).json({ error: 'Access denied' });
+      }
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to get user profile' });
+    }
+  };
+
+  const logout = async (req, res) => {
+    try {
+      // Destroy the session on the server
+      req.session.destroy((err) => {
+        if (err) {
+          console.error('Error destroying session:', err);
+          return res.status(500).json({ error: 'Logout failed' });
+        }
+        
+        // Clear the session cookie
+        res.clearCookie('connect.sid', { httpOnly: true, sameSite: 'Strict' });
+        res.status(200).json({ message: 'Logout successful' });
+      });
+    } catch (error) {
+      console.error('Error during logout:', error);
+      res.status(500).json({ error: 'Logout failed' });
     }
   };
 module.exports = {
     signupCustomer,
     signupBusinessOwner,
     customerLogin,
-    businessOwnerLogin
+    businessOwnerLogin,
+    checkAuth,
+    getProfile,
+    logout
   };

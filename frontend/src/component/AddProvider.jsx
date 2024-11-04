@@ -1,21 +1,28 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "./AuthContext"; // Import AuthContext
+import { AuthContext } from "./AuthContext";
+import Navbar from "./BusinessNavBar";
 
 function AddProvider() {
   const [services, setServices] = useState([]);
   const [providerName, setProviderName] = useState("");
   const [selectedServices, setSelectedServices] = useState([]);
-  const { authState } = useContext(AuthContext); // Get the token from AuthContext
+  const { authState } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  // Authentication check
+  useEffect(() => {
+    if (!authState.isAuthenticated || authState.userType !== "businessOwner") {
+      navigate("/login-business");
+    }
+  }, [authState.isAuthenticated, authState.userType, navigate]);
 
   // Fetch services for the business
   const fetchServices = async () => {
     try {
       const response = await fetch("/business/services", {
-        headers: {
-          Authorization: `Bearer ${authState.token}`, // Attach the token correctly
-        },
+        method: "GET",
+        credentials: "include", // Include cookies
       });
 
       if (!response.ok) {
@@ -23,7 +30,7 @@ function AddProvider() {
       }
 
       const data = await response.json();
-      setServices(data.services); // Set fetched services in state
+      setServices(data.services); // Adjust according to your backend response
     } catch (error) {
       console.error("Error fetching services:", error);
     }
@@ -38,11 +45,11 @@ function AddProvider() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${authState.token}`, // Attach the token in the header
         },
+        credentials: "include", // Include cookies
         body: JSON.stringify({
           providerName,
-          serviceIds: selectedServices, // Send selected service IDs as an array
+          serviceIds: selectedServices,
         }),
       });
 
@@ -59,42 +66,29 @@ function AddProvider() {
       console.error("Error adding provider:", error);
     }
   };
-
+  const handleCheckboxChange = (serviceId) => {
+    setSelectedServices((prevSelected) => {
+      if (prevSelected.includes(serviceId)) {
+        // If already selected, remove it
+        return prevSelected.filter((id) => id !== serviceId);
+      } else {
+        // If not selected, add it
+        return [...prevSelected, serviceId];
+      }
+    });
+  };
   useEffect(() => {
-    fetchServices(); // Fetch services when component mounts
+    fetchServices();
   }, []);
 
   // Function to handle logo click and redirect to the Home page
   const handleLogoClick = () => {
-    navigate("/home"); // Navigate to Home page
+    navigate("/home");
   };
 
   return (
     <div className="dashboard-container">
-      {/* Sidebar Navigation */}
-      <nav className="sidebar">
-        <div
-          className="business_logo"
-          onClick={handleLogoClick}
-          style={{ cursor: "pointer" }}
-        >
-          {/* Replace the <h2>Reservo</h2> with the logo */}
-          <img src="/logo.png" alt="Reservo Logo" className="logo-image" />
-        </div>
-        <ul className="nav-links">
-          <li>
-            <a href="/business-dashboard">Up Next</a>
-          </li>
-          <li>
-            <a href="/business-services">Services</a>
-          </li>
-          <li>
-            <a href="/business-add-provider">Providers</a>
-          </li>
-        </ul>
-      </nav>
-
-      {/* Main Content Area */}
+      <Navbar />
       <div className="main-content">
         <header className="main-header">
           <h1>Add a New Provider</h1>
@@ -118,25 +112,20 @@ function AddProvider() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="services">Services</label>
-              <select
-                id="services"
-                name="serviceIds[]"
-                multiple
-                value={selectedServices}
-                onChange={(e) =>
-                  setSelectedServices(
-                    [...e.target.selectedOptions].map((option) => option.value)
-                  )
-                }
-                required
-              >
+              <label>Services</label>
+              <div className="checkbox-group">
                 {services.map((service) => (
-                  <option key={service._id} value={service._id}>
+                  <label key={service._id} className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      value={service._id}
+                      checked={selectedServices.includes(service._id)}
+                      onChange={() => handleCheckboxChange(service._id)}
+                    />
                     {service.serviceName}
-                  </option>
+                  </label>
                 ))}
-              </select>
+              </div>
             </div>
 
             <button type="submit" className="btn">

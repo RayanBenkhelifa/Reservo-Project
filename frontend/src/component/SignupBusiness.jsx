@@ -51,7 +51,9 @@ function SignupBusiness() {
       !validateTimeFormat(formData.operatingHoursStart) ||
       !validateTimeFormat(formData.operatingHoursEnd)
     ) {
-      setError("Invalid time format. Please use the format H:MM AM/PM with a space before AM or PM in uppercase.");
+      setError(
+        "Invalid time format. Please use the format H:MM AM/PM with a space before AM or PM in uppercase."
+      );
       return;
     }
 
@@ -61,13 +63,15 @@ function SignupBusiness() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData), // Send time in H:MM AM/PM format
+        credentials: "include", // Include cookies
+        body: JSON.stringify(formData),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        login(data.token, "businessOwner");
+        // Update auth state
+        login("businessOwner");
         navigate("/business-dashboard");
       } else {
         setError(data.message || "Signup failed");

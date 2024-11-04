@@ -1,7 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles.css";
-import { AuthContext } from "./AuthContext"; // Import the AuthContext
+import { AuthContext } from "./AuthContext";
+import Navbar from "./BusinessNavBar";
 
 function BusinessServices() {
   const [serviceName, setServiceName] = useState("");
@@ -10,8 +11,15 @@ function BusinessServices() {
   const [price, setPrice] = useState("");
   const [error, setError] = useState("");
 
-  const { authState } = useContext(AuthContext); // Access the token from AuthContext
+  const { authState } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  // Authentication check
+  useEffect(() => {
+    if (!authState.isAuthenticated || authState.userType !== "businessOwner") {
+      navigate("/login-business");
+    }
+  }, [authState.isAuthenticated, authState.userType, navigate]);
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -22,8 +30,8 @@ function BusinessServices() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${authState.token}`, // Use the token from AuthContext
         },
+        credentials: "include", // Include cookies
         body: JSON.stringify({ serviceName, description, duration, price }),
       });
 
@@ -43,33 +51,14 @@ function BusinessServices() {
 
   // Function to handle logo click and redirect to the Home page
   const handleLogoClick = () => {
-    navigate("/home"); // Redirect to Home page
+    navigate("/home");
   };
 
   return (
     <div className="dashboard-container">
       {/* Sidebar Navigation */}
-      <nav className="sidebar">
-        <div
-          className="business_logo"
-          onClick={handleLogoClick}
-          style={{ cursor: "pointer" }}
-        >
-          {/* Replace <h2>Reservo</h2> with a clickable logo */}
-          <img src="/logo.png" alt="Reservo Logo" className="logo-image" />
-        </div>
-        <ul className="nav-links">
-          <li>
-            <a href="/business-dashboard">Up Next</a>
-          </li>
-          <li>
-            <a href="/business-services">Services</a>
-          </li>
-          <li>
-            <a href="/business-add-provider">Providers</a>
-          </li>
-        </ul>
-      </nav>
+      {/* Consider externalizing the navbar */}
+      <Navbar />
 
       {/* Main Content Area */}
       <div className="main-content">
@@ -121,7 +110,7 @@ function BusinessServices() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="price">Price ($)</label>
+              <label htmlFor="price">Price (SAR)</label>
               <input
                 type="number"
                 step="0.01"

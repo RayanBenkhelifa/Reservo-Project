@@ -2,10 +2,12 @@
 
 const express = require('express');
 const bookingController = require('../controllers/bookingController');
+const { verifySession } = require('../middleware/verifySession');
+
 const router = express.Router();
 
 // Route to create a new booking
-router.post('/create', bookingController.createBooking);
+router.post('/create', verifySession ,bookingController.createBooking);
 
 // Route to get available slots
 router.post('/available-slots', bookingController.getAvailableSlots);
@@ -14,7 +16,7 @@ router.post('/available-slots', bookingController.getAvailableSlots);
 router.post('/update-status/:bookingId', bookingController.updateBookingStatus);
 
 // Route to verify Stripe payment session
-router.get('/verify-session', bookingController.verifySession);
+router.get('/verify-session', bookingController.verifyPaymentSession );
 
 // Route to get booking details
 router.get('/details/:bookingId', bookingController.getBookingDetails);

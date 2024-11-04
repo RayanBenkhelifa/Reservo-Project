@@ -33,6 +33,7 @@ function SignupCustomer() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include", // Include cookies
         body: JSON.stringify(formData),
       });
 
@@ -40,7 +41,7 @@ function SignupCustomer() {
 
       if (response.ok) {
         // Use the login function from AuthContext to store the token and userType
-        login(data.token, "customer");
+        login("customer");
 
         // Redirect using useNavigate after successful signup
         navigate("/");

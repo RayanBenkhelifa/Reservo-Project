@@ -8,13 +8,10 @@ function LoginBusiness() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext); // Get login function from context
+  const { login } = useContext(AuthContext);
 
-  // Handle form submission
   const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent default form submission (reload)
-
-    console.log("Attempting login with:", { email, password });
+    e.preventDefault();
 
     try {
       const response = await fetch("/auth/login/businessOwner", {
@@ -22,17 +19,16 @@ function LoginBusiness() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include", // Include cookies
         body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
-      console.log("Response JSON data:", data);
 
       if (response.ok) {
-        // Store the JWT token and userType in context
-        login(data.token, "businessOwner");
-
-        // Delay redirect to avoid race conditions
+        // Update auth state
+        login("businessOwner");
+        navigate("/business-dashboard");
       } else {
         console.log("Login failed:", data.message);
         setError(data.message || "Login failed");

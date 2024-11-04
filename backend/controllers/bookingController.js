@@ -320,7 +320,7 @@ const updateBookingStatus = async (req, res) => {
 };
 
 // Controller to verify Stripe payment session
-const verifySession = async (req, res) => {
+const verifyPaymentSession  = async (req, res) => {
   const { session_id } = req.query;
 
   try {
@@ -374,6 +374,6 @@ module.exports = {
   getAvailableSlots,
   createBooking,
   updateBookingStatus,
-  verifySession,
+  verifyPaymentSession ,
   getBookingDetails,
 };

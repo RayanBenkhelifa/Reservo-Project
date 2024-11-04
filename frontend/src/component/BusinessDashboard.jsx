@@ -1,77 +1,63 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles.css";
+import { AuthContext } from "./AuthContext";
+import Navbar from "./BusinessNavBar";
 
 function BusinessDashboard() {
   const [businessOwner, setBusinessOwner] = useState(null);
   const [upNextAppointments, setUpNextAppointments] = useState([]); // State to hold upcoming appointments
   const navigate = useNavigate();
+  const { authState } = useContext(AuthContext);
 
   useEffect(() => {
-    // Function to fetch dashboard data (business owner information)
+    if (!authState.isAuthenticated || authState.userType !== "businessOwner") {
+      navigate("/login-business");
+      return;
+    }
+
     const fetchDashboardData = async () => {
-      const token = localStorage.getItem("authToken");
-      console.log("Token in BusinessDashboard: ", token); // Log the token to verify it's present
-
-      if (!token) {
-        console.log("Token missing, redirecting to login...");
-        navigate("/login-business");
-        return;
-      }
-
       try {
         const response = await fetch("/business/business-dashboard", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          method: "GET",
+          credentials: "include",
         });
 
         if (response.ok) {
           const data = await response.json();
-          console.log("Dashboard data fetched: ", data); // Log the fetched dashboard data
           setBusinessOwner(data);
         } else {
-          console.log(
-            "Failed to fetch dashboard data, clearing token and redirecting to login."
-          );
-          localStorage.removeItem("authToken");
+          console.log("Failed to fetch dashboard data.");
           navigate("/login-business");
         }
       } catch (error) {
-        console.error("Error fetching dashboard data:", error); // Log any fetch errors
-        localStorage.removeItem("authToken");
+        console.error("Error fetching dashboard data:", error);
         navigate("/login-business");
       }
     };
 
-    // Function to fetch upcoming appointments
     const fetchUpNextAppointments = async () => {
-      const token = localStorage.getItem("authToken");
-      if (!token) return;
-
       try {
-        console.log("Fetching upcoming appointments..."); // Log when fetching starts
         const response = await fetch("/business/up-next", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          method: "GET",
+          credentials: "include",
         });
 
         if (response.ok) {
           const appointmentsData = await response.json();
-          console.log("Appointments fetched: ", appointmentsData); // Log fetched appointments
           setUpNextAppointments(appointmentsData);
         } else {
-          console.error("Failed to fetch upcoming appointments."); // Log any non-200 responses
+          console.error("Failed to fetch upcoming appointments.");
         }
       } catch (error) {
-        console.error("Error fetching upcoming appointments:", error); // Log any fetch errors
+        console.error("Error fetching upcoming appointments:", error);
       }
     };
-
-    fetchDashboardData(); // Fetch business owner data
-    fetchUpNextAppointments(); // Fetch upcoming appointments
-  }, [navigate]);
+    if (authState.isAuthenticated) {
+      fetchDashboardData();
+      fetchUpNextAppointments();
+    }
+  }, [authState.isAuthenticated, authState.userType, navigate]);
 
   // Component to render the upcoming appointments in a table
   function UpNext() {
@@ -135,26 +121,7 @@ function BusinessDashboard() {
 
   return (
     <div className="dashboard-container">
-      <nav className="sidebar">
-        <div
-          className="business_logo"
-          onClick={() => navigate("/home")}
-          style={{ cursor: "pointer" }}
-        >
-          <img src="/logo.png" alt="Reservo Logo" className="logo-image" />
-        </div>
-        <ul className="nav-links">
-          <li>
-            <a href="/business-dashboard">Up Next</a>
-          </li>
-          <li>
-            <a href="/business-services">Services</a>
-          </li>
-          <li>
-            <a href="/business-add-provider">Providers</a>
-          </li>
-        </ul>
-      </nav>
+      <Navbar />
 
       <div className="main-content">
         <header className="main-header">

@@ -23,12 +23,13 @@ import { AuthContext } from './component/AuthContext';
 import './styles.css';
 
 function App() {
-  const { authState,loading } = useContext(AuthContext);
+  const { authState, loading } = useContext(AuthContext);
   console.log("Auth State:", authState);
+
   if (loading) {
     return <div>Loading...</div>;
   }
-  
+
   return (
     <Router>
       <div className="App">
@@ -39,7 +40,7 @@ function App() {
           <Route
             path="/business-dashboard"
             element={
-              authState.token && authState.userType === "businessOwner"
+              authState.isAuthenticated && authState.userType === "businessOwner"
                 ? <BusinessDashboard />
                 : <Navigate to="/login-business" />
             }
@@ -48,7 +49,7 @@ function App() {
           <Route
             path="/login-business"
             element={
-              authState.token && authState.userType === "businessOwner"
+              authState.isAuthenticated && authState.userType === "businessOwner"
                 ? <Navigate to="/business-dashboard" />
                 : <LoginBusiness />
             }
@@ -57,7 +58,7 @@ function App() {
           <Route
             path="/signup-business"
             element={
-              authState.token && authState.userType === "businessOwner"
+              authState.isAuthenticated && authState.userType === "businessOwner"
                 ? <Navigate to="/business-dashboard" />
                 : <SignupBusiness />
             }
@@ -66,7 +67,7 @@ function App() {
           <Route
             path="/login-customer"
             element={
-              authState.token && authState.userType === "customer"
+              authState.isAuthenticated && authState.userType === "customer"
                 ? <Navigate to="/" />
                 : <LoginCustomer />
             }
@@ -75,7 +76,7 @@ function App() {
           <Route
             path="/signup-customer"
             element={
-              authState.token && authState.userType === "customer"
+              authState.isAuthenticated && authState.userType === "customer"
                 ? <Navigate to="/" />
                 : <SignupCustomer />
             }
@@ -84,7 +85,7 @@ function App() {
           <Route
             path="/business-services"
             element={
-              authState.token && authState.userType === "businessOwner"
+              authState.isAuthenticated && authState.userType === "businessOwner"
                 ? <BusinessServices />
                 : <Navigate to="/login-business" />
             }
@@ -93,7 +94,7 @@ function App() {
           <Route
             path="/business-add-provider"
             element={
-              authState.token && authState.userType === "businessOwner"
+              authState.isAuthenticated && authState.userType === "businessOwner"
                 ? <AddProvider />
                 : <Navigate to="/login-business" />
             }

@@ -1,5 +1,6 @@
 import { useParams, useLocation, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
+import { AuthContext } from "./AuthContext";
 
 const TimeSlots = () => {
   const { providerId } = useParams(); // Get providerId from URL path
@@ -8,9 +9,10 @@ const TimeSlots = () => {
 
   // Parse query parameters using URLSearchParams
   const queryParams = new URLSearchParams(location.search);
-  const businessId = queryParams.get("businessId");  // Extract businessId from query parameters
+  const businessId = queryParams.get("businessId"); // Extract businessId from query parameters
   const serviceId = queryParams.get("serviceId");
   const serviceDuration = parseInt(queryParams.get("duration"), 10);
+  const { authState } = useContext(AuthContext);
 
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
@@ -19,15 +21,31 @@ const TimeSlots = () => {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
 
   useEffect(() => {
-    // Check for authentication
-    const token = localStorage.getItem("authToken");
-    if (!token) {
+    if (!authState.isAuthenticated) {
       navigate("/login-customer", {
-        state: { from: location.pathname, providerId, serviceId, serviceDuration, selectedDate, selectedTimeSlot, businessId },
+        state: {
+          from: location.pathname,
+          providerId,
+          serviceId,
+          serviceDuration,
+          selectedDate,
+          selectedTimeSlot,
+          businessId,
+        },
       });
       return;
     }
-  }, [navigate, location, providerId, serviceId, serviceDuration, selectedDate, selectedTimeSlot, businessId]);
+  }, [
+    authState.isAuthenticated,
+    navigate,
+    location,
+    providerId,
+    serviceId,
+    serviceDuration,
+    selectedDate,
+    selectedTimeSlot,
+    businessId,
+  ]);
 
   // Fetch available time slots from backend when date, providerId, or serviceDuration changes
   useEffect(() => {
@@ -38,6 +56,7 @@ const TimeSlots = () => {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include", // Include cookies
           body: JSON.stringify({
             providerId,
             selectedDate,
@@ -75,10 +94,17 @@ const TimeSlots = () => {
   };
 
   const handleContinueBooking = () => {
-    const token = localStorage.getItem("authToken");
-    if (!token) {
+    if (!authState.isAuthenticated) {
       navigate("/login-customer", {
-        state: { from: location.pathname, providerId, serviceId, serviceDuration, selectedDate, selectedTimeSlot, businessId },
+        state: {
+          from: location.pathname,
+          providerId,
+          serviceId,
+          serviceDuration,
+          selectedDate,
+          selectedTimeSlot,
+          businessId,
+        },
       });
       return;
     }
@@ -88,8 +114,9 @@ const TimeSlots = () => {
       return;
     }
 
-    console.log(providerId, serviceId, serviceDuration, selectedDate, selectedTimeSlot, businessId);
-    navigate(`/review-payment/${providerId}?businessId=${businessId}&serviceId=${serviceId}&duration=${serviceDuration}&date=${selectedDate}&time=${selectedTimeSlot}`);
+    navigate(
+      `/review-payment/${providerId}?businessId=${businessId}&serviceId=${serviceId}&duration=${serviceDuration}&date=${selectedDate}&time=${selectedTimeSlot}`
+    );
   };
 
   return (
@@ -121,7 +148,9 @@ const TimeSlots = () => {
             timeSlots.map((timeSlot, index) => (
               <button
                 key={index}
-                className={`time-slot ${selectedTimeSlot === timeSlot ? "selected" : ""}`}
+                className={`time-slot ${
+                  selectedTimeSlot === timeSlot ? "selected" : ""
+                }`}
                 onClick={() => handleTimeSlotSelection(timeSlot)}
               >
                 {timeSlot}

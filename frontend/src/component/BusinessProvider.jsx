@@ -15,24 +15,26 @@ const BusinessProvider = () => {
   useEffect(() => {
     const fetchProviders = async () => {
       try {
-        console.log('Fetching providers from API...');
         const response = await fetch(
-          `/customer/businesses/${businessId}/services/${serviceId}/providers`
+          `/customer/businesses/${businessId}/services/${serviceId}/providers`,
+          {
+            credentials: "include",
+          }
         );
 
         const providersData = await response.json();
-        console.log('API response:', providersData);
+        console.log("API response:", providersData);
 
         if (response.ok) {
           setProviders(providersData); // Update the state with fetched providers
         } else {
-          console.error('Failed response status:', response.status);
+          console.error("Failed response status:", response.status);
           setError("Failed to fetch providers");
         }
 
         setLoading(false);
       } catch (err) {
-        console.error('Error fetching providers:', err);
+        console.error("Error fetching providers:", err);
         setError("Failed to load providers");
         setLoading(false);
       }

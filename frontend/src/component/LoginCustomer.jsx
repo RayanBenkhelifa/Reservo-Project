@@ -20,39 +20,21 @@ function LoginCustomer() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include", // Include cookies
         body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        // Use the login function from AuthContext to store the token and userType
-        login(data.token, "customer");
+        // Update auth state
+        login("customer");
 
-        // If there's state passed from the previous page, extract it
-        const {
-          from,
-          providerId,
-          serviceId,
-          serviceDuration,
-          selectedDate,
-          selectedTimeSlot,
-        } = location.state || {}; // Destructure the state
-
-        // Redirect the user back to the time-slots page with all the details
-        if (
-          from &&
-          providerId &&
-          serviceId &&
-          serviceDuration &&
-          selectedDate &&
-          selectedTimeSlot
-        ) {
-          navigate(
-            `/time-slots/${providerId}?serviceId=${serviceId}&duration=${serviceDuration}&date=${selectedDate}&timeSlot=${selectedTimeSlot}`
-          );
+        // Handle redirection logic
+        const { from } = location.state || {};
+        if (from) {
+          navigate(from);
         } else {
-          // Default to the homepage if no state is provided
           navigate("/");
         }
       } else {

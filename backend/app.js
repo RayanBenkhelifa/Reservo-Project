@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const session = require('express-session');
 const authRoutes = require('./routes/authRoutes');
 const businessRoutes = require('./routes/businessRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
@@ -14,7 +15,18 @@ const path = require('path');
 
 dotenv.config();
 const app = express();
-
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET, // Make sure to set this in your .env file
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false, // Set to true if using HTTPS
+      httpOnly: true,
+      maxAge: 2 * 60 * 60 * 1000, // Session expiration time in milliseconds (e.g., 2 hours)
+    },
+  })
+);
 // Middleware to parse JSON
 app.use(express.json());
 app.use(bodyParser.json());

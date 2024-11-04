@@ -1,13 +1,13 @@
-// src/components/ReviewAndPayment.jsx
-import { useParams, useLocation, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import React, { useParams, useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { AuthContext } from "./AuthContext";
 
 const ReviewAndPayment = () => {
   const { providerId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const { authState } = useContext(AuthContext);
 
-  // Parse query parameters
   const queryParams = new URLSearchParams(location.search);
   const businessId = queryParams.get("businessId");
   const serviceId = queryParams.get("serviceId");
@@ -15,49 +15,68 @@ const ReviewAndPayment = () => {
   const selectedDate = queryParams.get("date");
   const selectedTimeSlot = queryParams.get("time");
 
-  // State variables
   const [serviceDetails, setServiceDetails] = useState(null);
   const [providerDetails, setProviderDetails] = useState(null);
   const [businessDetails, setBusinessDetails] = useState(null);
+  const [customerId, setCustomerId] = useState(null); // New state variable
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [paymentOption, setPaymentOption] = useState("stripe"); // Default to 'stripe'
+  const [paymentOption, setPaymentOption] = useState("stripe");
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-
-    // Redirect to login if user is not authenticated
-    if (!token) {
+    if (!authState.isAuthenticated) {
       navigate("/login-customer", { state: { from: location.pathname } });
       return;
     }
 
     const fetchDetails = async () => {
       try {
-        const serviceResponse = await fetch(`/customer/services/${serviceId}`);
+        // Fetch user profile to get customerId
+        const profileResponse = await fetch("/auth/profile", {
+          method: "GET",
+          credentials: "include",
+        });
+        const profileData = await profileResponse.json();
+        if (profileResponse.ok) {
+          setCustomerId(profileData.id);
+        } else {
+          throw new Error("Failed to get user profile");
+        }
+
+        // Fetch service details
+        const serviceResponse = await fetch(`/customer/services/${serviceId}`, {
+          credentials: "include",
+        });
         const serviceData = await serviceResponse.json();
         if (!serviceResponse.ok) {
           throw new Error(
             `Failed to fetch service details, status: ${serviceResponse.status}`
           );
         }
-
         setServiceDetails(serviceData);
 
+        // Fetch provider details
         const providerResponse = await fetch(
-          `/customer/businesses/${businessId}/services/${serviceId}/providers`
+          `/customer/providers/${providerId}`,
+          {
+            credentials: "include",
+          }
         );
         const providerData = await providerResponse.json();
+        console.log("Provider Data:", providerData); // Check this in the console
         if (!providerResponse.ok) {
           throw new Error(
             `Failed to fetch provider details, status: ${providerResponse.status}`
           );
         }
-
         setProviderDetails(providerData);
 
+        // Fetch business details
         const businessResponse = await fetch(
-          `/customer/businesses/${businessId}`
+          `/customer/businesses/${businessId}`,
+          {
+            credentials: "include",
+          }
         );
         const businessData = await businessResponse.json();
         if (!businessResponse.ok) {
@@ -65,8 +84,8 @@ const ReviewAndPayment = () => {
             `Failed to fetch business details, status: ${businessResponse.status}`
           );
         }
-
         setBusinessDetails(businessData);
+
         setLoading(false);
       } catch (err) {
         console.error("Error fetching details:", err);
@@ -76,18 +95,23 @@ const ReviewAndPayment = () => {
     };
 
     fetchDetails();
-  }, [providerId, serviceId, businessId, navigate, location]);
+  }, [
+    authState.isAuthenticated,
+    providerId,
+    serviceId,
+    businessId,
+    navigate,
+    location,
+  ]);
 
   const handleCheckout = async () => {
-    const token = localStorage.getItem("authToken");
-    if (!token) {
+    if (!authState.isAuthenticated) {
       navigate("/login-customer", { state: { from: location.pathname } });
       return;
     }
 
-    const customerId = extractCustomerIdFromToken(token);
     if (!customerId) {
-      console.error("Failed to extract customer ID from token.");
+      console.error("Customer ID not available.");
       return;
     }
 
@@ -97,7 +121,7 @@ const ReviewAndPayment = () => {
       serviceId,
       selectedDate,
       startTime: selectedTimeSlot,
-      paymentOption, // Include payment option
+      paymentOption,
       items: [
         {
           name: serviceDetails?.serviceName || "Unknown Service",
@@ -112,18 +136,16 @@ const ReviewAndPayment = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
+        credentials: "include",
         body: JSON.stringify(bookingData),
       });
 
       const data = await response.json();
       if (response.ok) {
         if (paymentOption === "stripe") {
-          // Redirect to Stripe checkout URL
           window.location = data.url;
         } else if (paymentOption === "venue") {
-          // Redirect to confirmation page
           navigate(`/booking-confirmation?bookingId=${data.bookingId}`);
         }
       } else {
@@ -164,7 +186,7 @@ const ReviewAndPayment = () => {
           <strong>Business:</strong> {businessDetails?.businessName || "N/A"}
         </p>
         <p>
-          <strong>Provider:</strong> {providerDetails?.[0]?.name || "N/A"}
+          <strong>Provider:</strong> {providerDetails?.name || "N/A"}
         </p>
         <p>
           <strong>Service:</strong> {serviceDetails?.serviceName || "N/A"}

@@ -19,6 +19,7 @@ import SuccessPage from './component/SuccessPage';  // Import the SuccessPage co
 import BookingConfirmation from './component/BookingConfirmation';  // Confirmation page component
 import AddProvider from './component/AddProvider';
 import ReviewAndPayment from './component/ReviewAndPayment';
+import CustomerBookings from './component/CustomerBookings';
 import { AuthContext } from './component/AuthContext';
 import './styles.css';
 
@@ -111,6 +112,7 @@ function App() {
           <Route path="/booking-confirmation" element={<BookingConfirmation />} /> {/* Confirmation page */}
           <Route path="/review-payment/:providerId" element={<ReviewAndPayment />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/customer-bookings" element={<CustomerBookings />} />
           <Route path="/contact" element={<Contact />} />
   /          
           {/* Handle unknown routes */}

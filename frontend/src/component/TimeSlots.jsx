@@ -3,20 +3,21 @@ import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "./AuthContext";
 
 const TimeSlots = () => {
-  const { providerId } = useParams(); // Get providerId from URL path
-  const location = useLocation(); // Get the full location object to access query params
+  const { providerId } = useParams(); 
+  const location = useLocation();
   const navigate = useNavigate();
 
-  // Parse query parameters using URLSearchParams
+  // Parse query parameters
   const queryParams = new URLSearchParams(location.search);
-  const businessId = queryParams.get("businessId"); // Extract businessId from query parameters
+  const businessId = queryParams.get("businessId");
   const serviceId = queryParams.get("serviceId");
   const serviceDuration = parseInt(queryParams.get("duration"), 10);
+  const bookingId = queryParams.get("bookingId"); // Check if it's a reschedule
   const { authState } = useContext(AuthContext);
 
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
-  ); // Default to today's date
+  );
   const [timeSlots, setTimeSlots] = useState([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
 
@@ -31,6 +32,7 @@ const TimeSlots = () => {
           selectedDate,
           selectedTimeSlot,
           businessId,
+          bookingId,
         },
       });
       return;
@@ -45,9 +47,10 @@ const TimeSlots = () => {
     selectedDate,
     selectedTimeSlot,
     businessId,
+    bookingId,
   ]);
 
-  // Fetch available time slots from backend when date, providerId, or serviceDuration changes
+  // Fetch available time slots
   useEffect(() => {
     const fetchAvailableTimeSlots = async () => {
       try {
@@ -56,7 +59,7 @@ const TimeSlots = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          credentials: "include", // Include cookies
+          credentials: "include",
           body: JSON.stringify({
             providerId,
             selectedDate,
@@ -93,7 +96,7 @@ const TimeSlots = () => {
     setSelectedTimeSlot(null);
   };
 
-  const handleContinueBooking = () => {
+  const handleContinueBooking = async () => {
     if (!authState.isAuthenticated) {
       navigate("/login-customer", {
         state: {
@@ -104,6 +107,7 @@ const TimeSlots = () => {
           selectedDate,
           selectedTimeSlot,
           businessId,
+          bookingId,
         },
       });
       return;
@@ -114,16 +118,44 @@ const TimeSlots = () => {
       return;
     }
 
-    navigate(
-      `/review-payment/${providerId}?businessId=${businessId}&serviceId=${serviceId}&duration=${serviceDuration}&date=${selectedDate}&time=${selectedTimeSlot}`
-    );
+    // If bookingId is present, we are rescheduling
+    if (bookingId) {
+      try {
+        const response = await fetch(`/booking/reschedule/${bookingId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            newDate: selectedDate,
+            newStartTime: selectedTimeSlot, // Corrected parameter name
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert("Booking rescheduled successfully");
+          navigate("/customer-bookings"); // Redirect to customer bookings
+        } else {
+          alert(data.error || "Failed to reschedule booking.");
+        }
+      } catch (error) {
+        console.error("Error rescheduling booking:", error);
+        alert("An error occurred while rescheduling.");
+      }
+    } else {
+      // Proceed with the booking flow
+      navigate(
+        `/review-payment/${providerId}?businessId=${businessId}&serviceId=${serviceId}&duration=${serviceDuration}&date=${selectedDate}&time=${selectedTimeSlot}`
+      );
+    }
   };
 
   return (
     <div className="container">
       <header className="main-header">
-        <h1>Select a Time Slot</h1>
-        <p>Please choose an available time slot for your appointment.</p>
+        <h1>{bookingId ? "Reschedule Your Booking" : "Select a Time Slot"}</h1>
+        <p>{bookingId ? "Choose a new time for your appointment." : "Please choose an available time slot for your appointment."}</p>
       </header>
 
       <section id="date-selection" className="date-category">
@@ -164,7 +196,7 @@ const TimeSlots = () => {
 
       <div className="continue-booking">
         <button className="btn" onClick={handleContinueBooking}>
-          Continue Booking
+          {bookingId ? "Confirm Reschedule" : "Continue Booking"}
         </button>
       </div>
     </div>

@@ -1,24 +1,20 @@
-// bookingRoutes.js
-
 const express = require('express');
 const bookingController = require('../controllers/bookingController');
 const { verifySession } = require('../middleware/verifySession');
 
 const router = express.Router();
 
-// Route to create a new booking
-router.post('/create', verifySession ,bookingController.createBooking);
-
-// Route to get available slots
+// Public Routes (No Authentication Required)
 router.post('/available-slots', bookingController.getAvailableSlots);
-
-// Route to update booking status after payment
-router.post('/update-status/:bookingId', bookingController.updateBookingStatus);
-
-// Route to verify Stripe payment session
 router.get('/verify-session', bookingController.verifyPaymentSession );
-
-// Route to get booking details
 router.get('/details/:bookingId', bookingController.getBookingDetails);
+
+// Protected Routes (Require Authentication)
+router.post('/create', verifySession, bookingController.createBooking);
+router.get('/customer-bookings', verifySession, bookingController.getCustomerBookings);
+router.post('/update-status/:bookingId', verifySession, bookingController.updateBookingStatus);
+router.post('/cancel/:bookingId', verifySession, bookingController.cancelBooking);
+router.post('/reschedule/:bookingId', verifySession, bookingController.rescheduleBooking);
+router.get('/customer-bookings', verifySession, bookingController.getCustomerBookings);
 
 module.exports = router;

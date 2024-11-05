@@ -369,6 +369,118 @@ const getBookingDetails = async (req, res) => {
       .json({ success: false, error: 'Failed to fetch booking details' });
   }
 };
+// const getCustomerBookings = async (req, res) => {
+//   try {
+//     const customerId = req.userId; // Assumes that verifyToken middleware sets req.userId
+
+//     const bookings = await Booking.find({ customer: customerId })
+//       .populate('service', 'serviceName')
+//       .populate('provider', 'name')
+//       .populate('businessOwner', 'businessName');
+
+//     res.json({ success: true, bookings });
+//   } catch (error) {
+//     console.error('Error fetching customer bookings:', error);
+//     res.status(500).json({ message: 'Error fetching bookings.' });
+//   }
+// };
+
+const cancelBooking = async (req, res) => {
+  const { bookingId } = req.params;
+
+  try {
+    const booking = await Booking.findById(bookingId);
+
+    if (!booking) {
+      return res.status(404).json({ success: false, error: 'Booking not found' });
+    }
+
+    // Check if the booking is eligible for cancellation
+    if (booking.paymentStatus === 'completed') {
+      return res.status(400).json({ success: false, error: 'Cannot cancel a completed booking' });
+    }
+
+    // Cancel the booking by updating status
+    booking.paymentStatus = 'canceled';
+    await booking.save();
+
+    res.json({ success: true, message: 'Booking canceled successfully' });
+  } catch (error) {
+    console.error('Error canceling booking:', error);
+    res.status(500).json({ success: false, error: 'Failed to cancel booking' });
+  }
+};
+
+const rescheduleBooking = async (req, res) => {
+  const { bookingId } = req.params;
+  const { newDate, newStartTime } = req.body;
+
+  try {
+    const booking = await Booking.findById(bookingId);
+
+    if (!booking) {
+      return res.status(404).json({ success: false, error: 'Booking not found' });
+    }
+
+    // Fetch service duration
+    await booking.populate('service', 'duration');
+
+    const serviceDuration = booking.service.duration;
+    const startDateTime = new Date(`${newDate} ${newStartTime}`);
+    const endDateTime = new Date(
+      startDateTime.getTime() + serviceDuration * 60000
+    );
+    const formattedEndTime = endDateTime.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+
+    // Check if the new time slot is available, excluding the current booking
+    const existingBooking = await Booking.findOne({
+      provider: booking.provider,
+      date: newDate,
+      startTime: { $lt: formattedEndTime },
+      endTime: { $gt: newStartTime },
+      _id: { $ne: bookingId }, // Exclude the current booking
+    });
+
+    if (existingBooking) {
+      return res.status(400).json({ success: false, error: 'Selected time slot is not available for rescheduling' });
+    }
+
+    // Update booking details
+    booking.date = newDate;
+    booking.startTime = newStartTime;
+    booking.endTime = formattedEndTime;
+    await booking.save();
+
+    res.json({ success: true, message: 'Booking rescheduled successfully' });
+  } catch (error) {
+    console.error('Error rescheduling booking:', error);
+    res.status(500).json({ success: false, error: 'Failed to reschedule booking' });
+  }
+};
+
+const getCustomerBookings = async (req, res) => {
+  const customerId = req.userId;
+
+  try {
+    const bookings = await Booking.find({ customer: customerId })
+      .populate({
+        path: 'service',
+        select: 'serviceName duration', // 'duration' is included
+      })
+      .populate('provider', 'name')
+      .populate('businessOwner', 'businessName')
+      .lean();
+
+    res.json({ bookings });
+  } catch (error) {
+    console.error('Error fetching bookings:', error);
+    res.status(500).json({ message: 'Error fetching bookings.' });
+  }
+};
+
 
 module.exports = {
   getAvailableSlots,
@@ -376,4 +488,8 @@ module.exports = {
   updateBookingStatus,
   verifyPaymentSession ,
   getBookingDetails,
+  getCustomerBookings,     
+  cancelBooking,           
+  rescheduleBooking         
 };
+

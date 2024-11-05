@@ -14,6 +14,7 @@ function Home() {
             <Link to="/index" className="active">
               Home
             </Link>
+           <Link to="/customer-bookings">Manage Bookings</Link>
             <Link to="/services">Services</Link>
             <Link to="/contact">Contact</Link>
             <Link to="/user-type" className="btn">

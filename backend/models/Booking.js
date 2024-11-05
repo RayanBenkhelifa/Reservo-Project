@@ -11,12 +11,12 @@ const bookingSchema = new mongoose.Schema({
     endTime: { type: String, required: true },
     paymentStatus: {
         type: String,
-        enum: ['pending', 'completed', 'failed','unpaid'],
+        enum: ['pending', 'completed', 'failed','unpaid','canceled'],
         default: 'pending'
     },
     stripeSessionId: { type: String }
 });
 
-const Booking = mongoose.models.Booking || mongoose.model('Booking', bookingSchema);
+const Booking = mongoose.model('Booking', bookingSchema);
 
 module.exports = Booking;

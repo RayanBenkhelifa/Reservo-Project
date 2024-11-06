@@ -1505,3 +1505,74 @@ button.confirm-booking-btn {
 button.confirm-booking-btn:hover {
     background-color: #3c3fb5;
 }
+
+/* Styling for the Appointments Table */
+.appointments-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .appointments-table th,
+  .appointments-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .appointments-table th {
+    background-color: #5d5fef; /* Using primary color for header */
+    color: white;
+    font-weight: 600;
+  }
+  
+  .appointments-table tbody tr:nth-child(even) {
+    background-color: #f9fafc; /* Light background for even rows */
+  }
+  
+  .appointments-table tbody tr:hover {
+    background-color: #e0e0e0; /* Row highlight on hover */
+  }
+  
+  /* Review Form Styles */
+  .review-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .review-form label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .review-form input[type="number"],
+  .review-form textarea {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    width: 100%;
+  }
+  
+  .review-form textarea {
+    resize: vertical;
+    min-height: 60px;
+  }
+  
+  .review-form .btn {
+    background-color: #5d5fef;
+    color: white;
+    font-weight: 600;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .review-form .btn:hover {
+    background-color: #4a4ad4;
+  }
+  

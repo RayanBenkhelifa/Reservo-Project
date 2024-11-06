@@ -77,3 +77,7 @@ app.get('/cancel', (req, res) => {
 });
 app.get('/payment/verify-session', paymentController.verifySession);
 
+const reviewRoutes = require('./routes/reviewRoutes'); // Add this line
+
+// Register review routes
+app.use('/review', reviewRoutes); // Add this line

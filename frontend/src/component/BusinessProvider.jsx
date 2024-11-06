@@ -1,5 +1,6 @@
 import { useParams, useLocation, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import CustomerNavBar from "./CustomerNavBar"; // Adjust the path as needed
 
 const BusinessProvider = () => {
   const { businessId, serviceId } = useParams(); // Extract businessId and serviceId from URL params
@@ -52,40 +53,43 @@ const BusinessProvider = () => {
   }
 
   return (
-    <div className="container">
-      <header className="main-header">
-        <h1>Available Providers for Service</h1>
-      </header>
+    <>
+      <CustomerNavBar />
+      <div className="container">
+        <header className="main-header">
+          <h1>Available Providers for Service</h1>
+        </header>
 
-      <section id="providers" className="service-category">
-        <h2>Providers</h2>
-        <div className="service-list">
-          {providers.length > 0 ? (
-            providers.map((provider) => (
-              <div className="service-card" key={provider._id}>
-                <h3>{provider.name}</h3>
-                <p>
-                  Available Services:{" "}
-                  {provider.services
-                    ? provider.services.length
-                    : "No services available"}
-                </p>
+        <section id="providers" className="service-category">
+          <h2>Providers</h2>
+          <div className="service-list">
+            {providers.length > 0 ? (
+              providers.map((provider) => (
+                <div className="service-card" key={provider._id}>
+                  <h3>{provider.name}</h3>
+                  <p>
+                    Available Services:{" "}
+                    {provider.services
+                      ? provider.services.length
+                      : "No services available"}
+                  </p>
 
-                {/* Pass providerId in the URL and serviceId, serviceDuration as query params */}
-                <Link
-                  to={`/time-slots/${provider._id}?businessId=${businessId}&serviceId=${serviceId}&duration=${serviceDuration}`}
-                  className="btn"
-                >
-                  Book {provider.name}
-                </Link>
-              </div>
-            ))
-          ) : (
-            <p>No providers available for this service.</p>
-          )}
-        </div>
-      </section>
-    </div>
+                  {/* Pass providerId in the URL and serviceId, serviceDuration as query params */}
+                  <Link
+                    to={`/time-slots/${provider._id}?businessId=${businessId}&serviceId=${serviceId}&duration=${serviceDuration}`}
+                    className="btn"
+                  >
+                    Book {provider.name}
+                  </Link>
+                </div>
+              ))
+            ) : (
+              <p>No providers available for this service.</p>
+            )}
+          </div>
+        </section>
+      </div>
+    </>
   );
 };
 

@@ -465,21 +465,44 @@ const getCustomerBookings = async (req, res) => {
   const customerId = req.userId;
 
   try {
-    const bookings = await Booking.find({ customer: customerId })
+    const now = new Date();
+    now.setHours(0, 0, 0, 0); // Optional: Set to midnight to compare dates only
+
+    // Fetch upcoming bookings
+    const upcomingBookings = await Booking.find({
+      customer: customerId,
+      date: { $gte: now },
+      paymentStatus: { $ne: 'canceled' },
+    })
       .populate({
         path: 'service',
-        select: 'serviceName duration', // 'duration' is included
+        select: 'serviceName duration',
       })
       .populate('provider', 'name')
       .populate('businessOwner', 'businessName')
       .lean();
 
-    res.json({ bookings });
+    // Fetch past bookings
+    const pastBookings = await Booking.find({
+      customer: customerId,
+      date: { $lt: now },
+      paymentStatus: { $ne: 'canceled' },
+    })
+      .populate({
+        path: 'service',
+        select: 'serviceName duration',
+      })
+      .populate('provider', 'name')
+      .populate('businessOwner', 'businessName')
+      .lean();
+
+    res.json({ upcomingBookings, pastBookings });
   } catch (error) {
     console.error('Error fetching bookings:', error);
     res.status(500).json({ message: 'Error fetching bookings.' });
   }
 };
+
 
 
 module.exports = {

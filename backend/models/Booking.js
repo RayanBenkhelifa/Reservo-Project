@@ -14,7 +14,11 @@ const bookingSchema = new mongoose.Schema({
         enum: ['pending', 'completed', 'failed','unpaid','canceled'],
         default: 'pending'
     },
-    stripeSessionId: { type: String }
+    stripeSessionId: { type: String },
+    isReviewed: {
+        type: Boolean,
+        default: false,
+      },
 });
 
 const Booking = mongoose.model('Booking', bookingSchema);

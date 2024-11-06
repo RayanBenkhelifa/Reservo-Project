@@ -1,28 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import CustomerNavBar from "./CustomerNavBar"; // Adjust the path as needed
 import "../styles.css";
 
 function Home() {
   return (
     <>
-      <header className="header">
-        <div className="container">
-          <Link to="/index" className="header-business-logo">
-            <img src="/logo.png" alt="Reservo Logo" className="logo-image" />
-          </Link>
-          <nav className="nav">
-            <Link to="/index" className="active">
-              Home
-            </Link>
-           <Link to="/customer-bookings">Manage Bookings</Link>
-            <Link to="/services">Services</Link>
-            <Link to="/contact">Contact</Link>
-            <Link to="/user-type" className="btn">
-              Get Started
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <CustomerNavBar />
+
       <section className="hero">
         <div className="hero-overlay"></div>
         <div className="hero-content container">

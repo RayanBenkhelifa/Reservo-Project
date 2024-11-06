@@ -1,9 +1,10 @@
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "./AuthContext";
+import CustomerNavBar from "./CustomerNavBar"; // Adjust the path as needed
 
 const TimeSlots = () => {
-  const { providerId } = useParams(); 
+  const { providerId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -152,54 +153,66 @@ const TimeSlots = () => {
   };
 
   return (
-    <div className="container">
-      <header className="main-header">
-        <h1>{bookingId ? "Reschedule Your Booking" : "Select a Time Slot"}</h1>
-        <p>{bookingId ? "Choose a new time for your appointment." : "Please choose an available time slot for your appointment."}</p>
-      </header>
+    <>
+      <CustomerNavBar />
 
-      <section id="date-selection" className="date-category">
-        <h2>Select a Date</h2>
-        <div className="date-list">
-          {availableDates.map((date) => (
-            <button
-              key={date}
-              className={`date-item ${selectedDate === date ? "selected" : ""}`}
-              onClick={() => handleDateSelection(date)}
-            >
-              {date}
-            </button>
-          ))}
-        </div>
-      </section>
+      <div className="container">
+        <header className="main-header">
+          <h1>
+            {bookingId ? "Reschedule Your Booking" : "Select a Time Slot"}
+          </h1>
+          <p>
+            {bookingId
+              ? "Choose a new time for your appointment."
+              : "Please choose an available time slot for your appointment."}
+          </p>
+        </header>
 
-      <section id="time-slots" className="time-slots-category">
-        <h2>Select a Time Slot</h2>
-        <div className="time-slots-list">
-          {timeSlots.length > 0 ? (
-            timeSlots.map((timeSlot, index) => (
+        <section id="date-selection" className="date-category">
+          <h2>Select a Date</h2>
+          <div className="date-list">
+            {availableDates.map((date) => (
               <button
-                key={index}
-                className={`time-slot ${
-                  selectedTimeSlot === timeSlot ? "selected" : ""
+                key={date}
+                className={`date-item ${
+                  selectedDate === date ? "selected" : ""
                 }`}
-                onClick={() => handleTimeSlotSelection(timeSlot)}
+                onClick={() => handleDateSelection(date)}
               >
-                {timeSlot}
+                {date}
               </button>
-            ))
-          ) : (
-            <p>No available time slots for the selected date.</p>
-          )}
-        </div>
-      </section>
+            ))}
+          </div>
+        </section>
 
-      <div className="continue-booking">
-        <button className="btn" onClick={handleContinueBooking}>
-          {bookingId ? "Confirm Reschedule" : "Continue Booking"}
-        </button>
+        <section id="time-slots" className="time-slots-category">
+          <h2>Select a Time Slot</h2>
+          <div className="time-slots-list">
+            {timeSlots.length > 0 ? (
+              timeSlots.map((timeSlot, index) => (
+                <button
+                  key={index}
+                  className={`time-slot ${
+                    selectedTimeSlot === timeSlot ? "selected" : ""
+                  }`}
+                  onClick={() => handleTimeSlotSelection(timeSlot)}
+                >
+                  {timeSlot}
+                </button>
+              ))
+            ) : (
+              <p>No available time slots for the selected date.</p>
+            )}
+          </div>
+        </section>
+
+        <div className="continue-booking">
+          <button className="btn" onClick={handleContinueBooking}>
+            {bookingId ? "Confirm Reschedule" : "Continue Booking"}
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

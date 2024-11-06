@@ -126,12 +126,36 @@ const signupBusinessOwner = async (req, res) => {
     }
   };
 
-  const checkAuth = (req, res) => {
+  const checkAuth = async (req, res) => {
     if (req.session && req.session.userId) {
-      res.status(200).json({
-        isAuthenticated: true,
-        userType: req.session.userType,
-      });
+      const userId = req.session.userId;
+      const userType = req.session.userType;
+  
+      try {
+        let user;
+        if (userType === 'customer') {
+          user = await Customer.findById(userId).select('name email');
+        } else if (userType === 'businessOwner') {
+          user = await BusinessOwner.findById(userId).select('name email');
+        }
+  
+        if (user) {
+          res.status(200).json({
+            isAuthenticated: true,
+            userType: userType,
+            user: {
+              username: user.name,
+              email: user.email,
+            },
+          });
+        } else {
+          // User not found
+          res.status(401).json({ isAuthenticated: false });
+        }
+      } catch (err) {
+        console.error('Error fetching user in checkAuth:', err);
+        res.status(500).json({ isAuthenticated: false });
+      }
     } else {
       res.status(401).json({ isAuthenticated: false });
     }

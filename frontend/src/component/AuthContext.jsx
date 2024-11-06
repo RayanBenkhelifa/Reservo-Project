@@ -6,28 +6,30 @@ export const AuthProvider = ({ children }) => {
   const [authState, setAuthState] = useState({
     isAuthenticated: false,
     userType: null,
+    user: null, // Add user property
   });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // On component mount, check if the user is authenticated
     const checkAuth = async () => {
       try {
         const response = await fetch("/auth/check-auth", {
           method: "GET",
-          credentials: "include", // Include cookies
+          credentials: "include",
         });
 
         if (response.ok) {
           const data = await response.json();
           setAuthState({
             isAuthenticated: true,
-            userType: data.userType, // Assuming the backend returns userType
+            userType: data.userType,
+            user: data.user, // Set the user data
           });
         } else {
           setAuthState({
             isAuthenticated: false,
             userType: null,
+            user: null,
           });
         }
       } catch (error) {
@@ -35,6 +37,7 @@ export const AuthProvider = ({ children }) => {
         setAuthState({
           isAuthenticated: false,
           userType: null,
+          user: null,
         });
       } finally {
         setLoading(false);
@@ -43,7 +46,6 @@ export const AuthProvider = ({ children }) => {
 
     checkAuth();
   }, []);
-
   const login = (userType) => {
     setAuthState({
       isAuthenticated: true,

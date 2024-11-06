@@ -1,6 +1,7 @@
 import React, { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "./AuthContext";
+import CustomerNavBar from "./CustomerNavBar"; // Adjust the path as needed
 
 const ReviewAndPayment = () => {
   const { providerId } = useParams();
@@ -175,60 +176,63 @@ const ReviewAndPayment = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="container">
-      <header className="main-header">
-        <h1>Review and Payment</h1>
-      </header>
+    <>
+      <CustomerNavBar />
+      <div className="container">
+        <header className="main-header">
+          <h1>Review and Payment</h1>
+        </header>
 
-      <section className="review-section">
-        <h2>Review Your Booking</h2>
-        <p>
-          <strong>Business:</strong> {businessDetails?.businessName || "N/A"}
-        </p>
-        <p>
-          <strong>Provider:</strong> {providerDetails?.name || "N/A"}
-        </p>
-        <p>
-          <strong>Service:</strong> {serviceDetails?.serviceName || "N/A"}
-        </p>
-        <p>
-          <strong>Duration:</strong> {serviceDuration} minutes
-        </p>
-        <p>
-          <strong>Date:</strong> {selectedDate}
-        </p>
-        <p>
-          <strong>Start Time:</strong> {selectedTimeSlot}
-        </p>
-        <p>
-          <strong>Price:</strong> SAR {serviceDetails?.price || "N/A"}
-        </p>
-        <div className="payment-toggle">
-          <h3>Select Payment Method:</h3>
-          <div className="toggle-container">
-            <div
-              className={`toggle-card ${
-                paymentOption === "stripe" ? "selected" : ""
-              }`}
-              onClick={() => setPaymentOption("stripe")}
-            >
-              Pay with Card (Stripe)
+        <section className="review-section">
+          <h2>Review Your Booking</h2>
+          <p>
+            <strong>Business:</strong> {businessDetails?.businessName || "N/A"}
+          </p>
+          <p>
+            <strong>Provider:</strong> {providerDetails?.name || "N/A"}
+          </p>
+          <p>
+            <strong>Service:</strong> {serviceDetails?.serviceName || "N/A"}
+          </p>
+          <p>
+            <strong>Duration:</strong> {serviceDuration} minutes
+          </p>
+          <p>
+            <strong>Date:</strong> {selectedDate}
+          </p>
+          <p>
+            <strong>Start Time:</strong> {selectedTimeSlot}
+          </p>
+          <p>
+            <strong>Price:</strong> SAR {serviceDetails?.price || "N/A"}
+          </p>
+          <div className="payment-toggle">
+            <h3>Select Payment Method:</h3>
+            <div className="toggle-container">
+              <div
+                className={`toggle-card ${
+                  paymentOption === "stripe" ? "selected" : ""
+                }`}
+                onClick={() => setPaymentOption("stripe")}
+              >
+                Pay with Card (Stripe)
+              </div>
+              <div
+                className={`toggle-card ${
+                  paymentOption === "venue" ? "selected" : ""
+                }`}
+                onClick={() => setPaymentOption("venue")}
+              >
+                Pay at Venue
+              </div>
             </div>
-            <div
-              className={`toggle-card ${
-                paymentOption === "venue" ? "selected" : ""
-              }`}
-              onClick={() => setPaymentOption("venue")}
-            >
-              Pay at Venue
-            </div>
+            <button className="confirm-booking-btn" onClick={handleCheckout}>
+              Confirm Booking
+            </button>
           </div>
-          <button className="confirm-booking-btn" onClick={handleCheckout}>
-            Confirm Booking
-          </button>
-        </div>
-      </section>
-    </div>
+        </section>
+      </div>
+    </>
   );
 };
 

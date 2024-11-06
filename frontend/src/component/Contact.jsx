@@ -1,27 +1,11 @@
 import React from "react";
+import CustomerNavBar from "./CustomerNavBar"; // Adjust the path as needed
 import "../styles.css";
 
 function Contact() {
   return (
     <>
-      <header className="header">
-        <div className="container">
-          <a href="/index" className="header-business-logo">
-            {/* Replacing the text with a logo image */}
-            <img src="/logo.png" alt="Reservo Logo" className="logo-image" />
-          </a>
-          <nav className="nav">
-            <a href="/index" className="active">
-              Home
-            </a>
-            <a href="/services">Services</a>
-            <a href="/contact">Contact</a>
-            <a href="/user-type" className="btn">
-              Get Started
-            </a>
-          </nav>
-        </div>
-      </header>
+      <CustomerNavBar />
 
       <section className="contact">
         <div className="container">

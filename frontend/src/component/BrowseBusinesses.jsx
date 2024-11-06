@@ -1,3 +1,4 @@
+import CustomerNavBar from "./CustomerNavBar"; // Adjust the path as needed
 import React, { useEffect, useState } from "react";
 import "../styles.css";
 
@@ -46,34 +47,37 @@ function BrowseBusinesses() {
   }, {});
 
   return (
-    <div className="container">
-      <header className="main-header">
-        <h1>Browse Businesses</h1>
-        <p>Select a category to explore businesses near you.</p>
-      </header>
+    <>
+      <CustomerNavBar />
+      <div className="container">
+        <header className="main-header">
+          <h1>Browse Businesses</h1>
+          <p>Select a category to explore businesses near you.</p>
+        </header>
 
-      {/* Render categories dynamically */}
-      {Object.keys(categorizedBusinesses).map((category) => (
-        <section
-          key={category}
-          id={category.toLowerCase()}
-          className="business-category"
-        >
-          <h2>{category}</h2>
-          <div className="business-list">
-            {categorizedBusinesses[category].map((business) => (
-              <div className="business-card" key={business._id}>
-                <h3>{business.name}</h3>
-                <p>Location: {business.location}</p>
-                <a href={`/business-details/${business._id}`} className="btn">
-                  View Details
-                </a>
-              </div>
-            ))}
-          </div>
-        </section>
-      ))}
-    </div>
+        {/* Render categories dynamically */}
+        {Object.keys(categorizedBusinesses).map((category) => (
+          <section
+            key={category}
+            id={category.toLowerCase()}
+            className="business-category"
+          >
+            <h2>{category}</h2>
+            <div className="business-list">
+              {categorizedBusinesses[category].map((business) => (
+                <div className="business-card" key={business._id}>
+                  <h3>{business.name}</h3>
+                  <p>Location: {business.location}</p>
+                  <a href={`/business-details/${business._id}`} className="btn">
+                    View Details
+                  </a>
+                </div>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+    </>
   );
 }
 

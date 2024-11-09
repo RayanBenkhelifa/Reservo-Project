@@ -1700,3 +1700,49 @@ button.confirm-booking-btn:hover {
     border: none;
     cursor: pointer;
 }
+
+.business-card {
+    position: relative;
+    padding: 20px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.business-card h3 {
+    margin: 0 0 10px;
+    font-size: 18px;
+}
+
+.business-card .btn {
+    padding: 10px 20px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.business-card .btn:hover {
+    background: #0056b3;
+}
+
+.business-card .rating {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #fff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-weight: bold;
+    color: #333;
+}

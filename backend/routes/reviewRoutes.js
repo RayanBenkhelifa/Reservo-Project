@@ -1,14 +1,23 @@
-// routes/reviewRoutes.js
 const express = require('express');
-const reviewController = require('../controllers/reviewController');
-const { verifySession } = require('../middleware/verifySession');
+const {
+    createReview,
+    getReviews,
+    getAverageRating,
+    deleteReview
+} = require('../controllers/reviewController');
 
 const router = express.Router();
 
-// Route to create a new review (only accessible to the customer)
-router.post('/create', verifySession, reviewController.createReview);
+// Route to create a new review
+router.post('/', createReview);
 
-// Route to get all reviews for a provider
-router.get('/provider/:providerId', reviewController.getProviderReviews);
+// Route to get all reviews for a specific business
+router.get('/:businessId', getReviews);
+
+// Route to get the average rating for a specific business
+router.get('/average/:businessId', getAverageRating);
+
+// Route to delete a specific review
+router.delete('/:reviewId', deleteReview);
 
 module.exports = router;

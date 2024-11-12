@@ -1,24 +1,27 @@
 const Review = require('../models/Review');
-const Business = require('../models/BusinessOwner');
 
 // Controller to create a new review
 exports.createReview = async (req, res) => {
     try {
-        const { rating, comment, business } = req.body;
+        const { businessRating, providerRating, comment, businessOwner, provider, booking } = req.body;
 
-        if (!rating || !business) {
-            return res.status(400).json({ error: 'Rating and business ID are required' });
+        if (!businessRating || !providerRating || !businessOwner || !provider || !booking) {
+            return res.status(400).json({ error: 'All required fields must be provided' });
         }
 
         const newReview = await Review.create({
-            rating,
+            businessRating,
+            providerRating,
             comment,
-            business,
-            user: req.user._id, // Assuming you have user authentication
+            businessOwner,
+            provider,
+            booking,
+            customer: req.user._id, // Assuming user authentication is implemented
         });
 
         res.status(201).json(newReview);
     } catch (error) {
+        console.error('Error creating review:', error);
         res.status(500).json({ error: 'Failed to create review' });
     }
 };
@@ -27,10 +30,11 @@ exports.createReview = async (req, res) => {
 exports.getReviews = async (req, res) => {
     try {
         const businessId = req.params.businessId;
-        const reviews = await Review.find({ business: businessId }).populate('user', 'name');
+        const reviews = await Review.find({ businessOwner: businessId }).populate('customer', 'name');
 
         res.status(200).json(reviews);
     } catch (error) {
+        console.error('Error fetching reviews:', error);
         res.status(500).json({ error: 'Failed to fetch reviews' });
     }
 };
@@ -41,23 +45,19 @@ exports.getAverageRating = async (req, res) => {
         const businessId = req.params.businessId;
 
         // Fetch all reviews for the business
-        const reviews = await Review.find({ business: businessId });
-        console.log(`Reviews for business ${businessId}:`, reviews); // Debugging log
+        const reviews = await Review.find({ businessOwner: businessId });
 
         if (reviews.length === 0) {
-            console.log(`No reviews found for business ${businessId}`); // Debugging log
-            return res.status(200).json({ averageRating: 0 }); // No reviews, return 0
+            return res.status(200).json({ averageRating: 0.0 }); // No reviews, return 0.0
         }
 
-        // Calculate the average rating
-        const averageRating =
-            reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length;
+        // Calculate the average business rating
+        const averageBusinessRating =
+            reviews.reduce((sum, review) => sum + review.businessRating, 0) / reviews.length;
 
-        console.log(`Average rating for business ${businessId}:`, averageRating); // Debugging log
-
-        res.status(200).json({ averageRating });
+        res.status(200).json({ averageRating: averageBusinessRating });
     } catch (error) {
-        console.error(`Error calculating average rating for business ${req.params.businessId}:`, error); // Debugging log
+        console.error(`Error calculating average rating for business ${req.params.businessId}:`, error);
         res.status(500).json({ error: 'Failed to calculate average rating' });
     }
 };
@@ -75,6 +75,7 @@ exports.deleteReview = async (req, res) => {
 
         res.status(200).json({ message: 'Review deleted successfully' });
     } catch (error) {
+        console.error('Error deleting review:', error);
         res.status(500).json({ error: 'Failed to delete review' });
     }
 };

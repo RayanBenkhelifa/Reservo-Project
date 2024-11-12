@@ -1,5 +1,5 @@
-import CustomerNavBar from "./CustomerNavBar"; // Adjust the path as needed
 import React, { useEffect, useState } from "react";
+import CustomerNavBar from "./CustomerNavBar"; // Adjust the path as needed
 import "../styles.css";
 
 function BrowseBusinesses() {
@@ -9,48 +9,57 @@ function BrowseBusinesses() {
     const [ratings, setRatings] = useState({}); // State to hold average ratings
 
     useEffect(() => {
-        // Fetch businesses from the backend
-        const fetchBusinesses = async () => {
+        const fetchBusinessesAndRatings = async () => {
             try {
-                const response = await fetch("/customer/businesses"); // Make the GET request
+                // Fetch businesses from the backend
+                const response = await fetch("/customer/businesses");
                 if (!response.ok) {
-                    throw new Error("Failed to fetch businesses"); // Throw an error if the response is not ok
+                    throw new Error("Failed to fetch businesses");
                 }
-                const data = await response.json(); // Parse the JSON response
-                setBusinesses(data); // Update the state with the fetched businesses
-                setLoading(false); // Set loading to false once the data is fetched
+                const data = await response.json();
+                console.log("Businesses fetched:", data); // Debug log for businesses
+                setBusinesses(data);
 
-                // Fetch average ratings for businesses
+                // Fetch average ratings for all businesses in parallel
                 const ratingsData = {};
-                for (const business of data) {
+                const ratingPromises = data.map(async (business) => {
                     try {
-                        console.log(`Fetching rating for business: ${business._id}`);
-                        const ratingResponse = await fetch(`/api/reviews/average/${business._id}`);
-                        const ratingData = await ratingResponse.json();
-                        console.log(`Average rating for ${business._id}:`, ratingData.averageRating); // Debug here
-                        ratingsData[business._id] = ratingData.averageRating || 0; // Store the average rating
+                        const ratingResponse = await fetch(`/review/average/${business._id}`); // Corrected API path
+                        if (ratingResponse.ok) {
+                            const ratingData = await ratingResponse.json();
+                            console.log(`Average rating for ${business._id}:`, ratingData); // Debug log for each rating
+                            ratingsData[business._id] = ratingData.averageRating || 0;
+                        } else {
+                            console.error(`Failed to fetch average rating for ${business._id}`);
+                            ratingsData[business._id] = 0; // Default to 0 if the API response fails
+                        }
                     } catch (err) {
-                        console.error(`Failed to fetch rating for business ${business._id}:`, err);
-                        ratingsData[business._id] = 0; // Default to 0 if fetching fails
+                        console.error(`Error fetching rating for business ${business._id}:`, err);
+                        ratingsData[business._id] = 0; // Default to 0 on error
                     }
-                }
-                setRatings(ratingsData); // Update ratings state
+                });
+
+                // Wait for all promises to resolve before updating the state
+                await Promise.all(ratingPromises);
+                console.log("All ratings fetched:", ratingsData); // Debug log for all ratings
+                setRatings(ratingsData); // Update the ratings state
+                setLoading(false); // Stop loading
             } catch (err) {
-                console.error(err);
-                setError("Failed to load businesses"); // Set the error message in case of failure
-                setLoading(false); // Stop loading when error occurs
+                console.error("Error fetching businesses or ratings:", err);
+                setError("Failed to load businesses");
+                setLoading(false); // Stop loading in case of error
             }
         };
 
-        fetchBusinesses(); // Call the fetch function when the component mounts
-    }, []); // The empty dependency array means this useEffect runs only once after the initial render
+        fetchBusinessesAndRatings();
+    }, []); // Run once on component mount
 
     if (loading) {
-        return <div>Loading...</div>; // Render this while data is being fetched
+        return <div>Loading...</div>; // Show loading spinner or text
     }
 
     if (error) {
-        return <div>{error}</div>; // Render this if there is an error
+        return <div>{error}</div>; // Display error message
     }
 
     // Group businesses by category (assuming each business has a 'category' field)
@@ -82,7 +91,11 @@ function BrowseBusinesses() {
                         <h2>{category}</h2>
                         <div className="business-list">
                             {categorizedBusinesses[category].map((business) => (
-                                <div className="business-card" key={business._id} style={{ position: "relative" }}>
+                                <div
+                                    className="business-card"
+                                    key={business._id}
+                                    style={{ position: "relative" }}
+                                >
                                     <h3>{business.name}</h3>
                                     <p>Location: {business.location}</p>
                                     <a href={`/business-details/${business._id}`} className="btn">
@@ -96,7 +109,7 @@ function BrowseBusinesses() {
                                             right: "10px",
                                             backgroundColor: "#fff",
                                             borderRadius: "50%",
-                                            width: "40px",
+                                            width: "60px", // Adjusted width for star symbol
                                             height: "40px",
                                             display: "flex",
                                             alignItems: "center",
@@ -107,7 +120,12 @@ function BrowseBusinesses() {
                                         }}
                                     >
                                         {ratings[business._id] !== undefined
-                                            ? ratings[business._id].toFixed(1)
+                                            ? (
+                                                <>
+                                                    {ratings[business._id].toFixed(1)}{" "}
+                                                    <span style={{ color: "#FFD700", marginLeft: "2px" }}>⭐</span>
+                                                </>
+                                            )
                                             : "..."}
                                     </div>
                                 </div>

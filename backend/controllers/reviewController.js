@@ -1,46 +1,62 @@
+// controllers/reviewController.js
 const Review = require('../models/Review');
+const Booking = require('../models/Booking');
 
-// Controller to create a new review
-exports.createReview = async (req, res) => {
+// Controller to create a review after the booking time has passed
+const createReview = async (req, res) => {
+    const { businessRating, providerRating, comment, bookingId } = req.body;
+    const customerId = req.userId;
+  
     try {
-        const { businessRating, providerRating, comment, businessOwner, provider, booking } = req.body;
-
-        if (!businessRating || !providerRating || !businessOwner || !provider || !booking) {
-            return res.status(400).json({ error: 'All required fields must be provided' });
-        }
-
-        const newReview = await Review.create({
-            businessRating,
-            providerRating,
-            comment,
-            businessOwner,
-            provider,
-            booking,
-            customer: req.user._id, // Assuming user authentication is implemented
-        });
-
-        res.status(201).json(newReview);
+      const booking = await Booking.findById(bookingId).populate('provider businessOwner');
+  
+      // Ensure booking exists and that it has ended
+      if (!booking || booking.date > new Date()) {
+        return res.status(400).json({ message: 'Booking does not exist or has not yet completed' });
+      }
+  
+      // Check if the booking has already been reviewed
+      if (booking.isReviewed) {
+        return res.status(400).json({ message: 'Review already submitted for this booking' });
+      }
+  
+      const newReview = new Review({
+        customer: customerId,
+        businessOwner: booking.businessOwner._id,
+        provider: booking.provider._id,
+        booking: bookingId,
+        businessRating,
+        providerRating,
+        comment,
+      });
+  
+      await newReview.save();
+  
+      // Mark the booking as reviewed
+      booking.isReviewed = true;
+      await booking.save();
+  
+      res.status(201).json({ message: 'Review submitted successfully', review: newReview });
     } catch (error) {
-        console.error('Error creating review:', error);
-        res.status(500).json({ error: 'Failed to create review' });
+      console.error('Error creating review:', error);
+      res.status(500).json({ error: 'Failed to submit review' });
     }
-};
+  };
+// Controller to fetch reviews for a specific provider
+const getProviderReviews = async (req, res) => {
+    const { providerId } = req.params;
 
-// Controller to get all reviews for a specific business
-exports.getReviews = async (req, res) => {
     try {
-        const businessId = req.params.businessId;
-        const reviews = await Review.find({ businessOwner: businessId }).populate('customer', 'name');
-
+        const reviews = await Review.find({ provider: providerId }).populate('customer');
         res.status(200).json(reviews);
     } catch (error) {
-        console.error('Error fetching reviews:', error);
+        console.error('Error fetching provider reviews:', error);
         res.status(500).json({ error: 'Failed to fetch reviews' });
     }
 };
 
 // Controller to calculate the average rating for a business
-exports.getAverageRating = async (req, res) => {
+const getAverageRating = async (req, res) => {
     try {
         const businessId = req.params.businessId;
 
@@ -63,7 +79,7 @@ exports.getAverageRating = async (req, res) => {
 };
 
 // Controller to delete a review
-exports.deleteReview = async (req, res) => {
+const deleteReview = async (req, res) => {
     try {
         const reviewId = req.params.reviewId;
 
@@ -79,3 +95,6 @@ exports.deleteReview = async (req, res) => {
         res.status(500).json({ error: 'Failed to delete review' });
     }
 };
+
+// Export all necessary functions
+module.exports = { createReview, getProviderReviews, getAverageRating, deleteReview };

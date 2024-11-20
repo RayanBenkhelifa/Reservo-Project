@@ -1,4 +1,3 @@
-// CustomerNavBar.jsx
 import React, { useContext, useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "./AuthContext"; // Adjust the path based on your project structure
@@ -67,8 +66,8 @@ const CustomerNavBar = () => {
                     <div className="dropdown-header">
                       <FaUserCircle className="dropdown-avatar" />
                       <div className="user-info">
-                        <p className="user-name">{authState.user.username}</p>
-                        <p className="user-email">{authState.user.email}</p>
+                        <p className="user-name">{authState.user?.username}</p>
+                        <p className="user-email">{authState.user?.email}</p>
                       </div>
                     </div>
                     <Link to="/profile" className="dropdown-item">

@@ -17,7 +17,7 @@ const TimeSlots = () => {
   const { authState } = useContext(AuthContext);
 
   const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().split("T")[0]
+    new Date().toLocaleDateString("en-CA")
   );
   const [timeSlots, setTimeSlots] = useState([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
@@ -76,6 +76,7 @@ const TimeSlots = () => {
         }
       } catch (error) {
         console.error("Error fetching available slots:", error);
+        alert("Error fetching available slots.");
       }
     };
 
@@ -86,10 +87,11 @@ const TimeSlots = () => {
     setSelectedTimeSlot(timeSlot);
   };
 
+  // **Updated availableDates Generation**
   const availableDates = Array.from({ length: 7 }, (_, i) => {
     const date = new Date();
     date.setDate(date.getDate() + i);
-    return date.toISOString().split("T")[0];
+    return date.toLocaleDateString("en-CA"); // Returns 'YYYY-MM-DD' in local time
   });
 
   const handleDateSelection = (date) => {

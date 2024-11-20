@@ -6,51 +6,52 @@ export const AuthProvider = ({ children }) => {
   const [authState, setAuthState] = useState({
     isAuthenticated: false,
     userType: null,
-    user: null, // Add user property
+    user: null,
   });
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await fetch("/auth/check-auth", {
-          method: "GET",
-          credentials: "include",
-        });
+  // Function to check authentication status and fetch user data
+  const checkAuth = async () => {
+    try {
+      const response = await fetch("/auth/check-auth", {
+        method: "GET",
+        credentials: "include",
+      });
 
-        if (response.ok) {
-          const data = await response.json();
-          setAuthState({
-            isAuthenticated: true,
-            userType: data.userType,
-            user: data.user, // Set the user data
-          });
-        } else {
-          setAuthState({
-            isAuthenticated: false,
-            userType: null,
-            user: null,
-          });
-        }
-      } catch (error) {
-        console.error("Error checking authentication:", error);
+      if (response.ok) {
+        const data = await response.json();
+        setAuthState({
+          isAuthenticated: data.isAuthenticated,
+          userType: data.userType,
+          user: data.user,
+        });
+      } else {
         setAuthState({
           isAuthenticated: false,
           userType: null,
           user: null,
         });
-      } finally {
-        setLoading(false);
       }
-    };
+    } catch (error) {
+      console.error("Error checking authentication:", error);
+      setAuthState({
+        isAuthenticated: false,
+        userType: null,
+        user: null,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  // Call checkAuth on component mount
+  useEffect(() => {
     checkAuth();
   }, []);
-  const login = (userType) => {
-    setAuthState({
-      isAuthenticated: true,
-      userType: userType,
-    });
+
+  const login = async (userType) => {
+    // After login, call checkAuth to update authState
+    await checkAuth();
   };
 
   const logout = async () => {
@@ -64,6 +65,7 @@ export const AuthProvider = ({ children }) => {
         setAuthState({
           isAuthenticated: false,
           userType: null,
+          user: null,
         });
       } else {
         console.error("Logout failed");

@@ -1751,9 +1751,9 @@ button.confirm-booking-btn:hover {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
-  }
-  
-  .stat-card {
+}
+
+.stat-card {
     background-color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -1761,25 +1761,26 @@ button.confirm-booking-btn:hover {
     text-align: center;
     width: 30%;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-  
-  .stat-title {
+}
+
+.stat-title {
     font-size: 16px;
     color: #333;
     margin-bottom: 8px;
-  }
-  
-  .stat-value {
+}
+
+.stat-value {
     font-size: 24px;
     font-weight: bold;
     color: #333;
-  }
-  
-  .stat-value.positive {
-    color: #4caf50; /* Green for positive improvement */
-  }
-  
-  .stat-value.negative {
-    color: #f44336; /* Red for negative improvement */
-  }
-  
+}
+
+.stat-value.positive {
+    color: #4caf50;
+    /* Green for positive improvement */
+}
+
+.stat-value.negative {
+    color: #f44336;
+    /* Red for negative improvement */
+}

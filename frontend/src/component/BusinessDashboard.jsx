@@ -1,8 +1,11 @@
+// src/components/BusinessDashboard.js
+
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles.css";
 import { AuthContext } from "./AuthContext";
 import Navbar from "./BusinessNavBar";
+import UploadBusinessImage from "./UploadBusinessImage";
 
 function BusinessDashboard() {
   const [businessOwner, setBusinessOwner] = useState(null); // Business owner details
@@ -12,13 +15,9 @@ function BusinessDashboard() {
     totalRevenue: 0,
     improvement: 0,
   }); // Weekly stats
+  const [businessImageUrl, setBusinessImageUrl] = useState(""); // Business image URL
   const navigate = useNavigate();
   const { authState } = useContext(AuthContext); // Auth context
-
-  // Debugging: Log stats state whenever it updates
-  useEffect(() => {
-    console.log("DEBUG: Updated stats state:", stats);
-  }, [stats]);
 
   useEffect(() => {
     // Redirect if not authenticated or wrong user type
@@ -38,6 +37,11 @@ function BusinessDashboard() {
         if (response.ok) {
           const data = await response.json();
           setBusinessOwner(data);
+
+          // Set the image URL if available
+          if (data.imageUrl) {
+            setBusinessImageUrl(data.imageUrl);
+          }
         } else {
           console.log("Failed to fetch dashboard data.");
           navigate("/login-business");
@@ -58,7 +62,6 @@ function BusinessDashboard() {
 
         if (response.ok) {
           const appointmentsData = await response.json();
-          console.log("DEBUG: Up Next Appointments:", appointmentsData);
           setUpNextAppointments(appointmentsData);
         } else {
           console.error("Failed to fetch upcoming appointments.");
@@ -78,7 +81,6 @@ function BusinessDashboard() {
 
         if (response.ok) {
           const statsData = await response.json();
-          console.log("DEBUG: Weekly Stats API Response:", statsData);
           setStats(statsData);
         } else {
           console.error("Failed to fetch weekly stats.");
@@ -156,9 +158,24 @@ function BusinessDashboard() {
 
       <div className="main-content">
         <header className="main-header">
-          <h1>Welcome Back, {businessOwner?.name || "Business Owner"}</h1>
+          <h1>Welcome Back, {businessOwner?.name || "Business Owner"}!</h1>
           <p>Manage your services, appointments, and providers from here.</p>
+
+          {/* Display Business Logo */}
+          {businessImageUrl && (
+            <img
+              src={businessImageUrl}
+              alt={`${businessOwner?.name} Logo`}
+              className="business-logo"
+            />
+          )}
         </header>
+
+        {/* Include the UploadBusinessImage component */}
+        <section className="upload-section">
+          <h2>Update Your Business Logo</h2>
+          <UploadBusinessImage />
+        </section>
 
         {/* Weekly stats */}
         <section id="weekly-stats" className="stats-bar">

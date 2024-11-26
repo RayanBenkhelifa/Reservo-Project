@@ -192,6 +192,94 @@ const getUpNextAppointments = async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch upcoming appointments' });
   }
 };
+
+const uploadBusinessImage = async (req, res) => {
+  try {
+    const businessOwnerId = req.userId; // Ensure the user is authenticated
+
+    if (!businessOwnerId) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const businessOwner = await BusinessOwner.findById(businessOwnerId);
+    if (!businessOwner) {
+      return res.status(404).json({ message: 'Business owner not found' });
+    }
+
+    // Check if a file is uploaded
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    // Convert the image to a Base64 string
+    const imageData = req.file.buffer.toString('base64');
+
+    // Store the MIME type
+    const mimeType = req.file.mimetype;
+
+    // Update the business owner's imageData and mimeType
+    businessOwner.imageData = imageData;
+    businessOwner.imageMimeType = mimeType;
+    await businessOwner.save();
+
+    res.status(200).json({
+      message: 'Image uploaded successfully',
+    });
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Get Business Image
+const getBusinessImage = async (req, res) => {
+  try {
+    const businessOwnerId = req.params.id;
+
+    const businessOwner = await BusinessOwner.findById(businessOwnerId);
+
+    if (!businessOwner || !businessOwner.imageData || !businessOwner.imageMimeType) {
+      return res.status(404).json({ message: 'Image not found' });
+    }
+
+    // Construct the Data URL
+    const dataUrl = `data:${businessOwner.imageMimeType};base64,${businessOwner.imageData}`;
+
+    res.status(200).json({ imageUrl: dataUrl });
+  } catch (error) {
+    console.error('Error fetching image:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+const getBusinessOwnerDetails = async (req, res) => {
+  try {
+    const businessId = req.userId;
+
+    const businessOwner = await BusinessOwner.findById(businessId).select(
+      'name imageData imageMimeType'
+    );
+
+    if (!businessOwner) {
+      return res.status(404).json({ message: 'Business Owner not found' });
+    }
+
+    let imageUrl = '';
+    if (businessOwner.imageData && businessOwner.imageMimeType) {
+      imageUrl = `data:${businessOwner.imageMimeType};base64,${businessOwner.imageData}`;
+    }
+
+    res.status(200).json({
+      name: businessOwner.name,
+      imageUrl: imageUrl,
+    });
+  } catch (error) {
+    console.error('Error fetching business owner details:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
 module.exports = {
   addService,
   addProvider,
@@ -199,4 +287,7 @@ module.exports = {
   getDashboard,
   getWeeklyStats,
   getUpNextAppointments, // Added this function
+  uploadBusinessImage,
+  getBusinessImage,
+  getBusinessOwnerDetails
 };

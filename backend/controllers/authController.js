@@ -23,10 +23,10 @@ const signupCustomer = async (req, res) => {
     // Send success message
     res.status(201).json({
       message: "Customer Logged In successfully!",
-      userId: customer._id,
+      userId: newCustomer._id,
       userType: "customer",
-      username: customer.name, // Include username
-      email: customer.email, // Include email
+      username: newCustomer.name, // Include username
+      email: newCustomer.email, // Include email
     });
     
     
@@ -109,17 +109,18 @@ const signupBusinessOwner = async (req, res) => {
     // Send success message
     res.status(201).json({
       message: "Business Owner Logged In successfully!",
-      userId: businessOwner._id,
+      userId: newBusinessOwner._id,
       userType: "businessOwner",
-      username: businessOwner.name, // Include username
-      email: businessOwner.email, // Include email
+      username: newBusinessOwner.name, // Include username
+      email: newBusinessOwner.email, // Include email
     });
-    
   } catch (error) {
     res.status(500).json({ message: `Server error ${error}` });
   }
 };
-  
+// Server error ReferenceError: businessOwner is not defined
+
+
   // Business Owner Login
   const businessOwnerLogin = async (req, res) => {
     const { email, password } = req.body;

@@ -8,6 +8,7 @@ const authRoutes = require("./routes/authRoutes");
 const businessRoutes = require("./routes/businessRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
 const customerRoutes = require("./routes/customerRoutes");
+const reviewRoutes = require("./routes/reviewRoutes"); // Add this line
 const paymentRoutes = require("./routes/paymentRoutes"); // Import payment routes
 const bodyParser = require("body-parser");
 const paymentController = require("./controllers/paymentController");
@@ -38,7 +39,8 @@ app.use("/auth", authRoutes);
 app.use("/business", businessRoutes);
 app.use("/booking", bookingRoutes);
 app.use("/customer", customerRoutes);
-app.use("/payment", paymentRoutes); // Use payment routes
+app.use("/review", reviewRoutes); // Add this line
+
 
 const PORT = process.env.PORT || 5000;
 
@@ -73,12 +75,10 @@ mongoose
 // });
 
 // Handle cancel page route
-app.get("/cancel", (req, res) => {
-  res.render("cancel"); // Render cancel page
-});
-app.get("/payment/verify-session", paymentController.verifySession);
+// app.get("/cancel", (req, res) => {
+//   res.render("cancel"); // Render cancel page
+// });
+// app.get("/payment/verify-session", paymentController.verifySession);
 
-const reviewRoutes = require("./routes/reviewRoutes"); // Add this line
 
 // Register review routes
-app.use("/review", reviewRoutes); // Add this line

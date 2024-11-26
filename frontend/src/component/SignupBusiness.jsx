@@ -71,7 +71,13 @@ function SignupBusiness() {
 
       if (response.ok) {
         // Update auth state
-        login("businessOwner");
+        // Store userId and userType in localStorage
+        localStorage.setItem("userId", data.userId);
+        localStorage.setItem("userType", data.userType);
+        localStorage.setItem("username", data.username); // Store username
+        localStorage.setItem("email", data.email); // Store email
+        // Update auth state
+        login(data.userType);
         navigate("/business-dashboard");
       } else {
         setError(data.message || "Signup failed");

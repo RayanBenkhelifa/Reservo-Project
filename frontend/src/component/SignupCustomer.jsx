@@ -40,8 +40,13 @@ function SignupCustomer() {
       const data = await response.json();
 
       if (response.ok) {
-        // Use the login function from AuthContext to store the token and userType
-        login("customer");
+        // Store userId and userType in localStorage
+        localStorage.setItem("userId", data.userId);
+        localStorage.setItem("userType", data.userType);
+        localStorage.setItem("username", data.username); // Store username
+        localStorage.setItem("email", data.email); // Store email
+        // Use the login function from AuthContext to update auth state
+        login(data.userType);
 
         // Redirect using useNavigate after successful signup
         navigate("/");

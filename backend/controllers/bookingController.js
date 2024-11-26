@@ -329,8 +329,8 @@ const createBooking = async (req, res) => {
           },
           quantity: item.quantity,
         })),
-        success_url: `${process.env.SERVER_URL}/booking/success?session_id={CHECKOUT_SESSION_ID}&bookingId=${newBooking._id}`,
-        cancel_url: `${process.env.SERVER_URL}/booking/cancel?bookingId=${newBooking._id}`,
+        success_url: `${process.env.SERVER_URL}booking/success?session_id={CHECKOUT_SESSION_ID}&bookingId=${newBooking._id}`,
+        cancel_url: `${process.env.SERVER_URL}booking/cancel?bookingId=${newBooking._id}`,
       });
 
       // Update booking with Stripe session ID
@@ -394,11 +394,11 @@ const handleStripeSuccess = async (req, res) => {
 
       // Redirect to booking confirmation page on the frontend
       res.redirect(
-        `${process.env.CLIENT_URL}/booking-confirmation?bookingId=${booking._id}`
+        `${process.env.CLIENT_URL}booking-confirmation?bookingId=${booking._id}`
       );
     } else {
       // Payment not completed
-      res.redirect(`${process.env.CLIENT_URL}/payment-failed`);
+      res.redirect(`${process.env.CLIENT_URL}payment-failed`);
     }
   } catch (error) {
     console.error("Error handling Stripe success:", error);

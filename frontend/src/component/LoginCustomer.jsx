@@ -28,7 +28,11 @@ function LoginCustomer() {
 
       if (response.ok) {
         // Update auth state
-        login("customer");
+        localStorage.setItem("userId", data.userId);
+        localStorage.setItem("userType", data.userType);
+        localStorage.setItem("username", data.username); // Store username
+        localStorage.setItem("email", data.email); // Store email
+        login(data.userType);
 
         // Handle redirection logic
         const { from } = location.state || {};

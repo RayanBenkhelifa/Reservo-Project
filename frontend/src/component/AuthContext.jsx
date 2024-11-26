@@ -1,59 +1,38 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState } from "react";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  // Initialize authState from localStorage
   const [authState, setAuthState] = useState({
-    isAuthenticated: false,
-    userType: null,
-    user: null,
+    isAuthenticated: !!localStorage.getItem("userId"),
+    userType: localStorage.getItem("userType"),
+    user: localStorage.getItem("userId")
+      ? {
+          id: localStorage.getItem("userId"),
+          username: localStorage.getItem("username"), // Initialize username
+          email: localStorage.getItem("email"), // Initialize email
+        }
+      : null,
   });
-  const [loading, setLoading] = useState(true);
 
-  // Function to check authentication status and fetch user data
-  const checkAuth = async () => {
-    try {
-      const response = await fetch("/auth/check-auth", {
-        method: "GET",
-        credentials: "include",
-      });
+  // No need for loading state since we're not fetching from the backend
+  // const [loading, setLoading] = useState(false);
 
-      if (response.ok) {
-        const data = await response.json();
-        setAuthState({
-          isAuthenticated: data.isAuthenticated,
-          userType: data.userType,
-          user: data.user,
-        });
-      } else {
-        setAuthState({
-          isAuthenticated: false,
-          userType: null,
-          user: null,
-        });
-      }
-    } catch (error) {
-      console.error("Error checking authentication:", error);
-      setAuthState({
-        isAuthenticated: false,
-        userType: null,
-        user: null,
-      });
-    } finally {
-      setLoading(false);
-    }
+  // The login function updates the authState and stores data in localStorage
+  const login = (userType) => {
+    setAuthState({
+      isAuthenticated: true,
+      userType: userType,
+      user: {
+        id: localStorage.getItem("userId"),
+        username: localStorage.getItem("username"), // Initialize username
+        email: localStorage.getItem("email"), // Initialize email
+      },
+    });
   };
 
-  // Call checkAuth on component mount
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const login = async (userType) => {
-    // After login, call checkAuth to update authState
-    await checkAuth();
-  };
-
+  // The logout function clears the authState and localStorage
   const logout = async () => {
     try {
       const response = await fetch("/auth/logout", {
@@ -62,6 +41,10 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (response.ok) {
+        // Clear localStorage
+        localStorage.removeItem("userId");
+        localStorage.removeItem("userType");
+
         setAuthState({
           isAuthenticated: false,
           userType: null,
@@ -76,7 +59,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ authState, loading, login, logout }}>
+    <AuthContext.Provider value={{ authState, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

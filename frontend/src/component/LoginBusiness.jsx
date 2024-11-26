@@ -26,8 +26,13 @@ function LoginBusiness() {
       const data = await response.json();
 
       if (response.ok) {
+        localStorage.setItem("userId", data.userId);
+        localStorage.setItem("userType", data.userType);
+        localStorage.setItem("username", data.username); // Store username
+        localStorage.setItem("email", data.email); // Store email
+
         // Update auth state
-        login("businessOwner");
+        login(data.userType);
         navigate("/business-dashboard");
       } else {
         console.log("Login failed:", data.message);

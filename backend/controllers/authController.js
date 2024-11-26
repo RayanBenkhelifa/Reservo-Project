@@ -21,7 +21,14 @@ const signupCustomer = async (req, res) => {
     req.session.userId = newCustomer._id;
     req.session.userType = 'customer';
     // Send success message
-    res.status(201).json({ message: 'Customer registered successfully!' });
+    res.status(201).json({
+      message: "Customer Logged In successfully!",
+      userId: customer._id,
+      userType: "customer",
+      username: customer.name, // Include username
+      email: customer.email, // Include email
+    });
+    
     
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -48,7 +55,13 @@ const customerLogin = async (req, res) => {
       req.session.userId = customer._id;
       req.session.userType = 'customer';
       // Send success message
-      res.status(201).json({ message: 'Customer Logged In successfully!' });
+      res.status(201).json({
+        message: "Customer Logged In successfully!",
+        userId: customer._id,
+        userType: "customer",
+        username: customer.name, // Include username
+        email: customer.email, // Include email
+      });
       
     } catch (error) {
       return res.status(500).json({ message: 'Server error' });
@@ -94,7 +107,14 @@ const signupBusinessOwner = async (req, res) => {
     req.session.userId = newBusinessOwner._id;
     req.session.userType = 'businessOwner';
     // Send success message
-    res.status(201).json({ message: 'BusinessOwner registered successfully!' });
+    res.status(201).json({
+      message: "Business Owner Logged In successfully!",
+      userId: businessOwner._id,
+      userType: "businessOwner",
+      username: businessOwner.name, // Include username
+      email: businessOwner.email, // Include email
+    });
+    
   } catch (error) {
     res.status(500).json({ message: `Server error ${error}` });
   }
@@ -120,8 +140,15 @@ const signupBusinessOwner = async (req, res) => {
       req.session.userId = businessOwner._id;
       req.session.userType = 'businessOwner';
       // Send success message
-      res.status(201).json({ message: 'BusinessOwner Loged In successfully!' });
-    } catch (error) {
+      res.status(201).json({
+        message: "Business Owner Logged In successfully!",
+        userId: businessOwner._id,
+        userType: "businessOwner",
+        username: businessOwner.name, // Include username
+        email: businessOwner.email, // Include email
+      });
+      
+       } catch (error) {
       return res.status(500).json({ message: 'Server error' });
     }
   };

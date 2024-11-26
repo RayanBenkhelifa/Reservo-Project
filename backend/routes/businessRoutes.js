@@ -1,21 +1,24 @@
-const express = require('express');
-const businessController = require('../controllers/businessController');
+const express = require("express");
+const businessController = require("../controllers/businessController");
 const router = express.Router();
-const { verifyBusinessOwner } = require('../middleware/verifySession');
+const { verifyBusinessOwner } = require("../middleware/verifySession");
 
-// Route for adding a service
-router.post('/add-service', verifyBusinessOwner, businessController.addService);
+// Route to add a service
+router.post("/add-service", verifyBusinessOwner, businessController.addService);
 
-// Route for adding a provider
-router.post('/add-provider', verifyBusinessOwner, businessController.addProvider);
+// Route to add a provider
+router.post("/add-provider", verifyBusinessOwner, businessController.addProvider);
 
-// Route to get services for a business
-router.get('/services', verifyBusinessOwner, businessController.getBusinessServices);
+// Route to get business services
+router.get("/services", verifyBusinessOwner, businessController.getBusinessServices);
 
-// Route to get business dashboard data
-router.get('/business-dashboard', verifyBusinessOwner, businessController.getDashboard);
+// Route to get business dashboard
+router.get("/business-dashboard", verifyBusinessOwner, businessController.getDashboard);
+
+// Route to get weekly stats
+router.get("/weekly-stats", verifyBusinessOwner, businessController.getWeeklyStats);
 
 // Route to get upcoming appointments ("Up Next")
-router.get('/up-next', verifyBusinessOwner, businessController.getUpNextAppointments); // New route
+router.get('/up-next', verifyBusinessOwner, businessController.getUpNextAppointments); 
 
 module.exports = router;

@@ -5,17 +5,29 @@ import { AuthContext } from "./AuthContext";
 import Navbar from "./BusinessNavBar";
 
 function BusinessDashboard() {
-  const [businessOwner, setBusinessOwner] = useState(null);
-  const [upNextAppointments, setUpNextAppointments] = useState([]); // State to hold upcoming appointments
+  const [businessOwner, setBusinessOwner] = useState(null); // Business owner details
+  const [upNextAppointments, setUpNextAppointments] = useState([]); // Upcoming appointments
+  const [stats, setStats] = useState({
+    totalAppointments: 0,
+    totalRevenue: 0,
+    improvement: 0,
+  }); // Weekly stats
   const navigate = useNavigate();
-  const { authState } = useContext(AuthContext);
+  const { authState } = useContext(AuthContext); // Auth context
+
+  // Debugging: Log stats state whenever it updates
+  useEffect(() => {
+    console.log("DEBUG: Updated stats state:", stats);
+  }, [stats]);
 
   useEffect(() => {
+    // Redirect if not authenticated or wrong user type
     if (!authState.isAuthenticated || authState.userType !== "businessOwner") {
       navigate("/login-business");
       return;
     }
 
+    // Fetch dashboard data
     const fetchDashboardData = async () => {
       try {
         const response = await fetch("/business/business-dashboard", {
@@ -36,6 +48,7 @@ function BusinessDashboard() {
       }
     };
 
+    // Fetch upcoming appointments
     const fetchUpNextAppointments = async () => {
       try {
         const response = await fetch("/business/up-next", {
@@ -45,6 +58,7 @@ function BusinessDashboard() {
 
         if (response.ok) {
           const appointmentsData = await response.json();
+          console.log("DEBUG: Up Next Appointments:", appointmentsData);
           setUpNextAppointments(appointmentsData);
         } else {
           console.error("Failed to fetch upcoming appointments.");
@@ -53,20 +67,37 @@ function BusinessDashboard() {
         console.error("Error fetching upcoming appointments:", error);
       }
     };
+
+    // Fetch weekly stats
+    const fetchWeeklyStats = async () => {
+      try {
+        const response = await fetch("/business/weekly-stats", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const statsData = await response.json();
+          console.log("DEBUG: Weekly Stats API Response:", statsData);
+          setStats(statsData);
+        } else {
+          console.error("Failed to fetch weekly stats.");
+        }
+      } catch (error) {
+        console.error("Error fetching weekly stats:", error);
+      }
+    };
+
+    // Fetch data if authenticated
     if (authState.isAuthenticated) {
       fetchDashboardData();
       fetchUpNextAppointments();
+      fetchWeeklyStats();
     }
   }, [authState.isAuthenticated, authState.userType, navigate]);
 
-  // Component to render the upcoming appointments in a table
+  // Component to render upcoming appointments
   function UpNext() {
-    console.log(
-      "Rendering UpNext table with appointments: ",
-      upNextAppointments
-    ); // Log appointments data
-
-    // Define styles for payment status
     const statusStyles = {
       completed: { color: "green", fontWeight: "bold" },
       unpaid: { color: "red", fontWeight: "bold" },
@@ -129,11 +160,32 @@ function BusinessDashboard() {
           <p>Manage your services, appointments, and providers from here.</p>
         </header>
 
+        {/* Weekly stats */}
+        <section id="weekly-stats" className="stats-bar">
+          <div className="stat-card">
+            <h3 className="stat-title">Total Appointments</h3>
+            <p className="stat-value">{stats.totalAppointments}</p>
+          </div>
+          <div className="stat-card">
+            <h3 className="stat-title">Total Revenue</h3>
+            <p className="stat-value">SAR {stats.totalRevenue.toFixed(2)}</p>
+          </div>
+          <div className="stat-card">
+            <h3 className="stat-title">Improvement</h3>
+            <p
+              className={`stat-value ${
+                stats.improvement >= 0 ? "positive" : "negative"
+              }`}
+            >
+              {stats.improvement}%
+            </p>
+          </div>
+        </section>
+
         <section id="up-next" className="card">
           <h2>Up Next</h2>
           <p>Here is where you manage your upcoming appointments.</p>
 
-          {/* Insert the UpNext component here */}
           <UpNext />
         </section>
       </div>

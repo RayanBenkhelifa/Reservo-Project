@@ -1,46 +1,38 @@
-const Service = require('../models/Service');
-const BusinessOwner = require('../models/BusinessOwner');
-const Provider = require('../models/Provider');  // New Provider model
-const Booking = require('../models/Booking'); // Assuming Booking is where appointments are stored
+const Service = require("../models/Service");
+const BusinessOwner = require("../models/BusinessOwner");
+const Provider = require("../models/Provider");
+const Booking = require("../models/Booking");
 
 // Add Service to Business
 const addService = async (req, res) => {
   try {
     const { serviceName, description, duration, price } = req.body;
-    const businessId = req.userId; // Extracted from the verified token (businessId)
+    const businessId = req.userId;
 
-    // Check if required fields are provided
     if (!serviceName || !duration || !price) {
-      return res.status(400).json({ error: 'Missing required fields' });
+      return res.status(400).json({ error: "Missing required fields" });
     }
 
-    // Find the business
     const business = await BusinessOwner.findById(businessId);
     if (!business) {
-      return res.status(404).json({ error: 'Business not found' });
+      return res.status(404).json({ error: "Business not found" });
     }
 
-    // Create a new service
     const newService = new Service({
       serviceName,
       description,
       duration,
-      price
+      price,
     });
 
-    // Save the service to the Service collection
     await newService.save();
-
-    // Attach the service to the business
     business.services.push(newService._id);
-
-    // Save the updated business
     await business.save();
 
-    res.status(201).json({ message: 'Service added successfully', service: newService });
+    res.status(201).json({ message: "Service added successfully", service: newService });
   } catch (error) {
-    console.error('Error adding service:', error);
-    res.status(500).json({ error: 'Failed to add service' });
+    console.error("Error adding service:", error);
+    res.status(500).json({ error: "Failed to add service" });
   }
 };
 
@@ -50,59 +42,36 @@ const addProvider = async (req, res) => {
     const { providerName, serviceIds } = req.body;
     const businessId = req.userId;
 
-    // Check if required fields are provided
     if (!providerName || !serviceIds || serviceIds.length === 0) {
-      return res.status(400).json({ error: 'Missing required fields' });
+      return res.status(400).json({ error: "Missing required fields" });
     }
 
-    // Find the business
-    const business = await BusinessOwner.findById(businessId).populate('services');
+    const business = await BusinessOwner.findById(businessId).populate("services");
     if (!business) {
-      return res.status(404).json({ error: 'Business not found' });
+      return res.status(404).json({ error: "Business not found" });
     }
 
-    // Ensure the services being added are owned by the business
-    const validServiceIds = serviceIds.filter(serviceId => {
-      const serviceExists = business.services.some(service => service._id.toString() === serviceId.toString());
-      return serviceExists;
+    const validServiceIds = serviceIds.filter((serviceId) => {
+      return business.services.some((service) => service._id.toString() === serviceId.toString());
     });
 
     if (validServiceIds.length !== serviceIds.length) {
-      return res.status(400).json({ error: 'Some services are not part of this business' });
+      return res.status(400).json({ error: "Some services are not part of this business" });
     }
 
-    // Generate availability for the next 7 days based on business hours
-    const availability = [];
-    for (let i = 0; i < 7; i++) {
-      const date = new Date();
-      date.setDate(date.getDate() + i);
-      const timeSlots = generateTimeSlots(business.operatingHours.start, business.operatingHours.end);
-      availability.push({
-        date: date.toISOString().split('T')[0], // Save only the date part
-        timeSlots
-      });
-    }
-
-    // Create the provider object
     const newProvider = new Provider({
       name: providerName,
       services: validServiceIds,
-      availability  // Generated availability for the next 7 days
     });
 
-    // Save the provider to the Provider collection
     await newProvider.save();
-
-    // Add provider to business's provider list (by reference)
     business.providers.push(newProvider._id);
-
-    // Save the updated business
     await business.save();
 
-    res.status(201).json({ message: 'Provider added successfully', provider: newProvider });
+    res.status(201).json({ message: "Provider added successfully", provider: newProvider });
   } catch (error) {
-    console.error('Error adding provider:', error);
-    res.status(500).json({ error: 'Failed to add provider' });
+    console.error("Error adding provider:", error);
+    res.status(500).json({ error: "Failed to add provider" });
   }
 };
 
@@ -110,17 +79,14 @@ const addProvider = async (req, res) => {
 const getBusinessServices = async (req, res) => {
   try {
     const businessId = req.userId;
-
-    // Find the business by ID and populate its services
-    const business = await BusinessOwner.findById(businessId).populate('services');
+    const business = await BusinessOwner.findById(businessId).populate("services");
     if (!business) {
-      return res.status(404).json({ message: 'Business not found' });
+      return res.status(404).json({ message: "Business not found" });
     }
-
     res.status(200).json({ services: business.services });
   } catch (error) {
-    console.error('Error fetching business services:', error);
-    res.status(500).json({ message: 'Failed to fetch services' });
+    console.error("Error fetching business services:", error);
+    res.status(500).json({ message: "Failed to fetch services" });
   }
 };
 
@@ -128,53 +94,56 @@ const getBusinessServices = async (req, res) => {
 const getDashboard = async (req, res) => {
   try {
     const businessId = req.userId;
-
     const businessOwner = await BusinessOwner.findById(businessId);
     if (!businessOwner) {
-      return res.status(404).json({ message: 'Business Owner not found' });
+      return res.status(404).json({ message: "Business Owner not found" });
     }
 
-    // Send back the business owner's name and other data
     res.status(200).json({
       name: businessOwner.name,
       message: `Welcome to the dashboard, ${businessOwner.name}`,
     });
   } catch (error) {
-    console.error('Error in getDashboard:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error("Error in getDashboard:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-// Function to generate time slots between start and end times (assumes 1-hour intervals)
-const generateTimeSlots = (start, end) => {
-  const slots = [];
-  const startTime = new Date(`1970-01-01T${convertTo24Hour(start)}:00`);
-  const endTime = new Date(`1970-01-01T${convertTo24Hour(end)}:00`);
+// Get Weekly Stats for Dashboard
+const getWeeklyStats = async (req, res) => {
+  try {
+    const businessId = req.userId;
 
-  let currentTime = startTime;
-  while (currentTime < endTime) {
-    slots.push(currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-    currentTime = new Date(currentTime.getTime() + 60 * 60 * 1000); // Add 1 hour
+    const today = new Date();
+    const currentWeekStart = new Date(today);
+    currentWeekStart.setDate(today.getDate() - today.getDay()); // Sunday
+    currentWeekStart.setHours(0, 0, 0, 0);
+
+    const currentWeekEnd = new Date(currentWeekStart);
+    currentWeekEnd.setDate(currentWeekStart.getDate() + 6); // Saturday
+    currentWeekEnd.setHours(23, 59, 59, 999);
+
+    const currentWeekAppointments = await Booking.find({
+      businessOwner: businessId,
+      date: { $gte: currentWeekStart, $lt: currentWeekEnd },
+    }).populate("service");
+
+    const totalAppointmentsCurrentWeek = currentWeekAppointments.length;
+    const totalRevenueCurrentWeek = currentWeekAppointments.reduce((sum, booking) => {
+      return sum + (booking.service?.price || 0);
+    }, 0);
+
+    res.status(200).json({
+      totalAppointments: totalAppointmentsCurrentWeek,
+      totalRevenue: totalRevenueCurrentWeek,
+    });
+  } catch (error) {
+    console.error("Error in getWeeklyStats:", error);
+    res.status(500).json({ error: "Failed to fetch weekly stats" });
   }
-
-  return slots;
 };
 
-// Helper function to convert 12-hour format (e.g., "9:00 AM") to 24-hour format
-const convertTo24Hour = (time) => {
-  const [hour, minute, period] = time.match(/(\d+):(\d+)\s*(AM|PM)/i).slice(1);
-  let hours = parseInt(hour, 10);
-  const minutes = parseInt(minute, 10);
-
-  if (period.toUpperCase() === 'PM' && hours < 12) {
-    hours += 12;
-  }
-  if (period.toUpperCase() === 'AM' && hours === 12) {
-    hours = 0;
-  }
-
-  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-};
+// Get Upcoming Appointments
 const getUpNextAppointments = async (req, res) => {
   try {
     const businessId = req.userId;  // The logged-in business owner's ID
@@ -223,6 +192,11 @@ const getUpNextAppointments = async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch upcoming appointments' });
   }
 };
-
-
-module.exports = { addService, addProvider, getBusinessServices, getDashboard, getUpNextAppointments };
+module.exports = {
+  addService,
+  addProvider,
+  getBusinessServices,
+  getDashboard,
+  getWeeklyStats,
+  getUpNextAppointments, // Added this function
+};

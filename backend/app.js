@@ -1,84 +1,67 @@
-// app.js
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
 const session = require("express-session");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const path = require("path");
+
+// Import routes
 const authRoutes = require("./routes/authRoutes");
 const businessRoutes = require("./routes/businessRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
 const customerRoutes = require("./routes/customerRoutes");
-const reviewRoutes = require("./routes/reviewRoutes"); // Add this line
-const paymentRoutes = require("./routes/paymentRoutes"); // Import payment routes
-const bodyParser = require("body-parser");
-const paymentController = require("./controllers/paymentController");
-const path = require("path");
+const reviewRoutes = require("./routes/reviewRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
 
-dotenv.config();
+// Initialize Express app
 const app = express();
+
+// CORS Middleware
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Allow frontend
+    credentials: true, // Allow cookies
+  })
+);
+
+// Session Middleware
 app.use(
   session({
-    secret: process.env.SESSION_SECRET, // Make sure to set this in your .env file
+    secret: process.env.SESSION_SECRET || "default_secret", // Replace with a secure secret
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false, // Set to true if using HTTPS
+      secure: false, // Set true if using HTTPS
       httpOnly: true,
-      maxAge: 2 * 60 * 60 * 1000, // Session expiration time in milliseconds (e.g., 2 hours)
+      maxAge: 2 * 60 * 60 * 1000, // 2 hours
     },
   })
 );
-// Middleware to parse JSON
+
+// Middleware for parsing JSON and form data
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Serve static files (if applicable)
 app.use(express.static(path.join(__dirname, "../frontend/public")));
 
-// Import routes
+// Routes
 app.use("/auth", authRoutes);
 app.use("/business", businessRoutes);
 app.use("/booking", bookingRoutes);
 app.use("/customer", customerRoutes);
-app.use("/review", reviewRoutes); // Add this line
+app.use("/review", reviewRoutes);
+app.use("/payment", paymentRoutes);
 
-
+// Database connection and server start
 const PORT = process.env.PORT || 5000;
 
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log("Successfully connected to the database server.");
     app.listen(PORT, () => console.log(`Web server listening on port ${PORT}`));
   })
-  .catch((error) => console.log(error));
-
-// Handle success page route
-// app.get('/success', async (req, res) => {
-//   const sessionId = req.query.session_id;
-
-//   try {
-//     const booking = await Booking.findOne({ stripeSessionId: sessionId });
-
-//     if (!booking) {
-//       return res.status(404).json({ error: 'Booking not found' });
-//     }
-
-//     // Update payment status to completed
-//     booking.paymentStatus = 'completed';
-//     await booking.save();
-
-//     res.render('success', { booking });
-//   } catch (error) {
-//     console.error('Error updating payment status:', error);
-//     res.status(500).json({ error: 'Failed to complete payment' });
-//   }
-// });
-
-// Handle cancel page route
-// app.get("/cancel", (req, res) => {
-//   res.render("cancel"); // Render cancel page
-// });
-// app.get("/payment/verify-session", paymentController.verifySession);
-
-
-// Register review routes
+  .catch((error) => console.error("Error connecting to the database:", error));

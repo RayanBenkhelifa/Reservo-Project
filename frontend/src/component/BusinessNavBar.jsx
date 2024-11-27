@@ -36,6 +36,9 @@ function Navbar() {
         <li>
           <a href="/business-add-provider">Providers</a>
         </li>
+        <li>
+          <a href="/review-feedback">Review Feedback</a> {/* New Menu Item */}
+        </li>
       </ul>
 
       {/* Logout Button */}

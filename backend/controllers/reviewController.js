@@ -96,5 +96,25 @@ const deleteReview = async (req, res) => {
     }
 };
 
+// reviewController.js
+const getBusinessReviews = async (req, res) => {
+    try {
+      console.log("Fetching reviews for Business Owner ID:", req.userId); // Debug log
+      const reviews = await Review.find({ businessOwner: req.userId });
+  
+      if (reviews.length === 0) {
+        console.log("No reviews found for this business owner.");
+        return res.status(200).json({ reviews: [] });
+      }
+  
+      console.log("Reviews fetched successfully:", reviews); // Debug log
+      res.status(200).json({ reviews });
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+      res.status(500).json({ message: "Failed to fetch reviews" });
+    }
+  };
+      
+
 // Export all necessary functions
-module.exports = { createReview, getProviderReviews, getAverageRating, deleteReview };
+module.exports = { createReview, getProviderReviews, getAverageRating, deleteReview, getBusinessReviews};

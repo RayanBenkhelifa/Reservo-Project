@@ -15,11 +15,12 @@ import Contact from './component/Contact';
 import BrowseBusinesses from './component/BrowseBusinesses';
 import SelectProvider from './component/SelectProvider';
 import TimeSlots from './component/TimeSlots';
-import SuccessPage from './component/SuccessPage';  // Import the SuccessPage component
-import BookingConfirmation from './component/BookingConfirmation';  // Confirmation page component
+import SuccessPage from './component/SuccessPage';
+import BookingConfirmation from './component/BookingConfirmation';
 import AddProvider from './component/AddProvider';
 import ReviewAndPayment from './component/ReviewAndPayment';
 import CustomerBookings from './component/CustomerBookings';
+import ReviewFeedback from './component/ReviewFeedback'; // Import the new ReviewFeedback component
 import { AuthContext } from './component/AuthContext';
 import './styles.css';
 
@@ -108,13 +109,21 @@ function App() {
           <Route path="/browse-businesses" element={<BrowseBusinesses />} />
           <Route path="/services" element={<BrowseBusinesses />} />
           <Route path="/user-type" element={<UserType />} />
-          <Route path="/success" element={<SuccessPage />} />  {/* Success page */}
-          <Route path="/booking-confirmation" element={<BookingConfirmation />} /> {/* Confirmation page */}
+          <Route path="/success" element={<SuccessPage />} />
+          <Route path="/booking-confirmation" element={<BookingConfirmation />} />
           <Route path="/review-payment/:providerId" element={<ReviewAndPayment />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/customer-bookings" element={<CustomerBookings />} />
           <Route path="/contact" element={<Contact />} />
-  /          
+          <Route
+            path="/review-feedback"
+            element={
+              authState.isAuthenticated && authState.userType === "businessOwner"
+                ? <ReviewFeedback />
+                : <Navigate to="/login-business" />
+            }
+          />
+          
           {/* Handle unknown routes */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

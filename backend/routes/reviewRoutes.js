@@ -3,7 +3,8 @@ const {
     createReview,
     getProviderReviews, // Ensure this matches the function name in the controller
     getAverageRating,
-    deleteReview
+    deleteReview,
+    getBusinessReviews
 } = require('../controllers/reviewController');
 const { verifySession } = require('../middleware/verifySession');
 
@@ -20,5 +21,8 @@ router.get('/average/:businessId', getAverageRating);
 
 // Route to delete a specific review
 router.delete('/:reviewId', deleteReview);
+
+router.get("/business-reviews", verifySession, getBusinessReviews); // Route to fetch reviews
+
 
 module.exports = router;

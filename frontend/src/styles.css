@@ -1784,3 +1784,33 @@ button.confirm-booking-btn:hover {
     color: #f44336;
     /* Red for negative improvement */
 }
+
+/* Modify */
+
+.review-feedback-page-container {
+    display: flex;
+    background-color: #f8f9fa; /* Light background color */
+    min-height: 100vh; /* Full viewport height */
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    flex: 0 0 220px; /* Fixed width for sidebar */
+  }
+
+  /* Table Styling */
+  .review-feedback-table {
+    width: 120%;
+    border-collapse: collapse;
+    margin-top: px;
+    margin-left: 200px;
+  }
+  
+  .review-feedback-table th,
+  .review-feedback-table td {
+    padding: 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 16px;
+  }
+

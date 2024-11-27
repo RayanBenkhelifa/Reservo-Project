@@ -44,6 +44,8 @@ export const AuthProvider = ({ children }) => {
         // Clear localStorage
         localStorage.removeItem("userId");
         localStorage.removeItem("userType");
+        localStorage.removeItem("username"); // Initialize username
+        localStorage.removeItem("email"); // Initialize email
 
         setAuthState({
           isAuthenticated: false,

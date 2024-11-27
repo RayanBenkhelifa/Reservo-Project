@@ -222,6 +222,13 @@ const createBooking = async (req, res) => {
       items,
     } = req.body;
 
+    console.log("EEEEEEEEEEEEEE",customerId,
+      providerId,
+      serviceId,
+      selectedDate,
+      startTime,
+      paymentOption,
+      items)
     const service = await Service.findById(serviceId);
     const provider = await Provider.findById(providerId);
 

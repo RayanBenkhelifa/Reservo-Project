@@ -4,7 +4,8 @@ const {
     getProviderReviews, // Ensure this matches the function name in the controller
     getAverageRating,
     deleteReview,
-    getBusinessReviews
+    getBusinessReviews,
+    submitFeedback
 } = require('../controllers/reviewController');
 const { verifySession } = require('../middleware/verifySession');
 
@@ -24,5 +25,7 @@ router.delete('/:reviewId', deleteReview);
 
 router.get("/business-reviews", verifySession, getBusinessReviews); // Route to fetch reviews
 
+// Route to submit feedback to the customer
+router.post("/submit-feedback", verifySession, submitFeedback); // New route for feedback submission
 
 module.exports = router;

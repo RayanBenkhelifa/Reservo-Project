@@ -24,9 +24,11 @@ const TimeSlots = () => {
 
   useEffect(() => {
     if (!authState.isAuthenticated) {
+      const fullPath = `${location.pathname}${location.search}`;
+      console.log(fullPath); // Outputs the full path including query parameters
       navigate("/login-customer", {
         state: {
-          from: location.pathname,
+          from: fullPath,
           providerId,
           serviceId,
           serviceDuration,
@@ -36,12 +38,12 @@ const TimeSlots = () => {
           bookingId,
         },
       });
-      return;
     }
   }, [
     authState.isAuthenticated,
     navigate,
-    location,
+    location.pathname,
+    location.search,
     providerId,
     serviceId,
     serviceDuration,

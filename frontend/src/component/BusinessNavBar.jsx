@@ -39,6 +39,9 @@ function Navbar() {
         <li>
           <a href="/review-feedback">Review Feedback</a> {/* New Menu Item */}
         </li>
+        <li>
+          <a href="/edit-profile">Edit Profile</a>
+        </li>
       </ul>
 
       {/* Logout Button */}

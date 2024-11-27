@@ -1,28 +1,34 @@
-import React, { useContext } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import BusinessProvider from './component/BusinessProvider';
-import BusinessDashboard from './component/BusinessDashboard';
-import BusinessServices from './component/BusinessServices';
-import Home from './component/Home';
-import LoginBusiness from './component/LoginBusiness';
-import LoginCustomer from './component/LoginCustomer';
-import SignupBusiness from './component/SignupBusiness';
-import SignupCustomer from './component/SignupCustomer';
-import BusinessDetails from './component/BusinessDetails';
-import UserType from './component/UserType';
-import ForgotPassword from './component/ForgotPassword';
-import Contact from './component/Contact';
-import BrowseBusinesses from './component/BrowseBusinesses';
-import SelectProvider from './component/SelectProvider';
-import TimeSlots from './component/TimeSlots';
-import SuccessPage from './component/SuccessPage';
-import BookingConfirmation from './component/BookingConfirmation';
-import AddProvider from './component/AddProvider';
-import ReviewAndPayment from './component/ReviewAndPayment';
-import CustomerBookings from './component/CustomerBookings';
-import ReviewFeedback from './component/ReviewFeedback'; // Import the new ReviewFeedback component
-import { AuthContext } from './component/AuthContext';
-import './styles.css';
+import React, { useContext } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import BusinessProvider from "./component/BusinessProvider";
+import BusinessDashboard from "./component/BusinessDashboard";
+import BusinessServices from "./component/BusinessServices";
+import Home from "./component/Home";
+import LoginBusiness from "./component/LoginBusiness";
+import LoginCustomer from "./component/LoginCustomer";
+import SignupBusiness from "./component/SignupBusiness";
+import SignupCustomer from "./component/SignupCustomer";
+import BusinessDetails from "./component/BusinessDetails";
+import UserType from "./component/UserType";
+import EditProfile from "./component/EditProfile";
+import ForgotPassword from "./component/ForgotPassword";
+import Contact from "./component/Contact";
+import BrowseBusinesses from "./component/BrowseBusinesses";
+import SelectProvider from "./component/SelectProvider";
+import TimeSlots from "./component/TimeSlots";
+import SuccessPage from "./component/SuccessPage";
+import BookingConfirmation from "./component/BookingConfirmation";
+import AddProvider from "./component/AddProvider";
+import ReviewAndPayment from "./component/ReviewAndPayment";
+import CustomerBookings from "./component/CustomerBookings";
+import ReviewFeedback from "./component/ReviewFeedback"; // Import the new ReviewFeedback component
+import { AuthContext } from "./component/AuthContext";
+import "./styles.css";
 
 function App() {
   const { authState, loading } = useContext(AuthContext);
@@ -38,92 +44,127 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/index" element={<Home />} />
-          
+
           <Route
             path="/business-dashboard"
             element={
-              authState.isAuthenticated && authState.userType === "businessOwner"
-                ? <BusinessDashboard />
-                : <Navigate to="/login-business" />
+              authState.isAuthenticated &&
+              authState.userType === "businessOwner" ? (
+                <BusinessDashboard />
+              ) : (
+                <Navigate to="/login-business" />
+              )
             }
           />
-          
+
           <Route
             path="/login-business"
             element={
-              authState.isAuthenticated && authState.userType === "businessOwner"
-                ? <Navigate to="/business-dashboard" />
-                : <LoginBusiness />
+              authState.isAuthenticated &&
+              authState.userType === "businessOwner" ? (
+                <Navigate to="/business-dashboard" />
+              ) : (
+                <LoginBusiness />
+              )
             }
           />
-          
+
           <Route
             path="/signup-business"
             element={
-              authState.isAuthenticated && authState.userType === "businessOwner"
-                ? <Navigate to="/business-dashboard" />
-                : <SignupBusiness />
+              authState.isAuthenticated &&
+              authState.userType === "businessOwner" ? (
+                <Navigate to="/business-dashboard" />
+              ) : (
+                <SignupBusiness />
+              )
             }
           />
 
           <Route
             path="/login-customer"
             element={
-              authState.isAuthenticated && authState.userType === "customer"
-                ? <Navigate to="/" />
-                : <LoginCustomer />
+              authState.isAuthenticated && authState.userType === "customer" ? (
+                <Navigate to="/" />
+              ) : (
+                <LoginCustomer />
+              )
             }
           />
-          
+
           <Route
             path="/signup-customer"
             element={
-              authState.isAuthenticated && authState.userType === "customer"
-                ? <Navigate to="/" />
-                : <SignupCustomer />
+              authState.isAuthenticated && authState.userType === "customer" ? (
+                <Navigate to="/" />
+              ) : (
+                <SignupCustomer />
+              )
             }
           />
-          
+
           <Route
             path="/business-services"
             element={
-              authState.isAuthenticated && authState.userType === "businessOwner"
-                ? <BusinessServices />
-                : <Navigate to="/login-business" />
+              authState.isAuthenticated &&
+              authState.userType === "businessOwner" ? (
+                <BusinessServices />
+              ) : (
+                <Navigate to="/login-business" />
+              )
             }
           />
 
           <Route
             path="/business-add-provider"
             element={
-              authState.isAuthenticated && authState.userType === "businessOwner"
-                ? <AddProvider />
-                : <Navigate to="/login-business" />
+              authState.isAuthenticated &&
+              authState.userType === "businessOwner" ? (
+                <AddProvider />
+              ) : (
+                <Navigate to="/login-business" />
+              )
             }
           />
-          
+
           <Route path="/select-provider/:id" element={<SelectProvider />} />
-          <Route path="/business-details/:businessId" element={<BusinessDetails />} />
-          <Route path="/business-provider/:businessId/:serviceId" element={<BusinessProvider />} />
+          <Route
+            path="/business-details/:businessId"
+            element={<BusinessDetails />}
+          />
+          <Route
+            path="/business-provider/:businessId/:serviceId"
+            element={<BusinessProvider />}
+          />
           <Route path="/time-slots/:providerId" element={<TimeSlots />} />
           <Route path="/browse-businesses" element={<BrowseBusinesses />} />
           <Route path="/services" element={<BrowseBusinesses />} />
           <Route path="/user-type" element={<UserType />} />
           <Route path="/success" element={<SuccessPage />} />
-          <Route path="/booking-confirmation" element={<BookingConfirmation />} />
-          <Route path="/review-payment/:providerId" element={<ReviewAndPayment />} />
+          <Route
+            path="/booking-confirmation"
+            element={<BookingConfirmation />}
+          />
+          <Route
+            path="/review-payment/:providerId"
+            element={<ReviewAndPayment />}
+          />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/customer-bookings" element={<CustomerBookings />} />
           <Route path="/contact" element={<Contact />} />
           <Route
             path="/review-feedback"
             element={
-              authState.isAuthenticated && authState.userType === "businessOwner"
-                ? <ReviewFeedback />
-                : <Navigate to="/login-business" />
+              authState.isAuthenticated &&
+              authState.userType === "businessOwner" ? (
+                <ReviewFeedback />
+              ) : (
+                <Navigate to="/login-business" />
+              )
             }
           />
-          
+
           {/* Handle unknown routes */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

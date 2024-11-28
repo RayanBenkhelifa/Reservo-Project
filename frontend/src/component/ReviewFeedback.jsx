@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import BusinessNavBar from "./BusinessNavBar";
-import "../styles.css";  // Ensure the styles are imported
+import BusinessNavBar from "./BusinessNavBar";  // Import the Navbar component
+import "../styles.css";  // Ensure you import the correct styles
 
 const ReviewFeedback = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [feedbacks, setFeedbacks] = useState({}); // To store feedback for each customer
-  const [submittedFeedback, setSubmittedFeedback] = useState({}); // To track feedback submission for each review
+  const [feedbacks, setFeedbacks] = useState({}); // Store feedback for each customer
+  const [submittedFeedback, setSubmittedFeedback] = useState({}); // Track feedback submission for each review
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -71,6 +71,7 @@ const ReviewFeedback = () => {
         [reviewId]: true, // Feedback is submitted for this review
       }));
 
+      // Store the updated feedback submission status in localStorage
       localStorage.setItem("submittedFeedback", JSON.stringify({
         ...submittedFeedback,
         [reviewId]: true,
@@ -83,11 +84,9 @@ const ReviewFeedback = () => {
   };
 
   return (
-    <div className="review-feedback-page"> {/* Ensure this class is applied to the parent container */}
-      <div className="sidebar">
-        <BusinessNavBar />
-      </div>
-      <div className="review-feedback-content">
+    <div className="dashboard-container">
+      <BusinessNavBar /> {/* Include the same BusinessNavBar */}
+      <div className="main-content">
         <div className="review-feedback-card">
           <h1>Review Feedback</h1>
           {loading ? (

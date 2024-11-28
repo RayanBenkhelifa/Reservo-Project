@@ -122,6 +122,7 @@ const getDashboard = async (req, res) => {
 };
 
 // Get Weekly Stats for Dashboard
+// Example of a backend controller to fetch weekly stats
 const getWeeklyStats = async (req, res) => {
   try {
     const businessId = req.userId;
@@ -135,28 +136,47 @@ const getWeeklyStats = async (req, res) => {
     currentWeekEnd.setDate(currentWeekStart.getDate() + 6); // Saturday
     currentWeekEnd.setHours(23, 59, 59, 999);
 
-    const currentWeekAppointments = await Booking.find({
+    // Find all bookings for the current week
+    const currentWeekBookings = await Booking.find({
       businessOwner: businessId,
       date: { $gte: currentWeekStart, $lt: currentWeekEnd },
     }).populate("service");
 
-    const totalAppointmentsCurrentWeek = currentWeekAppointments.length;
-    const totalRevenueCurrentWeek = currentWeekAppointments.reduce(
-      (sum, booking) => {
-        return sum + (booking.service?.price || 0);
-      },
+    // Calculate total revenue and total appointments
+    const totalAppointmentsCurrentWeek = currentWeekBookings.length;
+    const totalRevenueCurrentWeek = currentWeekBookings.reduce(
+      (sum, booking) => sum + (booking.service?.price || 0),
       0
     );
+
+    // Calculate number of reservations per service
+    const serviceReservations = currentWeekBookings.reduce((acc, booking) => {
+      const serviceName = booking.service.serviceName;
+      if (acc[serviceName]) {
+        acc[serviceName] += 1;
+      } else {
+        acc[serviceName] = 1;
+      }
+      return acc;
+    }, {});
+
+    // Return the data for pie chart (only data, not the JSX)
+    const pieChartData = Object.entries(serviceReservations).map(([serviceName, count]) => ({
+      label: serviceName,
+      value: count,
+    }));
 
     res.status(200).json({
       totalAppointments: totalAppointmentsCurrentWeek,
       totalRevenue: totalRevenueCurrentWeek,
+      pieChartData, // Send the pie chart data as a response
     });
   } catch (error) {
     console.error("Error in getWeeklyStats:", error);
     res.status(500).json({ error: "Failed to fetch weekly stats" });
   }
 };
+
 
 // Get Upcoming Appointments
 const getUpNextAppointments = async (req, res) => {

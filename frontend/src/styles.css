@@ -1785,155 +1785,83 @@ button.confirm-booking-btn:hover {
     /* Red for negative improvement */
 }
 
-/* Modify */
-
-/* Scoped styles for the ReviewFeedback component */
-.review-feedback-page {
-    display: flex;
-    min-height: 100vh; /* Full page height */
-    background-color: #f8f9fa; /* Light background */
-  }
-  
-  /* Sidebar Styling for ReviewFeedback */
-  .review-feedback-page .sidebar {
-    width: 230px; /* Set fixed width for the sidebar */
-    background-color: #2d3e50; /* Dark background for the sidebar */
-    color: white;
-    padding-top: 20px;
-    position: fixed;
-    height: 100vh; /* Sidebar should cover full height */
+.review-feedback-table {
     font-family: 'Roboto', sans-serif;
-  }
-  
-  .review-feedback-page .sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    margin-right: 50px;
-  }
-  
-  .review-feedback-page .sidebar li {
-    margin: 20px 0;
-  }
-  
-  .review-feedback-page .sidebar a {
-    color: white;
-    text-decoration: none;
-    font-size: 16px;
-  }
-  
-  
-  /* Main content area */
-  .review-feedback-page .review-feedback-content {
-    margin-left: 240px; /* Offset the content to the right of the sidebar */
-    display: flex;
-    justify-content: center; /* Center content horizontally */
-    align-items: center; /* Center content vertically */
-    width: calc(100% - 240px); /* Full width minus the sidebar */
-    padding: 20px;
-  }
-  
-  /* Card that holds the content */
-  .review-feedback-page .review-feedback-card {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for the card */
-    padding: 30px;
-    width: 100%; /* Take full width of available space */
-    max-width: 1200px; /* Limit max width for better readability */
-    text-align: center;
-  }
-  
-  /* Table Styling */
-  .review-feedback-page .review-feedback-table {
-    width: 100%; /* Full width */
-    border-collapse: collapse;
-    margin-top: 20px;
-    margin-left: 15px;
-  }
-  
-  .review-feedback-page .review-feedback-table th,
-  .review-feedback-page .review-feedback-table td {
-    padding: 15px;
-    border: 1px solid #ddd;
-    text-align: center;
-    font-size: 16px;
-  }
-  
-  .review-feedback-page .review-feedback-table th {
-    background-color: #5d5fef; /* Primary color for headers */
-    color: white;
-    font-weight: bold;
-    text-transform: uppercase;
-  }
-  
-  .review-feedback-page .review-feedback-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9; /* Alternate row colors */
-  }
-  
-  .review-feedback-page .review-feedback-table tbody tr:hover {
-    background-color: #f1f1f1; /* Hover effect for rows */
-  }
-  
-  /* Table Cells Styling */
-  .review-feedback-page .review-feedback-table td {
-    color: #555;
-    font-size: 16px;
-  }
-  
-  /* Styling for textarea */
-  .review-feedback-page textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    resize: vertical;
-  }
-  
-  /* Button Styling */
-  .review-feedback-page button {
-    background-color: #5d5fef; /* Primary button color */
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .review-feedback-page button:hover {
-    background-color: #4a4ae6; /* Darker shade on hover */
-  }
-  
-  /* Feedback Given Message */
-  .review-feedback-page .review-feedback-table td p {
-    color: green;
-    font-weight: bold;
-    font-size: 16px;
-  }
-  
-
-
-@media (max-width: 768px) {
-  .review-feedback-page .review-feedback-content {
-    margin-left: 0; /* Remove left margin for small screens */
-    padding: 10px;
-  }
-
-  .review-feedback-page .review-feedback-card {
-    padding: 20px; /* Reduced padding for mobile view */
-    width: 100%;
-  }
-
-  .review-feedback-page .review-feedback-table th,
-  .review-feedback-page .review-feedback-table td {
-    font-size: 14px; /* Smaller font size for mobile */
-  }
-
-  .review-feedback-page button {
-    padding: 8px 16px; /* Smaller button size for mobile */
-  }
 }
 
+.review-feedback-table textarea{
+    width: 100%;
+    height: 80px;
+    resize: vertical;
+}
+
+/* Button Styling for ReviewFeedback */
+.review-feedback-table button {
+    background: linear-gradient(145deg, #5d5fef, #4a4ae6); /* Gradient background */
+    color: white;
+    padding: 12px 24px; /* Increase the size of the button */
+    border: none;
+    border-radius: 30px; /* Round the corners more */
+    cursor: pointer;
+    font-size: 16px; /* Set the font size */
+    box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1), -4px -4px 6px rgba(255, 255, 255, 0.3); /* Subtle shadow effect */
+    transition: all 0.3s ease; /* Smooth transition on hover */
+  }
+  
+  .review-feedback-table button:hover {
+    background: linear-gradient(145deg, #4a4ae6, #5d5fef); /* Reverse the gradient on hover */
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.4); /* Darker shadow on hover */
+  }
+  
+  .review-feedback-table button:active {
+    transform: scale(0.98); /* Slightly shrink the button when clicked */
+  }
+
+  /* Stats container to align Total Appointments, Total Revenue, and Pie Chart side by side */
+#weekly-stats {
+    display: flex;
+    justify-content: space-between; /* Space out the items */
+    align-items: flex-start; /* Vertically align items at the top */
+    gap: 20px; /* Add space between the items */
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+  }
+  
+  /* Styling for individual stat cards */
+  .stat-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    min-width: 250px; /* Ensure they don't get too small */
+    flex-grow: 1; /* Allow stat cards to grow and take up available space */
+  }
+  
+  /* Specific styling for Total Appointments stat card */
+  .stat-card-appointments {
+    flex-basis: 45%; /* Take up 45% of the available space */
+  }
+  
+  /* Specific styling for Total Revenue stat card */
+  .stat-card-revenue {
+    flex-basis: 45%; /* Take up 45% of the available space */
+  }
+  
+  /* Scoped styles for the Pie chart container */
+  #reserved-services-pie-chart {
+    width: 80%;
+    max-width: 5000px; /* Set max-width to make the pie chart smaller */
+    height: 200px; /* Set height for the pie chart */
+    margin:10px  auto; /* Center the pie chart */
+    
+    padding: 0px 120px 120px 120px;
+    flex-basis: 45%; /* Ensure the pie chart takes up the correct amount of space */
+  }
+  
+  /* Ensure the canvas inside the pie chart takes up the full space */
+  #reserved-services-pie-chart canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+  
   

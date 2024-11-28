@@ -1,20 +1,23 @@
-// src/components/BusinessDashboard.js
-
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Pie } from "react-chartjs-2"; // Import Pie chart from Chart.js
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js"; // Import necessary components for Pie chart
 import "../styles.css";
 import { AuthContext } from "./AuthContext";
 import Navbar from "./BusinessNavBar";
 import UploadBusinessImage from "./UploadBusinessImage";
 
+// Register Chart.js components
+ChartJS.register(ArcElement, Tooltip, Legend);
+
 function BusinessDashboard() {
   const [businessOwner, setBusinessOwner] = useState(null); // Business owner details
-  const [upNextAppointments, setUpNextAppointments] = useState([]); // Upcoming appointments
+  const [pieChartData, setPieChartData] = useState([]); // Pie chart data for reserved services
   const [stats, setStats] = useState({
     totalAppointments: 0,
     totalRevenue: 0,
-    improvement: 0,
   }); // Weekly stats
+  const [upNextAppointments, setUpNextAppointments] = useState([]); // Upcoming appointments
   const [businessImageUrl, setBusinessImageUrl] = useState(""); // Business image URL
   const navigate = useNavigate();
   const { authState } = useContext(AuthContext); // Auth context
@@ -71,7 +74,7 @@ function BusinessDashboard() {
       }
     };
 
-    // Fetch weekly stats
+    // Fetch weekly stats and pie chart data
     const fetchWeeklyStats = async () => {
       try {
         const response = await fetch("/business/weekly-stats", {
@@ -81,7 +84,11 @@ function BusinessDashboard() {
 
         if (response.ok) {
           const statsData = await response.json();
-          setStats(statsData);
+          setStats({
+            totalAppointments: statsData.totalAppointments,
+            totalRevenue: statsData.totalRevenue,
+          });
+          setPieChartData(statsData.pieChartData); // Set pie chart data
         } else {
           console.error("Failed to fetch weekly stats.");
         }
@@ -97,6 +104,36 @@ function BusinessDashboard() {
       fetchWeeklyStats();
     }
   }, [authState.isAuthenticated, authState.userType, navigate]);
+
+  // Pie chart configuration
+// Pie chart configuration
+const pieChartConfig = {
+  labels: pieChartData.map((data) => data.label), // Service names as labels
+  datasets: [
+    {
+      label: "Reserved Services",
+      data: pieChartData.map((data) => data.value), // Number of reservations for each service
+      backgroundColor: pieChartData.map((_, index) => {
+        // Assign a color based on the index (first service in blue, second in red, etc.)
+        const colors = [
+          "#5d5fef", // Blue
+          "#e3342f", // Red
+          "#38c172", // Green
+          "#ffed4a", // Yellow
+          "#6cb2eb", // Light Blue
+          "#f39c12", // Orange
+          "#8e44ad", // Purple
+          "#2ecc71", // Lime Green
+        ];
+        // Cycle through colors or use the same set for multiple services
+        return colors[index % colors.length];
+      }),
+      borderColor: "#fff", // White border for each slice
+      borderWidth: 1,
+    },
+  ],
+};
+
 
   // Component to render upcoming appointments
   function UpNext() {
@@ -179,30 +216,39 @@ function BusinessDashboard() {
 
         {/* Weekly stats */}
         <section id="weekly-stats" className="stats-bar">
-          <div className="stat-card">
+          {/* Total Appointments stat */}
+          <div className="stat-card stat-card-appointments">
             <h3 className="stat-title">Total Appointments</h3>
             <p className="stat-value">{stats.totalAppointments}</p>
           </div>
-          <div className="stat-card">
+
+          {/* Total Revenue stat */}
+          <div className="stat-card stat-card-revenue">
             <h3 className="stat-title">Total Revenue</h3>
             <p className="stat-value">SAR {stats.totalRevenue.toFixed(2)}</p>
           </div>
-          <div className="stat-card">
-            <h3 className="stat-title">Improvement</h3>
-            <p
-              className={`stat-value ${
-                stats.improvement >= 0 ? "positive" : "negative"
-              }`}
-            >
-              {stats.improvement}%
-            </p>
+
+          {/* Pie Chart for Reserved Services */}
+          <div id="reserved-services-pie-chart" className="card">
+            <h2>Reserved Services</h2>
+            <p>Visualize how many reservations each service has received this week.</p>
+            {pieChartData.length > 0 ? (
+              <Pie
+                data={pieChartConfig}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false, // Allow the pie chart to resize
+                }}
+              />
+            ) : (
+              <p>No data available for reserved services this week.</p>
+            )}
           </div>
         </section>
 
         <section id="up-next" className="card">
           <h2>Up Next</h2>
           <p>Here is where you manage your upcoming appointments.</p>
-
           <UpNext />
         </section>
       </div>

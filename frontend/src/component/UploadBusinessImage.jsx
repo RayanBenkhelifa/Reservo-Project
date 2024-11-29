@@ -45,6 +45,8 @@ function UploadBusinessImage() {
 
   return (
     <div className="upload-image-container">
+      <h2>Upload Business Logo</h2>
+
       <form onSubmit={handleUpload}>
         <input type="file" accept="image/*" onChange={handleImageChange} />
         <button type="submit" className="btn">

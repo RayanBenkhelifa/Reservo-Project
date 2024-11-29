@@ -1,389 +1,388 @@
 /* General Styles */
 body,
 html {
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto', sans-serif;
-    background-color: #f9fafc;
-    color: #333;
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", sans-serif;
+  background-color: #f9fafc;
+  color: #333;
 }
 
 .container {
-    width: 85%;
-    max-width: 1200px;
-    margin: 0 auto;
+  width: 85%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 /* Header Styles */
 .header {
-    background-color: #ffffff;
-    padding: 20px 0;
-    border-bottom: 1px solid #eaeaea;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    width: 100%;
-    z-index: 1000;
-    border: none;
-
+  background-color: #ffffff;
+  padding: 20px 0;
+  border-bottom: 1px solid #eaeaea;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  z-index: 1000;
+  border: none;
 }
 
 .header .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .logo {
-    font-size: 24px;
-    font-weight: 700;
-    color: #333;
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
 }
 
 .nav {
-    display: flex;
-    align-items: center;
-
+  display: flex;
+  align-items: center;
 }
 
 /* Nav Links */
 .nav a,
 .nav .nav-button {
-    margin: 0 15px;
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-    transition: color 0.3s ease;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    /* Center align icon and text */
+  margin: 0 15px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  /* Center align icon and text */
 }
 
 .nav a:hover,
 .nav .nav-button:hover {
-    color: #5d5fef;
+  color: #5d5fef;
 }
 
 .nav a.active {
-    color: #5d5fef;
-    font-weight: 700;
+  color: #5d5fef;
+  font-weight: 700;
 }
 
 /* Logout Button Styling */
 .nav .nav-button {
-    background: none;
-    border: none;
-    cursor: pointer;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 .nav .nav-button:focus {
-    outline: none;
+  outline: none;
 }
 
 /* Icon Styling */
 .nav .nav-icon {
-    margin-right: 5px;
-    /* Space between icon and text */
-    font-size: 18px;
-    /* Adjust icon size */
+  margin-right: 5px;
+  /* Space between icon and text */
+  font-size: 18px;
+  /* Adjust icon size */
 }
 
 .nav .btn {
-    padding: 12px 25px;
-    border-radius: 25px;
-    font-weight: 600;
-    text-decoration: none;
-    background: linear-gradient(135deg, #007bff, #0056b3);
-    /* Gradient background */
-    color: #ffffff;
-    margin-left: 15px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    /* Shadow effect */
-    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+  padding: 12px 25px;
+  border-radius: 25px;
+  font-weight: 600;
+  text-decoration: none;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  /* Gradient background */
+  color: #ffffff;
+  margin-left: 15px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  /* Shadow effect */
+  transition: transform 0.3s ease, background-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .nav .btn:hover {
-    background: linear-gradient(135deg, #0056b3, #003f8c);
-    color: white;
-    /* Darker gradient on hover */
-    transform: scale(1.05);
-    /* Slight scale up */
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
-    /* Enhanced shadow on hover */
+  background: linear-gradient(135deg, #0056b3, #003f8c);
+  color: white;
+  /* Darker gradient on hover */
+  transform: scale(1.05);
+  /* Slight scale up */
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+  /* Enhanced shadow on hover */
 }
 
 /* Profile Menu Styles */
 .profile-menu {
-    position: relative;
+  position: relative;
 }
 
 .profile-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #333;
-    margin-left: 15px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333;
+  margin-left: 15px;
 }
 
 .profile-button:focus {
-    outline: none;
+  outline: none;
 }
 
 .profile-icon {
-    font-size: 40px;
-    /* Adjust icon size */
+  font-size: 40px;
+  /* Adjust icon size */
 }
 
 .dropdown-menu {
-    position: absolute;
-    right: 0;
-    top: 50px;
-    /* Adjust based on your navbar height */
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    width: 250px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+  position: absolute;
+  right: 0;
+  top: 50px;
+  /* Adjust based on your navbar height */
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 250px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
 }
 
 .dropdown-header {
-    display: flex;
-    align-items: center;
-    padding: 15px;
-    border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
 }
 
 .dropdown-avatar {
-    font-size: 60px;
-    margin-right: 10px;
-    color: #5d5fef;
+  font-size: 60px;
+  margin-right: 10px;
+  color: #5d5fef;
 }
 
 .user-info {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .user-name {
-    font-weight: bold;
-    margin: 0;
-    color: #333;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
 }
 
 .user-email {
-    margin: 0;
-    color: #666;
-    font-size: 14px;
+  margin: 0;
+  color: #666;
+  font-size: 14px;
 }
 
 .dropdown-item {
-    display: flex;
-    align-items: center;
-    padding: 12px 15px;
-    color: #333;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-    cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
 }
 
 .dropdown-item:hover {
-    background-color: #f5f5f5;
+  background-color: #f5f5f5;
 }
 
 .dropdown-icon {
-    font-size: 18px;
-    margin-right: 10px;
+  font-size: 18px;
+  margin-right: 10px;
 }
 
 .logout-item {
-    width: 100%;
-    padding: 12px;
-    background-color: #e74c3c;
-    /* Red color for logout */
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s ease;
+  width: 100%;
+  padding: 12px;
+  background-color: #e74c3c;
+  /* Red color for logout */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
 }
 
 .logout-item:hover {
-    background-color: #c0392b;
+  background-color: #c0392b;
 }
 
 /* Hero Section Styles */
 .hero {
-    position: relative;
-    background-image: url('img/barbershop_vs_salon_hero.jpg');
-    /* Update path if needed */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 900px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #ffffff;
+  position: relative;
+  background-image: url("img/barbershop_vs_salon_hero.jpg");
+  /* Update path if needed */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 900px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
 }
 
 .hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    /* Dark overlay */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Dark overlay */
 }
 
 .hero-content {
-    position: relative;
-    z-index: 1;
-    text-align: center;
+  position: relative;
+  z-index: 1;
+  text-align: center;
 }
 
 .hero h1 {
-    font-size: 48px;
-    margin-bottom: 20px;
-    font-weight: 700;
+  font-size: 48px;
+  margin-bottom: 20px;
+  font-weight: 700;
 }
 
 .hero p {
-    font-size: 18px;
-    margin-bottom: 30px;
+  font-size: 18px;
+  margin-bottom: 30px;
 }
 
 .hero .btn {
-    padding: 15px 30px;
-    background-color: #007bff;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    text-transform: uppercase;
-    font-weight: 600;
-    transition: background-color 0.3s ease;
-    margin-right: 15px;
-    text-decoration: none;
-    /* Remove underline */
+  padding: 15px 30px;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  margin-right: 15px;
+  text-decoration: none;
+  /* Remove underline */
 }
 
 .hero .btn:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
 .hero .btn-secondary {
-    padding: 15px 30px;
-    background-color: #f5f5f5;
-    color: #333;
-    border: none;
-    border-radius: 5px;
-    text-transform: uppercase;
-    font-weight: 600;
-    transition: background-color 0.3s ease;
-    text-decoration: none;
-    /* Remove underline */
+  padding: 15px 30px;
+  background-color: #f5f5f5;
+  color: #333;
+  border: none;
+  border-radius: 5px;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+  /* Remove underline */
 }
 
 .hero .btn-secondary:hover {
-    background-color: #e0e0e0;
+  background-color: #e0e0e0;
 }
 
 /* Features Section Styles */
 .features {
-    padding: 60px 0;
-    text-align: center;
-    background-color: #ffffff;
+  padding: 60px 0;
+  text-align: center;
+  background-color: #ffffff;
 }
 
 .features h2 {
-    font-size: 36px;
-    color: #333;
-    margin-bottom: 20px;
+  font-size: 36px;
+  color: #333;
+  margin-bottom: 20px;
 }
 
 .features p {
-    font-size: 18px;
-    color: #666;
-    margin-bottom: 30px;
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 30px;
 }
 
 .feature-grid {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .feature-card {
-    background-color: #f9fafc;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    width: 30%;
-    transition: box-shadow 0.3s ease;
+  background-color: #f9fafc;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 30%;
+  transition: box-shadow 0.3s ease;
 }
 
 .feature-card h3 {
-    margin-bottom: 15px;
-    color: #5d5fef;
+  margin-bottom: 15px;
+  color: #5d5fef;
 }
 
 .feature-card p {
-    font-size: 16px;
-    color: #666;
+  font-size: 16px;
+  color: #666;
 }
 
 .feature-card:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
 /* Footer Styles */
 .footer {
-    background-color: #333;
-    color: #ffffff;
-    text-align: center;
-    padding: 20px 0;
+  background-color: #333;
+  color: #ffffff;
+  text-align: center;
+  padding: 20px 0;
 }
 
 /* Login & Sign-Up Page Styles */
 .login-container,
 .signup-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f9fafc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f9fafc;
 }
 
 .login-box,
 .signup-box {
-    background-color: #ffffff;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-    width: 400px;
-    text-align: center;
-    transition: transform 0.3s ease;
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  text-align: center;
+  transition: transform 0.3s ease;
 }
 
 .login-box:hover,
 .signup-box:hover {
-    transform: translateY(-5px);
+  transform: translateY(-5px);
 }
 
 .login-box h2,
 .signup-box h2 {
-    margin-bottom: 20px;
-    /* Reduced spacing for better layout */
-    color: #5d5fef;
-    font-size: 24px;
-    /* Increased font size for better readability */
-    font-weight: 600;
-    /* Bold text for better emphasis */
+  margin-bottom: 20px;
+  /* Reduced spacing for better layout */
+  color: #5d5fef;
+  font-size: 24px;
+  /* Increased font size for better readability */
+  font-weight: 600;
+  /* Bold text for better emphasis */
 }
 
 /* Input and Text Area Styles */
@@ -391,1477 +390,1526 @@ html {
 .signup-box input,
 .signup-box select,
 .signup-box textarea {
-    width: 100%;
-    padding: 12px;
-    margin: 12px 0;
-    /* Consistent margin between fields */
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-sizing: border-box;
-    font-size: 16px;
-    /* Increased font size for better readability */
+  width: 100%;
+  padding: 12px;
+  margin: 12px 0;
+  /* Consistent margin between fields */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 16px;
+  /* Increased font size for better readability */
 }
 
 .login-box input:focus,
 .signup-box input:focus,
 .signup-box select:focus,
 .signup-box textarea:focus {
-    border-color: #5d5fef;
-    /* Border color on focus for better UX */
-    outline: none;
+  border-color: #5d5fef;
+  /* Border color on focus for better UX */
+  outline: none;
 }
 
 .error-message {
-    color: red;
-    font-weight: bold;
-    font-size: 16px;
-    margin-bottom: 20px;
-    /* Add space below the error message */
-    text-align: center;
-    /* Center the error message */
+  color: red;
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 20px;
+  /* Add space below the error message */
+  text-align: center;
+  /* Center the error message */
 }
 
 /* Button Styles */
 .login-box .btn,
 .signup-box .btn {
-    width: 100%;
-    padding: 14px;
-    /* Increased padding for better button size */
-    margin-top: 20px;
-    background-color: #5d5fef;
-    color: #fff;
-    border: none;
-    border-radius: 30px;
-    text-transform: uppercase;
-    font-weight: 600;
-    transition: background-color 0.3s ease;
-    cursor: pointer;
-    font-size: 14px;
+  width: 100%;
+  padding: 14px;
+  /* Increased padding for better button size */
+  margin-top: 20px;
+  background-color: #5d5fef;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 .login-box .btn:hover,
 .signup-box .btn:hover {
-    background-color: #4a4ad4;
+  background-color: #4a4ad4;
 }
 
 /* Social Button Styles */
 .social-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin: 20px 0;
-    /* Added space between form elements */
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+  /* Added space between form elements */
 }
 
 .social-buttons .btn {
-    width: 48%;
-    /* Even distribution for social buttons */
-    background-color: #f5f5f5;
-    color: #333;
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
-    font-size: 14px;
+  width: 48%;
+  /* Even distribution for social buttons */
+  background-color: #f5f5f5;
+  color: #333;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  font-size: 14px;
 }
 
 .social-buttons .btn:hover {
-    background-color: #ddd;
+  background-color: #ddd;
 }
 
 /* Forgot Password and Terms Link Styles */
 .forgot-password {
-    display: block;
-    margin-bottom: 15px;
-    color: #5d5fef;
-    text-decoration: none;
-    font-size: 14px;
+  display: block;
+  margin-bottom: 15px;
+  color: #5d5fef;
+  text-decoration: none;
+  font-size: 14px;
 }
 
 .forgot-password:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 /* General Link Styles */
 .login-box p,
 .signup-box p {
-    font-size: 14px;
+  font-size: 14px;
 }
 
 .login-box p a,
 .signup-box p a {
-    color: #5d5fef;
-    text-decoration: none;
+  color: #5d5fef;
+  text-decoration: none;
 }
 
 .login-box p a:hover,
 .signup-box p a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 /* Responsive Styles */
 @media (max-width: 768px) {
-    .feature-grid {
-        flex-direction: column;
-        align-items: center;
-    }
+  .feature-grid {
+    flex-direction: column;
+    align-items: center;
+  }
 
-    .signup-box,
-    .login-box {
-        width: 90%;
-    }
+  .signup-box,
+  .login-box {
+    width: 90%;
+  }
 
-    .social-buttons {
-        flex-direction: column;
-        gap: 10px;
-        /* Space between social buttons */
-    }
+  .social-buttons {
+    flex-direction: column;
+    gap: 10px;
+    /* Space between social buttons */
+  }
 
-    .social-buttons .btn {
-        width: 100%;
-    }
+  .social-buttons .btn {
+    width: 100%;
+  }
 }
 
 /* User Type Selection Page Styles */
 .signup-type-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f9fafc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f9fafc;
 }
 
 .signup-type-box {
-    background-color: #ffffff;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    max-width: 400px;
-    width: 100%;
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
 }
 
 .signup-type-box h2 {
-    margin-bottom: 20px;
-    color: #5d5fef;
-    font-size: 28px;
-    /* Larger font for heading */
-    font-weight: 600;
-    /* Bold text for heading */
+  margin-bottom: 20px;
+  color: #5d5fef;
+  font-size: 28px;
+  /* Larger font for heading */
+  font-weight: 600;
+  /* Bold text for heading */
 }
 
 .signup-type-box p {
-    font-size: 16px;
-    color: #666;
-    margin-bottom: 30px;
-    /* Increased spacing for better layout */
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 30px;
+  /* Increased spacing for better layout */
 }
 
 .btn-group {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    margin-top: 20px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .btn-group .btn {
-    padding: 15px 30px;
-    background-color: #007bff;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    text-transform: uppercase;
-    font-weight: 600;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-    cursor: pointer;
+  padding: 15px 30px;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  text-transform: uppercase;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
 }
 
 .btn-group .btn:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
 /* Contact Form Styles */
 .contact-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /* Center the form elements */
-    gap: 15px;
-    /* Space between form elements */
-    max-width: 600px;
-    /* Limit form width */
-    margin: 30px auto;
-    /* Center form within section */
-    padding: 30px;
-    /* Add padding around the form */
-    background-color: #ffffff;
-    /* White background */
-    border-radius: 12px;
-    /* Rounded corners */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    /* Subtle shadow */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Center the form elements */
+  gap: 15px;
+  /* Space between form elements */
+  max-width: 600px;
+  /* Limit form width */
+  margin: 30px auto;
+  /* Center form within section */
+  padding: 30px;
+  /* Add padding around the form */
+  background-color: #ffffff;
+  /* White background */
+  border-radius: 12px;
+  /* Rounded corners */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  /* Subtle shadow */
 }
 
 .contact-form input,
 .contact-form textarea {
-    width: 100%;
-    padding: 15px;
-    /* Consistent padding for all fields */
-    border: 1px solid #ddd;
-    /* Light border */
-    border-radius: 8px;
-    /* Rounded corners */
-    font-size: 16px;
-    /* Consistent font size */
-    box-sizing: border-box;
-    /* Include padding in width */
-    margin-bottom: 15px;
-    /* Space between fields */
+  width: 100%;
+  padding: 15px;
+  /* Consistent padding for all fields */
+  border: 1px solid #ddd;
+  /* Light border */
+  border-radius: 8px;
+  /* Rounded corners */
+  font-size: 16px;
+  /* Consistent font size */
+  box-sizing: border-box;
+  /* Include padding in width */
+  margin-bottom: 15px;
+  /* Space between fields */
 }
 
 .contact-form textarea {
-    height: 120px;
-    /* Set height for textarea */
-    resize: none;
-    /* Prevent resizing */
+  height: 120px;
+  /* Set height for textarea */
+  resize: none;
+  /* Prevent resizing */
 }
 
 .contact-form .btn {
-    width: 100%;
-    /* Full width button */
-    padding: 15px;
-    /* Padding inside button */
-    background-color: #5d5fef;
-    /* Button color */
-    color: #fff;
-    /* Text color */
-    border: none;
-    /* Remove border */
-    border-radius: 30px;
-    /* Rounded corners */
-    font-weight: 600;
-    /* Bold text */
-    cursor: pointer;
-    /* Pointer cursor */
-    transition: background-color 0.3s ease;
-    /* Smooth transition */
+  width: 100%;
+  /* Full width button */
+  padding: 15px;
+  /* Padding inside button */
+  background-color: #5d5fef;
+  /* Button color */
+  color: #fff;
+  /* Text color */
+  border: none;
+  /* Remove border */
+  border-radius: 30px;
+  /* Rounded corners */
+  font-weight: 600;
+  /* Bold text */
+  cursor: pointer;
+  /* Pointer cursor */
+  transition: background-color 0.3s ease;
+  /* Smooth transition */
 }
 
 .contact-form .btn:hover {
-    background-color: #4a4ad4;
-    /* Darker hover color */
+  background-color: #4a4ad4;
+  /* Darker hover color */
 }
 
 /* About Us Section */
 .about-us {
-    padding: 80px 0;
-    /* Add spacing around the section */
-    background-color: #f9fafc;
-    /* Light background */
-    text-align: center;
-    /* Center-align the text */
+  padding: 80px 0;
+  /* Add spacing around the section */
+  background-color: #f9fafc;
+  /* Light background */
+  text-align: center;
+  /* Center-align the text */
 }
 
 .about-us .container {
-    max-width: 800px;
-    /* Limit the width of the content */
-    margin: 0 auto;
-    /* Center the container */
+  max-width: 800px;
+  /* Limit the width of the content */
+  margin: 0 auto;
+  /* Center the container */
 }
 
 .about-us h1 {
-    font-size: 36px;
-    /* Larger heading size */
-    margin-bottom: 20px;
-    /* Space below heading */
-    color: #333;
-    /* Darker text color */
-    font-weight: 700;
-    /* Bold text */
+  font-size: 36px;
+  /* Larger heading size */
+  margin-bottom: 20px;
+  /* Space below heading */
+  color: #333;
+  /* Darker text color */
+  font-weight: 700;
+  /* Bold text */
 }
 
 .about-us p {
-    font-size: 18px;
-    /* Increase font size */
-    color: #666;
-    /* Lighter text color */
-    line-height: 1.6;
-    /* Increase line spacing */
-    margin-bottom: 30px;
-    /* Space between paragraphs */
+  font-size: 18px;
+  /* Increase font size */
+  color: #666;
+  /* Lighter text color */
+  line-height: 1.6;
+  /* Increase line spacing */
+  margin-bottom: 30px;
+  /* Space between paragraphs */
 }
 
 .about-us h2 {
-    font-size: 28px;
-    /* Subheading size */
-    margin-top: 40px;
-    /* Space above subheading */
-    margin-bottom: 15px;
-    /* Space below subheading */
-    color: #333;
-    /* Darker text color */
-    font-weight: 600;
-    /* Semi-bold text */
+  font-size: 28px;
+  /* Subheading size */
+  margin-top: 40px;
+  /* Space above subheading */
+  margin-bottom: 15px;
+  /* Space below subheading */
+  color: #333;
+  /* Darker text color */
+  font-weight: 600;
+  /* Semi-bold text */
 }
 
 .about-us ul {
-    text-align: left;
-    /* Align list items to the left */
-    list-style-type: disc;
-    /* Use disc list style */
-    padding-left: 40px;
-    /* Indent the list */
-    margin-top: 20px;
-    /* Space above the list */
+  text-align: left;
+  /* Align list items to the left */
+  list-style-type: disc;
+  /* Use disc list style */
+  padding-left: 40px;
+  /* Indent the list */
+  margin-top: 20px;
+  /* Space above the list */
 }
 
 .about-us ul li {
-    font-size: 18px;
-    /* Increase font size */
-    color: #666;
-    /* Lighter text color */
-    line-height: 1.8;
-    /* Increase line height */
-    margin-bottom: 10px;
-    /* Space between list items */
+  font-size: 18px;
+  /* Increase font size */
+  color: #666;
+  /* Lighter text color */
+  line-height: 1.8;
+  /* Increase line height */
+  margin-bottom: 10px;
+  /* Space between list items */
 }
 
 /* Forgot Password Page Styles */
 .forgot-password-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f9fafc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f9fafc;
 }
 
 .forgot-password-box {
-    background-color: #ffffff;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-    width: 400px;
-    text-align: center;
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  text-align: center;
 }
 
 .forgot-password-box h2 {
-    margin-bottom: 20px;
-    color: #5d5fef;
-    font-size: 24px;
-    font-weight: 600;
+  margin-bottom: 20px;
+  color: #5d5fef;
+  font-size: 24px;
+  font-weight: 600;
 }
 
 .forgot-password-box p {
-    font-size: 16px;
-    color: #666;
-    margin-bottom: 20px;
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 20px;
 }
 
 .forgot-password-box input {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-sizing: border-box;
-    font-size: 16px;
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 16px;
 }
 
 .forgot-password-box .btn {
-    width: 100%;
-    padding: 14px;
-    margin-top: 20px;
-    background-color: #5d5fef;
-    color: #fff;
-    border: none;
-    border-radius: 30px;
-    text-transform: uppercase;
-    font-weight: 600;
-    transition: background-color 0.3s ease;
-    cursor: pointer;
+  width: 100%;
+  padding: 14px;
+  margin-top: 20px;
+  background-color: #5d5fef;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
 }
 
 .forgot-password-box .btn:hover {
-    background-color: #4a4ad4;
+  background-color: #4a4ad4;
 }
 
 .forgot-password-box a {
-    color: #5d5fef;
-    text-decoration: none;
+  color: #5d5fef;
+  text-decoration: none;
 }
 
 .forgot-password-box a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .logo {
-    font-size: 24px;
-    font-weight: 700;
-    color: #333;
-    text-decoration: none;
-    /* Remove underline */
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  text-decoration: none;
+  /* Remove underline */
 }
 
 .logo:hover {
-    color: #007bff;
-    /* Optional: Change color on hover */
+  color: #007bff;
+  /* Optional: Change color on hover */
 }
 
 /* Dashboard Layout */
 .dashboard-container {
-    display: flex;
-    height: 100vh;
-    /* Full viewport height */
-    background-color: #f9fafc;
-    /* Consistent background */
+  display: flex;
+  height: 100vh;
+  /* Full viewport height */
+  background-color: #f9fafc;
+  /* Consistent background */
 }
 
 /* Sidebar Navigation */
 .sidebar {
-    width: 250px;
-    background-color: #2d3e50;
-    /* Dark sidebar background */
-    padding: 20px;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    /* Ensure space between nav-links and logout */
+  width: 250px;
+  background-color: #2d3e50;
+  /* Dark sidebar background */
+  padding: 20px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* Ensure space between nav-links and logout */
 }
 
 .nav-links {
-    list-style-type: none;
-    padding: 0;
-    /* Remove flex-grow to prevent stretching */
+  list-style-type: none;
+  padding: 0;
+  /* Remove flex-grow to prevent stretching */
 }
 
 .nav-links li {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 .nav-links a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 16px;
-    padding: 12px 15px;
-    display: block;
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 12px 15px;
+  display: block;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
 }
 
 .nav-links a:hover,
 .nav-links a.active {
-    background-color: #4a6572;
+  background-color: #4a6572;
 }
 
 /* Logout Section */
 .logout-section {
-    margin-top: auto;
-    /* Pushes the logout button to the bottom */
+  margin-top: auto;
+  /* Pushes the logout button to the bottom */
 }
 
 .logout-btn {
-    width: 100%;
-    padding: 12px;
-    background-color: #e74c3c;
-    /* Red color for logout */
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s ease;
+  width: 100%;
+  padding: 12px;
+  background-color: #e74c3c;
+  /* Red color for logout */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
 }
 
 .logout-btn:hover {
-    background-color: #c0392b;
+  background-color: #c0392b;
 }
 
 .logout-icon {
-    margin-right: 8px;
-    font-size: 18px;
+  margin-right: 8px;
+  font-size: 18px;
 }
 
 /* Main Content */
 .main-content {
-    flex: 1;
-    padding: 40px;
-    background-color: #f9fafc;
-    overflow-y: auto;
+  flex: 1;
+  padding: 40px;
+  background-color: #f9fafc;
+  overflow-y: auto;
 }
 
 /* Main Header */
 .main-header {
-    margin-bottom: 40px;
-    text-align: left;
+  margin-bottom: 40px;
+  text-align: left;
 }
 
 .main-header h1 {
-    font-size: 28px;
-    font-weight: 600;
-    color: #333;
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
 }
 
 .main-header p {
-    font-size: 16px;
-    color: #666;
+  font-size: 16px;
+  color: #666;
 }
 
 /* Section Styles */
 section.card {
-    background-color: #ffffff;
-    padding: 30px;
-    border-radius: 10px;
-    /* Smooth, consistent rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    /* Subtle shadow */
-    margin-bottom: 30px;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  /* Smooth, consistent rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  /* Subtle shadow */
+  margin-bottom: 30px;
 }
 
 section.card h2 {
-    font-size: 24px;
-    color: #333;
-    margin-bottom: 10px;
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 10px;
 }
 
 section.card p {
-    font-size: 16px;
-    color: #555;
+  font-size: 16px;
+  color: #555;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .dashboard-container {
-        flex-direction: column;
-    }
+  .dashboard-container {
+    flex-direction: column;
+  }
 
-    .sidebar {
-        width: 100%;
-        padding: 10px;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-    }
+  .sidebar {
+    width: 100%;
+    padding: 10px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-    .nav-links {
-        display: flex;
-        gap: 10px;
-    }
+  .nav-links {
+    display: flex;
+    gap: 10px;
+  }
 
-    .main-content {
-        padding: 20px;
-    }
+  .main-content {
+    padding: 20px;
+  }
 }
 
 /* General card styling for sections (like calendar) */
-/* General card styling for sections (like calendar) */
 .card {
-    padding: 30px;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
-    /* Add some space between cards */
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  /* Add some space between cards */
 }
 
 /* Specific form card styling for centering the service form */
 .form-card {
-    max-width: 600px;
-    margin: 0 auto;
-    /* Center the form card */
-    padding: 30px;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 0 auto;
+  /* Center the form card */
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Form labels and inputs (as you already have) */
 .form-group {
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 label {
-    font-size: 16px;
-    color: #333;
-    margin-bottom: 8px;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 8px;
 }
 
 /* Inputs and Textareas */
 input,
 textarea {
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-    width: 100%;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
 }
 
 input:focus,
 textarea:focus {
-    border-color: #5d5fef;
-    outline: none;
+  border-color: #5d5fef;
+  outline: none;
 }
 
 /* Button styling */
 button.btn {
-    display: block;
-    width: 100%;
-    padding: 15px;
-    background-color: #5d5fef;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  display: block;
+  width: 100%;
+  padding: 15px;
+  background-color: #5d5fef;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 button.btn:hover {
-    background-color: #4a4ad4;
-}
-
-.form-card {
-    max-width: 600px;
-    margin: 0 auto;
-    /* Center the form card */
-    padding: 30px;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Form labels and inputs */
-.form-group {
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-}
-
-label {
-    font-size: 16px;
-    color: #333;
-    margin-bottom: 8px;
-}
-
-/* Input fields and Select fields */
-input,
-select {
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-    width: 100%;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease;
-}
-
-input:focus,
-select:focus {
-    border-color: #5d5fef;
-    outline: none;
-}
-
-/* Button styling */
-button.btn {
-    display: block;
-    width: 100%;
-    padding: 15px;
-    background-color: #5d5fef;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button.btn:hover {
-    background-color: #4a4ad4;
+  background-color: #4a4ad4;
 }
 
 /* General container for the page */
 .container {
-    width: 85%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+  width: 85%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 /* Main Header */
 .main-header {
-    text-align: center;
-    margin-bottom: 40px;
+  text-align: center;
+  margin-bottom: 40px;
 }
 
 .main-header h1 {
-    font-size: 36px;
-    color: #333;
+  font-size: 36px;
+  color: #333;
 }
 
 .main-header p {
-    font-size: 18px;
-    color: #666;
-    margin-top: 10px;
+  font-size: 18px;
+  color: #666;
+  margin-top: 10px;
 }
 
 /* Business Category Sections */
 .business-category {
-    margin-bottom: 40px;
+  margin-bottom: 40px;
 }
 
 .business-category h2 {
-    font-size: 28px;
-    color: #5d5fef;
-    margin-bottom: 20px;
+  font-size: 28px;
+  color: #5d5fef;
+  margin-bottom: 20px;
 }
-
 .business-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+  display: flex;
+  flex-wrap: wrap; /* Allow items to wrap to the next row */
+  gap: 20px; /* Space between cards */
+  justify-content: flex-start; /* Align items to the left */
 }
 
 /* Business Card Styling */
 .business-card {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: calc(33.333% - 20px);
-    /* Makes sure 3 cards fit in a row */
-    box-sizing: border-box;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: calc(33.333% - 20px); /* 3 cards per row on large screens */
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
-.business-card h3 {
-    font-size: 20px;
-    color: #333;
+.business-card-image {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
 }
 
-.business-card p {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 15px;
+.business-card-image img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
 }
 
-/* Button Styling */
-.business-card .btn {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+.business-card-rating {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 4px 8px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  color: #333;
 }
 
-.business-card .btn:hover {
-    background-color: #0056b3;
+.business-card-rating span {
+  margin-right: 4px;
 }
 
-/* Responsive styling */
-@media (max-width: 768px) {
-    .business-card {
-        width: calc(50% - 20px);
-        /* For smaller screens, 2 cards per row */
-    }
+.business-card-content {
+  padding: 16px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-@media (max-width: 480px) {
-    .business-card {
-        width: 100%;
-        /* For mobile, 1 card per row */
-    }
+.business-card-content h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 20px;
+  color: #333;
 }
 
-.business-header {
-    text-align: center;
-    margin-bottom: 40px;
+.business-card-content .business-category-name {
+  color: #888;
+  font-style: italic;
+  margin-bottom: 8px;
 }
 
-.business-header h1 {
-    font-size: 36px;
-    color: #333;
+.business-card-content .business-description {
+  margin-bottom: 8px;
+  color: #555;
+  font-size: 14px;
 }
 
-.business-header p {
-    font-size: 16px;
-    color: #666;
-    margin-top: 10px;
+.business-card-content .business-location,
+.business-card-content .business-operating-hours {
+  display: flex;
+  align-items: center;
+  color: #333;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.business-card-content .business-location svg,
+.business-card-content .business-operating-hours svg {
+  margin-right: 8px;
+}
+
+.business-card-content .btn {
+  margin-top: auto;
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #5d5fef;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.business-card-content .btn:hover {
+  background-color: #4a4ad4;
+}
+
+/* Skeleton Loading Styles */
+.skeleton-card {
+  flex: 1 1 calc(33.333% - 20px); /* Match card width */
+  background-color: #f0f0f0;
+  overflow: hidden;
+}
+
+.skeleton-image {
+  width: 100%;
+  height: 200px;
+  background-color: #e0e0e0;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+.skeleton-text {
+  height: 20px;
+  background-color: #e0e0e0;
+  margin-bottom: 12px;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+.skeleton-title {
+  width: 60%;
+  margin-top: 16px;
+}
+
+.skeleton-category {
+  width: 40%;
+}
+
+.skeleton-description {
+  width: 80%;
+  height: 60px;
+}
+
+.skeleton-location,
+.skeleton-hours {
+  width: 50%;
+}
+
+.skeleton-button {
+  width: 100%;
+  height: 40px;
+  margin-top: auto;
+  background-color: #e0e0e0;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 5px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-color: #e0e0e0;
+  }
+  50% {
+    background-color: #cfcfcf;
+  }
+  100% {
+    background-color: #e0e0e0;
+  }
+}
+
+/* Responsive Styling */
+@media (max-width: 992px) {
+  .business-card {
+    flex: 1 1 calc(50% - 20px); /* 2 cards per row */
+  }
+
+  .skeleton-card {
+    flex: 1 1 calc(50% - 20px); /* Match card width for skeletons */
+  }
+}
+
+@media (max-width: 600px) {
+  .business-card {
+    flex: 1 1 100%; /* 1 card per row */
+  }
+
+  .skeleton-card {
+    flex: 1 1 100%; /* Match card width for skeletons */
+  }
 }
 
 /* Services List Section */
 .service-category {
-    margin-bottom: 40px;
+  margin-bottom: 40px;
 }
 
 .service-category h2 {
-    font-size: 28px;
-    color: #5d5fef;
-    margin-bottom: 20px;
+  font-size: 28px;
+  color: #5d5fef;
+  margin-bottom: 20px;
 }
 
 .service-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 /* Service Card Styling */
 .service-card {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: calc(33.333% - 20px);
-    /* Makes sure 3 service cards fit in a row */
-    box-sizing: border-box;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: calc(33.333% - 20px);
+  /* Makes sure 3 service cards fit in a row */
+  box-sizing: border-box;
 }
 
 .service-card h3 {
-    font-size: 20px;
-    color: #333;
+  font-size: 20px;
+  color: #333;
 }
 
 .service-card p {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 15px;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 15px;
 }
 
 /* Button Styling */
 .service-card .btn {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
 }
 
 .service-card .btn:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
 /* Responsive styling */
 @media (max-width: 768px) {
-    .service-card {
-        width: calc(50% - 20px);
-        /* For smaller screens, 2 service cards per row */
-    }
+  .service-card {
+    width: calc(50% - 20px);
+    /* For smaller screens, 2 service cards per row */
+  }
 }
 
 @media (max-width: 480px) {
-    .service-card {
-        width: 100%;
-        /* For mobile, 1 service card per row */
-    }
+  .service-card {
+    width: 100%;
+    /* For mobile, 1 service card per row */
+  }
 }
 
 /* Provider Header */
 .provider-header {
-    text-align: center;
-    margin-bottom: 40px;
+  text-align: center;
+  margin-bottom: 40px;
 }
 
 .provider-header h1 {
-    font-size: 36px;
-    color: #333;
+  font-size: 36px;
+  color: #333;
 }
 
 .provider-header p {
-    font-size: 16px;
-    color: #666;
-    margin-top: 10px;
+  font-size: 16px;
+  color: #666;
+  margin-top: 10px;
 }
 
 /* Providers List Section */
 .provider-category {
-    margin-bottom: 40px;
+  margin-bottom: 40px;
 }
 
 .provider-category h2 {
-    font-size: 28px;
-    color: #5d5fef;
-    margin-bottom: 20px;
+  font-size: 28px;
+  color: #5d5fef;
+  margin-bottom: 20px;
 }
 
 .provider-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 /* Provider Card Styling */
 .provider-card {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: calc(33.333% - 20px);
-    /* Makes sure 3 provider cards fit in a row */
-    box-sizing: border-box;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: calc(33.333% - 20px);
+  /* Makes sure 3 provider cards fit in a row */
+  box-sizing: border-box;
 }
 
 .provider-card h3 {
-    font-size: 20px;
-    color: #333;
+  font-size: 20px;
+  color: #333;
 }
 
 .provider-card p {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 15px;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 15px;
 }
 
 /* Button Styling */
 .provider-card .btn {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
 }
 
 .provider-card .btn:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
 /* Checkbox Group Styles */
 .checkbox-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .checkbox-label {
-    display: flex;
-    align-items: center;
-    background-color: #f9fafc;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  background-color: #f9fafc;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .checkbox-label:hover {
-    background-color: #e0e0e0;
+  background-color: #e0e0e0;
 }
 
 .checkbox-label input[type="checkbox"] {
-    margin-right: 8px;
+  margin-right: 8px;
 }
 
 /* Responsive styling */
 @media (max-width: 768px) {
-    .provider-card {
-        width: calc(50% - 20px);
-        /* For smaller screens, 2 provider cards per row */
-    }
+  .provider-card {
+    width: calc(50% - 20px);
+    /* For smaller screens, 2 provider cards per row */
+  }
 }
 
 @media (max-width: 480px) {
-    .provider-card {
-        width: 100%;
-        /* For mobile, 1 provider card per row */
-    }
-}
-
-/* General container styles */
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-/* Header styles */
-.main-header {
-    text-align: center;
-    margin-bottom: 40px;
+  .provider-card {
+    width: 100%;
+    /* For mobile, 1 provider card per row */
+  }
 }
 
 /* Time Slot Section */
 .time-slots-list {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
 }
 
 .time-slot {
-    padding: 15px;
-    background-color: #f5f5f5;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 16px;
-    min-width: 180px;
-    text-align: center;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 16px;
+  min-width: 180px;
+  text-align: center;
 }
 
 .time-slot:hover {
-    background-color: #5d5fef;
-    color: #fff;
-    border: 2px solid #5d5fef;
+  background-color: #5d5fef;
+  color: #fff;
+  border: 2px solid #5d5fef;
 }
 
 .time-slot:focus {
-    background-color: #5d5fef;
-    color: #fff;
-    outline: none;
+  background-color: #5d5fef;
+  color: #fff;
+  outline: none;
 }
 
 /* Style for selected time slot */
 .time-slot.selected {
-    background-color: #5d5fef;
-    color: #fff;
-    border: 2px solid #5d5fef;
+  background-color: #5d5fef;
+  color: #fff;
+  border: 2px solid #5d5fef;
 }
 
 /* Continue Booking Button */
 .continue-booking {
-    display: flex;
-    justify-content: center;
-    margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
 }
 
 .continue-booking .btn {
-    width: 100%;
-    max-width: 400px;
-    padding: 15px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 18px;
-    text-align: center;
+  width: 100%;
+  max-width: 400px;
+  padding: 15px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 18px;
+  text-align: center;
 }
 
 .continue-booking .btn:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
 .date-list {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
 }
 
 .date-item {
-    padding: 15px;
-    background-color: #f5f5f5;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    font-size: 16px;
-    min-width: 120px;
-    text-align: center;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-size: 16px;
+  min-width: 120px;
+  text-align: center;
 }
 
 .date-item:hover {
-    background-color: #5d5fef;
-    color: #fff;
-    border-color: #5d5fef;
+  background-color: #5d5fef;
+  color: #fff;
+  border-color: #5d5fef;
 }
 
 .date-item:focus {
-    background-color: #5d5fef;
-    color: #fff;
-    outline: none;
+  background-color: #5d5fef;
+  color: #fff;
+  outline: none;
 }
 
 .date-item.selected {
-    background-color: #5d5fef;
-    color: #fff;
-    border-color: #5d5fef;
+  background-color: #5d5fef;
+  color: #fff;
+  border-color: #5d5fef;
 }
 
 /* Styles for Table */
 table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 30px;
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
 }
 
 table thead {
-    background-color: #5d5fef;
-    /* Primary color for the header */
-    color: #fff;
+  background-color: #5d5fef;
+  /* Primary color for the header */
+  color: #fff;
 }
 
 table th,
 table td {
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    text-align: left;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  text-align: left;
 }
 
 table th {
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 14px;
 }
 
 table tbody tr:nth-child(even) {
-    background-color: #f9fafc;
-    /* Light background for even rows */
+  background-color: #f9fafc;
+  /* Light background for even rows */
 }
 
 table tbody tr:hover {
-    background-color: #e0e0e0;
-    /* Row highlight on hover */
+  background-color: #e0e0e0;
+  /* Row highlight on hover */
 }
 
 tfoot td {
-    font-weight: 600;
-    text-align: center;
-    background-color: #f5f5f5;
-    padding: 15px;
+  font-weight: 600;
+  text-align: center;
+  background-color: #f5f5f5;
+  padding: 15px;
 }
 
 .business_logo {
-    text-align: center;
-    margin-bottom: 20px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .business_logo .logo-image {
-    width: 200px;
-    /* Adjust size as needed */
-    height: auto;
-    cursor: pointer;
-    /* Cursor indicates clickable */
+  width: 200px;
+  /* Adjust size as needed */
+  height: auto;
+  cursor: pointer;
+  /* Cursor indicates clickable */
 }
 
 .header-business-logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 5px 0;
-    height: 60px;
-    background-color: #ffffff;
-    border-bottom: none;
-    /* Remove any bottom border */
-    box-shadow: none;
-    /* Ensure no shadow */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 0;
+  height: 60px;
+  background-color: #ffffff;
+  border-bottom: none;
+  /* Remove any bottom border */
+  box-shadow: none;
+  /* Ensure no shadow */
 }
 
 /* Logo Styling */
 .header-business-logo .logo-image {
-    width: 200px;
-    /* Adjust size as needed */
-    height: 150px;
-    cursor: pointer;
-    border: none;
-    /* Remove borders */
-    background: none;
-    /* Ensure no background */
-    box-shadow: none;
-    /* Ensure no shadow */
+  width: 200px;
+  /* Adjust size as needed */
+  height: 150px;
+  cursor: pointer;
+  border: none;
+  /* Remove borders */
+  background: none;
+  /* Ensure no background */
+  box-shadow: none;
+  /* Ensure no shadow */
 }
 
 .payment-toggle {
-    text-align: center;
-    margin-top: 20px;
+  text-align: center;
+  margin-top: 20px;
 }
 
 .toggle-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
 .toggle-card {
-    flex: 1;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    font-weight: 500;
-    font-size: 0.9em;
-    color: #4a4ad4;
-    text-align: center;
-    background-color: #f0f4ff;
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-weight: 500;
+  font-size: 0.9em;
+  color: #4a4ad4;
+  text-align: center;
+  background-color: #f0f4ff;
 }
 
 .toggle-card.selected {
-    background-color: #5d5fef;
-    color: white;
+  background-color: #5d5fef;
+  color: white;
 }
 
 .toggle-card:hover:not(.selected) {
-    background-color: #dfe5ff;
-    color: #4a4ad4;
+  background-color: #dfe5ff;
+  color: #4a4ad4;
 }
 
 /* New Confirm Booking button class */
 button.confirm-booking-btn {
-    display: block;
-    width: 100%;
-    padding: 12px;
-    background-color: #4a4ad4;
-    /* Darker shade aligns well with toggle-card */
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 0.9em;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: #4a4ad4;
+  /* Darker shade aligns well with toggle-card */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 button.confirm-booking-btn:hover {
-    background-color: #3c3fb5;
+  background-color: #3c3fb5;
 }
 
 /* Styling for the Appointments Table */
 .appointments-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
 }
 
 .appointments-table th,
 .appointments-table td {
-    padding: 12px;
-    border: 1px solid #ddd;
-    text-align: left;
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
 }
 
 .appointments-table th {
-    background-color: #5d5fef;
-    /* Using primary color for header */
-    color: white;
-    font-weight: 600;
+  background-color: #5d5fef;
+  /* Using primary color for header */
+  color: white;
+  font-weight: 600;
 }
 
 .appointments-table tbody tr:nth-child(even) {
-    background-color: #f9fafc;
-    /* Light background for even rows */
+  background-color: #f9fafc;
+  /* Light background for even rows */
 }
 
 .appointments-table tbody tr:hover {
-    background-color: #e0e0e0;
-    /* Row highlight on hover */
+  background-color: #e0e0e0;
+  /* Row highlight on hover */
 }
 
 /* Review Form Styles */
 .review-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
 }
 
 .rating-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
 .rating-container label {
-    margin-right: 10px;
-    font-weight: bold;
+  margin-right: 10px;
+  font-weight: bold;
 }
 
 .review-form label {
-    width: 100%;
-    margin-bottom: 10px;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 .review-form textarea {
-    width: 100%;
-    height: 80px;
-    resize: vertical;
+  width: 100%;
+  height: 80px;
+  resize: vertical;
 }
 
 .submit-btn {
-    background-color: #28a745;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-}
-
-.business-card {
-    position: relative;
-    padding: 20px;
-    background: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-.business-card h3 {
-    margin: 0 0 10px;
-    font-size: 18px;
-}
-
-.business-card .btn {
-    padding: 10px 20px;
-    background: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    text-transform: uppercase;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.business-card .btn:hover {
-    background: #0056b3;
-}
-
-.business-card .rating {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: #fff;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    font-weight: bold;
-    color: #333;
+  background-color: #28a745;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
 }
 
 .stats-bar {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 .stat-card {
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    text-align: center;
-    width: 30%;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  width: 30%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .stat-title {
-    font-size: 16px;
-    color: #333;
-    margin-bottom: 8px;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 8px;
 }
 
 .stat-value {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
 }
 
 .stat-value.positive {
-    color: #4caf50;
-    /* Green for positive improvement */
+  color: #4caf50;
+  /* Green for positive improvement */
 }
 
 .stat-value.negative {
-    color: #f44336;
-    /* Red for negative improvement */
+  color: #f44336;
+  /* Red for negative improvement */
 }
 
 .review-feedback-table {
-    font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
-.review-feedback-table textarea{
-    width: 100%;
-    height: 80px;
-    resize: vertical;
+.review-feedback-table textarea {
+  width: 100%;
+  height: 80px;
+  resize: vertical;
 }
 
 /* Button Styling for ReviewFeedback */
 .review-feedback-table button {
-    background: linear-gradient(145deg, #5d5fef, #4a4ae6); /* Gradient background */
-    color: white;
-    padding: 12px 24px; /* Increase the size of the button */
-    border: none;
-    border-radius: 30px; /* Round the corners more */
-    cursor: pointer;
-    font-size: 16px; /* Set the font size */
-    box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1), -4px -4px 6px rgba(255, 255, 255, 0.3); /* Subtle shadow effect */
-    transition: all 0.3s ease; /* Smooth transition on hover */
-  }
-  
-  .review-feedback-table button:hover {
-    background: linear-gradient(145deg, #4a4ae6, #5d5fef); /* Reverse the gradient on hover */
-    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.4); /* Darker shadow on hover */
-  }
-  
-  .review-feedback-table button:active {
-    transform: scale(0.98); /* Slightly shrink the button when clicked */
-  }
+  background: linear-gradient(145deg, #5d5fef, #4a4ae6);
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 16px;
+  box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1),
+    -4px -4px 6px rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
 
-  /* Stats container to align Total Appointments, Total Revenue, and Pie Chart side by side */
+.review-feedback-table button:hover {
+  background: linear-gradient(145deg, #4a4ae6, #5d5fef);
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2),
+    -4px -4px 8px rgba(255, 255, 255, 0.4);
+}
+
+.review-feedback-table button:active {
+  transform: scale(0.98);
+}
+
+/* Stats container */
 #weekly-stats {
-    display: flex;
-    justify-content: space-between; /* Space out the items */
-    align-items: flex-start; /* Vertically align items at the top */
-    gap: 20px; /* Add space between the items */
-    flex-wrap: wrap; /* Allow wrapping on small screens */
-  }
-  
-  /* Styling for individual stat cards */
-  .stat-card {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    min-width: 250px; /* Ensure they don't get too small */
-    flex-grow: 1; /* Allow stat cards to grow and take up available space */
-  }
-  
-  /* Specific styling for Total Appointments stat card */
-  .stat-card-appointments {
-    flex-basis: 45%; /* Take up 45% of the available space */
-  }
-  
-  /* Specific styling for Total Revenue stat card */
-  .stat-card-revenue {
-    flex-basis: 45%; /* Take up 45% of the available space */
-  }
-  
-  /* Scoped styles for the Pie chart container */
-  #reserved-services-pie-chart {
-    width: 80%;
-    max-width: 5000px; /* Set max-width to make the pie chart smaller */
-    height: 200px; /* Set height for the pie chart */
-    margin:10px  auto; /* Center the pie chart */
-    
-    padding: 0px 120px 120px 120px;
-    flex-basis: 45%; /* Ensure the pie chart takes up the correct amount of space */
-  }
-  
-  /* Ensure the canvas inside the pie chart takes up the full space */
-  #reserved-services-pie-chart canvas {
-    width: 100% !important;
-    height: 100% !important;
-  }
-  
-  
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Pie Chart Container */
+#reserved-services-pie-chart {
+  width: 80%;
+  max-width: 500px;
+  height: 200px;
+  margin: 10px auto;
+  padding: 0px 120px 120px 120px;
+  flex-basis: 45%;
+}
+
+/* Canvas Styling */
+#reserved-services-pie-chart canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Business Logo Container */
+.business-logo-container {
+  position: relative;
+  width: 100px; /* Adjust size */
+  height: 100px; /* Adjust size */
+  margin-left: auto; /* Pushes it to the far right */
+  cursor: pointer;
+  display: block; /* Ensures it's on a new line */
+}
+
+.business-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%; /* Make it circular */
+}
+
+.business-logo-placeholder {
+  width: 100%;
+  height: 100%;
+  background-color: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.edit-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  border-radius: 50%;
+  transition: opacity 0.3s ease;
+}
+
+.business-logo-container:hover .edit-overlay {
+  opacity: 1;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Dark overlay */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  position: relative;
+  width: 500px; /* Adjust as needed */
+  max-width: 90%;
+}
+
+.modal-close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+}

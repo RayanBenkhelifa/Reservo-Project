@@ -161,10 +161,12 @@ const getWeeklyStats = async (req, res) => {
     }, {});
 
     // Return the data for pie chart (only data, not the JSX)
-    const pieChartData = Object.entries(serviceReservations).map(([serviceName, count]) => ({
-      label: serviceName,
-      value: count,
-    }));
+    const pieChartData = Object.entries(serviceReservations).map(
+      ([serviceName, count]) => ({
+        label: serviceName,
+        value: count,
+      })
+    );
 
     res.status(200).json({
       totalAppointments: totalAppointmentsCurrentWeek,
@@ -176,7 +178,6 @@ const getWeeklyStats = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch weekly stats" });
   }
 };
-
 
 // Get Upcoming Appointments
 const getUpNextAppointments = async (req, res) => {
@@ -444,6 +445,33 @@ const getBusinessOwnerDetails = async (req, res) => {
   }
 };
 
+// ... existing code ...
+
+// Get Business Image URL
+const getBusinessImageUrl = async (req, res) => {
+  try {
+    const businessOwnerId = req.userId; // Get the logged-in business owner's ID
+
+    const businessOwner = await BusinessOwner.findById(businessOwnerId);
+
+    if (
+      !businessOwner ||
+      !businessOwner.imageData ||
+      !businessOwner.imageMimeType
+    ) {
+      return res.status(404).json({ message: "Image not found" });
+    }
+
+    // Construct the Data URL
+    const dataUrl = `data:${businessOwner.imageMimeType};base64,${businessOwner.imageData}`;
+
+    res.status(200).json({ imageUrl: dataUrl });
+  } catch (error) {
+    console.error("Error fetching image URL:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   addService,
   addProvider,
@@ -456,4 +484,5 @@ module.exports = {
   uploadBusinessImage,
   getBusinessImage,
   getBusinessOwnerDetails,
+  getBusinessImageUrl,
 };

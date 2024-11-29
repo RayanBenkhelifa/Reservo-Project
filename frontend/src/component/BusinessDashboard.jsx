@@ -6,6 +6,7 @@ import "../styles.css";
 import { AuthContext } from "./AuthContext";
 import Navbar from "./BusinessNavBar";
 import UploadBusinessImage from "./UploadBusinessImage";
+import Modal from "./Modal"; // We'll create a simple Modal component
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -21,6 +22,7 @@ function BusinessDashboard() {
   const [businessImageUrl, setBusinessImageUrl] = useState(""); // Business image URL
   const navigate = useNavigate();
   const { authState } = useContext(AuthContext); // Auth context
+  const [showUploadModal, setShowUploadModal] = useState(false); // New state variable
 
   useEffect(() => {
     // Redirect if not authenticated or wrong user type
@@ -104,36 +106,39 @@ function BusinessDashboard() {
       fetchWeeklyStats();
     }
   }, [authState.isAuthenticated, authState.userType, navigate]);
-
+  // Function to handle image upload success
+  const handleImageUploadSuccess = (newImageUrl) => {
+    setBusinessImageUrl(newImageUrl);
+    setShowUploadModal(false); // Close the modal after upload
+  };
   // Pie chart configuration
-// Pie chart configuration
-const pieChartConfig = {
-  labels: pieChartData.map((data) => data.label), // Service names as labels
-  datasets: [
-    {
-      label: "Reserved Services",
-      data: pieChartData.map((data) => data.value), // Number of reservations for each service
-      backgroundColor: pieChartData.map((_, index) => {
-        // Assign a color based on the index (first service in blue, second in red, etc.)
-        const colors = [
-          "#5d5fef", // Blue
-          "#e3342f", // Red
-          "#38c172", // Green
-          "#ffed4a", // Yellow
-          "#6cb2eb", // Light Blue
-          "#f39c12", // Orange
-          "#8e44ad", // Purple
-          "#2ecc71", // Lime Green
-        ];
-        // Cycle through colors or use the same set for multiple services
-        return colors[index % colors.length];
-      }),
-      borderColor: "#fff", // White border for each slice
-      borderWidth: 1,
-    },
-  ],
-};
-
+  // Pie chart configuration
+  const pieChartConfig = {
+    labels: pieChartData.map((data) => data.label), // Service names as labels
+    datasets: [
+      {
+        label: "Reserved Services",
+        data: pieChartData.map((data) => data.value), // Number of reservations for each service
+        backgroundColor: pieChartData.map((_, index) => {
+          // Assign a color based on the index (first service in blue, second in red, etc.)
+          const colors = [
+            "#5d5fef", // Blue
+            "#e3342f", // Red
+            "#38c172", // Green
+            "#ffed4a", // Yellow
+            "#6cb2eb", // Light Blue
+            "#f39c12", // Orange
+            "#8e44ad", // Purple
+            "#2ecc71", // Lime Green
+          ];
+          // Cycle through colors or use the same set for multiple services
+          return colors[index % colors.length];
+        }),
+        borderColor: "#fff", // White border for each slice
+        borderWidth: 1,
+      },
+    ],
+  };
 
   // Component to render upcoming appointments
   function UpNext() {
@@ -198,21 +203,35 @@ const pieChartConfig = {
           <h1>Welcome Back, {businessOwner?.name || "Business Owner"}!</h1>
           <p>Manage your services, appointments, and providers from here.</p>
 
-          {/* Display Business Logo */}
-          {businessImageUrl && (
-            <img
-              src={businessImageUrl}
-              alt={`${businessOwner?.name} Logo`}
-              className="business-logo"
-            />
-          )}
+          {/* Display Business Logo with Edit Overlay */}
+          <div
+            className="business-logo-container"
+            onClick={() => setShowUploadModal(true)}
+          >
+            {businessImageUrl ? (
+              <img
+                src={businessImageUrl}
+                alt={`${businessOwner?.name} Logo`}
+                className="business-logo"
+              />
+            ) : (
+              <div className="business-logo-placeholder">
+                {/* Placeholder if no logo */}
+                <span>No Logo</span>
+              </div>
+            )}
+            <div className="edit-overlay">
+              <span>Edit Picture</span>
+            </div>
+          </div>
         </header>
 
-        {/* Include the UploadBusinessImage component */}
-        <section className="upload-section">
-          <h2>Update Your Business Logo</h2>
-          <UploadBusinessImage />
-        </section>
+        {/* Modal for Uploading Business Image */}
+        {showUploadModal && (
+          <Modal onClose={() => setShowUploadModal(false)}>
+            <UploadBusinessImage onUploadSuccess={handleImageUploadSuccess} />
+          </Modal>
+        )}
 
         {/* Weekly stats */}
         <section id="weekly-stats" className="stats-bar">
@@ -231,7 +250,10 @@ const pieChartConfig = {
           {/* Pie Chart for Reserved Services */}
           <div id="reserved-services-pie-chart" className="card">
             <h2>Reserved Services</h2>
-            <p>Visualize how many reservations each service has received this week.</p>
+            <p>
+              Visualize how many reservations each service has received this
+              week.
+            </p>
             {pieChartData.length > 0 ? (
               <Pie
                 data={pieChartConfig}

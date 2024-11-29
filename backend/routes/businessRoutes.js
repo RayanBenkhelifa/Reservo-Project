@@ -74,6 +74,11 @@ router.post(
   upload.single("image"),
   businessController.uploadBusinessImage
 );
+router.get(
+  "/get-image-url",
+  verifyBusinessOwner,
+  businessController.getBusinessImageUrl
+);
 
 router.get("/image/:id", businessController.getBusinessImage);
 

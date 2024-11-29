@@ -2,28 +2,29 @@
 
 import React, { useEffect, useState } from "react";
 import CustomerNavBar from "./CustomerNavBar";
-import "../styles.css";
+import "../styles.css"; // Ensure your CSS reflects the new class names
+// Import FontAwesome icons (if not already included)
+import { FaMapMarkerAlt, FaClock, FaStar } from "react-icons/fa";
+// Import the default image
+import defaultImage from "../img/default.jpg";
 
 function BrowseBusinesses() {
-  const [businesses, setBusinesses] = useState([]); // State to hold businesses
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null); // Error state
-  const [ratings, setRatings] = useState({}); // State to hold average ratings
+  const [businesses, setBusinesses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [ratings, setRatings] = useState({});
 
   useEffect(() => {
     const fetchBusinessesAndRatings = async () => {
       try {
-        // Fetch businesses from the backend
         const response = await fetch("/customer/businesses");
         if (!response.ok) {
           throw new Error("Failed to fetch businesses");
         }
         const data = await response.json();
 
-        // Fetch images for all businesses
         const businessDataWithImages = await Promise.all(
           data.map(async (business) => {
-            // Fetch the image data
             const imageResponse = await fetch(
               `/business/image/${business._id}`
             );
@@ -38,7 +39,6 @@ function BrowseBusinesses() {
 
         setBusinesses(businessDataWithImages);
 
-        // Fetch average ratings for all businesses in parallel
         const ratingsData = {};
         const ratingPromises = businessDataWithImages.map(async (business) => {
           try {
@@ -60,7 +60,6 @@ function BrowseBusinesses() {
           }
         });
 
-        // Wait for all promises to resolve before updating the state
         await Promise.all(ratingPromises);
         setRatings(ratingsData);
         setLoading(false);
@@ -73,14 +72,6 @@ function BrowseBusinesses() {
 
     fetchBusinessesAndRatings();
   }, []);
-
-  if (loading) {
-    return <div>Loading...</div>; // Show loading spinner or text
-  }
-
-  if (error) {
-    return <div>{error}</div>; // Display error message
-  }
 
   // Group businesses by category
   const categorizedBusinesses = businesses.reduce((acc, business) => {
@@ -101,76 +92,95 @@ function BrowseBusinesses() {
           <p>Select a category to explore businesses near you.</p>
         </header>
 
-        {/* Render categories dynamically */}
-        {Object.keys(categorizedBusinesses).map((category) => (
-          <section
-            key={category}
-            id={category.toLowerCase()}
-            className="business-category"
-          >
-            <h2>{category}</h2>
-            <div className="business-list">
-              {categorizedBusinesses[category].map((business) => (
-                <div
-                  className="business-card"
-                  key={business._id}
-                  style={{ position: "relative" }}
-                >
-                  {/* Display Business Image */}
-                  {business.imageUrl ? (
-                    <img
-                      src={business.imageUrl}
-                      alt={`${business.name} Image`}
-                      className="business-image"
-                    />
-                  ) : (
-                    <img
-                      src="/default-business-image.jpg"
-                      alt="Default Business"
-                      className="business-image"
-                    />
-                  )}
-                  <h3>{business.name}</h3>
-                  <p>Location: {business.location}</p>
-                  <a href={`/business-details/${business._id}`} className="btn">
-                    View Details
-                  </a>
-                  {/* Display Average Rating */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "10px",
-                      right: "10px",
-                      backgroundColor: "#fff",
-                      borderRadius: "50%",
-                      width: "60px",
-                      height: "40px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                      fontWeight: "bold",
-                      color: "#333",
-                    }}
-                  >
-                    {ratings[business._id] !== undefined ? (
-                      <>
-                        {ratings[business._id].toFixed(1)}{" "}
-                        <span style={{ color: "#FFD700", marginLeft: "2px" }}>
-                          ⭐
-                        </span>
-                      </>
-                    ) : (
-                      "..."
-                    )}
+        {loading ? (
+          // Render skeletons when loading
+          <div className="business-list">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <SkeletonCard key={index} />
+            ))}
+          </div>
+        ) : error ? (
+          <div>{error}</div>
+        ) : (
+          // Render categories and businesses when data is loaded
+          Object.keys(categorizedBusinesses).map((category) => (
+            <section
+              key={category}
+              id={category.toLowerCase()}
+              className="business-category"
+            >
+              <h2>{category}</h2>
+              <div className="business-list">
+                {categorizedBusinesses[category].map((business) => (
+                  <div className="business-card" key={business._id}>
+                    {/* Business Image and Rating */}
+                    <div className="business-card-image">
+                      <img
+                        src={business.imageUrl || defaultImage}
+                        alt={`${business.businessName}`}
+                      />
+                      <div className="business-card-rating">
+                        {ratings[business._id] !== undefined ? (
+                          <>
+                            <span>{ratings[business._id].toFixed(1)}</span>
+                            <FaStar color="#FFD700" />
+                          </>
+                        ) : (
+                          "..."
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Business Details */}
+                    <div className="business-card-content">
+                      <h3>{business.businessName}</h3>
+                      <p className="business-category-name">
+                        {business.category}
+                      </p>
+                      <p className="business-description">
+                        {business.description.length > 100
+                          ? business.description.substring(0, 100) + "..."
+                          : business.description}
+                      </p>
+                      <p className="business-location">
+                        <FaMapMarkerAlt /> {business.location}
+                      </p>
+                      <p className="business-operating-hours">
+                        <FaClock /> {business.operatingHours.start} -{" "}
+                        {business.operatingHours.end}
+                      </p>
+                      <a
+                        href={`/business-details/${business._id}`}
+                        className="btn"
+                      >
+                        View Details
+                      </a>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        ))}
+                ))}
+              </div>
+            </section>
+          ))
+        )}
       </div>
     </>
+  );
+}
+
+// SkeletonCard Component
+function SkeletonCard() {
+  return (
+    <div className="business-card skeleton-card">
+      <div className="business-card-image skeleton-image"></div>
+      <div className="business-card-content">
+        <div className="skeleton-text skeleton-title"></div>
+        <div className="skeleton-text skeleton-category"></div>
+        <div className="skeleton-text skeleton-description"></div>
+        <div className="skeleton-text skeleton-location"></div>
+        <div className="skeleton-text skeleton-hours"></div>
+        <div className="skeleton-button"></div>
+      </div>
+    </div>
   );
 }
 

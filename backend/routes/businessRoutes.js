@@ -27,12 +27,42 @@ router.post(
   verifyBusinessOwner,
   businessController.addProvider
 );
+router.get(
+  "/providers",
+  verifyBusinessOwner,
+  businessController.getBusinessProviders
+);
 
 // Route to get business services
 router.get(
   "/services",
   verifyBusinessOwner,
   businessController.getBusinessServices
+);
+router.put(
+  "/edit-service",
+  verifyBusinessOwner,
+  businessController.editService
+);
+
+// Route to delete a service
+router.delete(
+  "/delete-service/:serviceId",
+  verifyBusinessOwner,
+  businessController.deleteService
+);
+
+router.put(
+  "/edit-provider",
+  verifyBusinessOwner,
+  businessController.editProvider
+);
+
+// Route to delete a provider
+router.delete(
+  "/delete-provider/:providerId",
+  verifyBusinessOwner,
+  businessController.deleteProvider
 );
 
 // Route to get business dashboard

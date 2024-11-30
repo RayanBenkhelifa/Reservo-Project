@@ -471,6 +471,244 @@ const getBusinessImageUrl = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+const getBusinessProviders = async (req, res) => {
+  try {
+    const businessOwnerId = req.userId;
+
+    console.log("Fetching providers for businessOwnerId:", businessOwnerId);
+
+    // Fetch the business owner and populate the providers
+    const businessOwner = await BusinessOwner.findById(
+      businessOwnerId
+    ).populate({
+      path: "providers",
+      populate: { path: "services" }, // Populate services within providers
+    });
+
+    if (!businessOwner) {
+      console.error("Business owner not found.");
+      return res.status(404).json({ message: "Business owner not found." });
+    }
+
+    const providers = businessOwner.providers;
+
+    console.log("Providers fetched:", providers);
+
+    res.status(200).json({ providers });
+  } catch (error) {
+    console.error("Error fetching providers:", error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+};
+
+// Edit Provider
+const editProvider = async (req, res) => {
+  try {
+    const businessOwnerId = req.userId;
+    const { providerId, providerName, serviceIds } = req.body;
+
+    console.log("Editing provider:", { providerId, providerName, serviceIds });
+
+    if (!providerId || !providerName || !serviceIds) {
+      console.error("Validation Error: Missing required fields.");
+      return res.status(400).json({ message: "All fields are required." });
+    }
+
+    // Ensure the provider belongs to the business owner
+    const businessOwner = await BusinessOwner.findOne({
+      _id: businessOwnerId,
+      providers: providerId,
+    });
+
+    if (!businessOwner) {
+      console.error(
+        "Provider not found or does not belong to the business owner."
+      );
+      return res.status(404).json({ message: "Provider not found." });
+    }
+
+    // Update the provider
+    const provider = await Provider.findByIdAndUpdate(
+      providerId,
+      {
+        name: providerName,
+        services: serviceIds,
+      },
+      { new: true }
+    ).populate("services");
+
+    if (!provider) {
+      console.error("Provider not found.");
+      return res.status(404).json({ message: "Provider not found." });
+    }
+
+    console.log("Provider updated successfully:", provider);
+
+    res.status(200).json({
+      message: "Provider updated successfully.",
+      provider,
+    });
+  } catch (error) {
+    console.error("Error updating provider:", error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+};
+
+// Delete Provider
+const deleteProvider = async (req, res) => {
+  try {
+    const businessOwnerId = req.userId;
+    const { providerId } = req.params;
+
+    console.log("Deleting provider:", providerId);
+
+    // Ensure the provider belongs to the business owner
+    const businessOwner = await BusinessOwner.findOne({
+      _id: businessOwnerId,
+      providers: providerId,
+    });
+
+    if (!businessOwner) {
+      console.error(
+        "Provider not found or does not belong to the business owner."
+      );
+      return res.status(404).json({ message: "Provider not found." });
+    }
+
+    // Remove the provider from the business owner's providers array
+    await BusinessOwner.findByIdAndUpdate(businessOwnerId, {
+      $pull: { providers: providerId },
+    });
+
+    // Delete the provider
+    const provider = await Provider.findByIdAndDelete(providerId);
+
+    if (!provider) {
+      console.error("Provider not found.");
+      return res.status(404).json({ message: "Provider not found." });
+    }
+
+    console.log("Provider deleted successfully:", provider);
+
+    res.status(200).json({ message: "Provider deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting provider:", error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+};
+
+const editService = async (req, res) => {
+  try {
+    const businessOwnerId = req.userId;
+    const { serviceId, serviceName, description, duration, price } = req.body;
+
+    console.log("Editing service:", {
+      serviceId,
+      serviceName,
+      description,
+      duration,
+      price,
+    });
+
+    if (!serviceId || !serviceName || !duration || !price) {
+      console.error("Validation Error: Missing required fields.");
+      return res.status(400).json({ message: "All fields are required." });
+    }
+
+    // Ensure the service belongs to the business owner
+    const businessOwner = await BusinessOwner.findOne({
+      _id: businessOwnerId,
+      services: serviceId,
+    });
+
+    if (!businessOwner) {
+      console.error(
+        "Service not found or does not belong to the business owner."
+      );
+      return res.status(404).json({ message: "Service not found." });
+    }
+
+    // Update the service
+    const service = await Service.findByIdAndUpdate(
+      serviceId,
+      {
+        serviceName,
+        description,
+        duration,
+        price,
+      },
+      { new: true }
+    );
+
+    if (!service) {
+      console.error("Service not found.");
+      return res.status(404).json({ message: "Service not found." });
+    }
+
+    console.log("Service updated successfully:", service);
+
+    res.status(200).json({
+      message: "Service updated successfully.",
+      service,
+    });
+  } catch (error) {
+    console.error("Error updating service:", error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+};
+
+const deleteService = async (req, res) => {
+  try {
+    const businessOwnerId = req.userId;
+    const { serviceId } = req.params;
+
+    console.log("Deleting service:", serviceId);
+
+    // Ensure the service belongs to the business owner
+    const businessOwner = await BusinessOwner.findOne({
+      _id: businessOwnerId,
+      services: serviceId,
+    });
+
+    if (!businessOwner) {
+      console.error(
+        "Service not found or does not belong to the business owner."
+      );
+      return res.status(404).json({ message: "Service not found." });
+    }
+
+    // Check for existing providers associated with this service
+    const providersWithService = await Provider.find({ services: serviceId });
+
+    if (providersWithService.length > 0) {
+      console.error("Cannot delete service associated with providers.");
+      return res.status(400).json({
+        message:
+          "Cannot delete service associated with providers. Please remove the service from all providers before deleting.",
+      });
+    }
+
+    // Remove the service from the business owner's services array
+    await BusinessOwner.findByIdAndUpdate(businessOwnerId, {
+      $pull: { services: serviceId },
+    });
+
+    // Delete the service
+    const service = await Service.findByIdAndDelete(serviceId);
+
+    if (!service) {
+      console.error("Service not found.");
+      return res.status(404).json({ message: "Service not found." });
+    }
+
+    console.log("Service deleted successfully:", service);
+
+    res.status(200).json({ message: "Service deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting service:", error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+};
 
 module.exports = {
   addService,
@@ -478,6 +716,11 @@ module.exports = {
   getBusinessServices,
   getDashboard,
   getWeeklyStats,
+  deleteProvider,
+  editProvider,
+  deleteService,
+  editService,
+  getBusinessProviders,
   getBusinessProfile,
   editBusinessProfile,
   getUpNextAppointments, // Added this function

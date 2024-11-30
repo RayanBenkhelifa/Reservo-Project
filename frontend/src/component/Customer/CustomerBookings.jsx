@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ReviewForm from "./ReviewForm";
-import CustomerNavBar from "./CustomerNavBar"; // Adjust the path as needed
+import CustomerNavBar from "./CustomerNavBar";
 
 const CustomerBookings = () => {
   const [upcomingBookings, setUpcomingBookings] = useState([]);
@@ -15,7 +15,7 @@ const CustomerBookings = () => {
     try {
       const response = await fetch("/booking/customer-bookings", {
         method: "GET",
-        credentials: "include", // Ensures cookies (session) are sent with the request
+        credentials: "include",
       });
       const data = await response.json();
 
@@ -129,12 +129,20 @@ const CustomerBookings = () => {
           <tbody>
             {upcomingBookings.map((booking) => (
               <tr key={booking._id}>
-                <td>{booking.service.serviceName}</td>
-                <td>{booking.provider.name}</td>
+                <td>
+                  {booking.service
+                    ? booking.service.serviceName
+                    : "Service not available"}
+                </td>
+                <td>
+                  {booking.provider
+                    ? booking.provider.name
+                    : "Provider not available"}
+                </td>
                 <td>{new Date(booking.date).toLocaleDateString()}</td>
                 <td>{booking.startTime}</td>
                 <td>
-                  {booking.service.duration
+                  {booking.service && booking.service.duration
                     ? `${booking.service.duration} mins`
                     : "Duration not available"}
                 </td>
@@ -173,8 +181,16 @@ const CustomerBookings = () => {
           <tbody>
             {pastBookings.map((booking) => (
               <tr key={booking._id}>
-                <td>{booking.service.serviceName}</td>
-                <td>{booking.provider.name}</td>
+                <td>
+                  {booking.service
+                    ? booking.service.serviceName
+                    : "Service not available"}
+                </td>
+                <td>
+                  {booking.provider
+                    ? booking.provider.name
+                    : "Provider not available"}
+                </td>
                 <td>{new Date(booking.date).toLocaleDateString()}</td>
                 <td>{booking.startTime}</td>
                 <td>

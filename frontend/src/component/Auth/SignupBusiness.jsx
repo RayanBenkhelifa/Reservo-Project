@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // For navigation
-import "../styles.css";
-import { AuthContext } from "./AuthContext"; // Import AuthContext
+import { AuthContext } from "../AuthContext"; // Import AuthContext
 
 function SignupBusiness() {
   const [formData, setFormData] = useState({

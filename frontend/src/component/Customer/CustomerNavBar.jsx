@@ -1,8 +1,7 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "./AuthContext"; // Adjust the path based on your project structure
+import { AuthContext } from "../AuthContext"; // Adjust the path based on your project structure
 import { FaUserCircle, FaUser, FaHeadset, FaSignOutAlt } from "react-icons/fa"; // Import icons
-import "../styles.css"; // Ensure this path is correct
 
 const CustomerNavBar = () => {
   const { authState, loading, logout } = useContext(AuthContext);

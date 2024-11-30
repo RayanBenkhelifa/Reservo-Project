@@ -1,7 +1,6 @@
 // src/components/UploadBusinessImage.js
 
 import React, { useState } from "react";
-import "../styles.css";
 
 function UploadBusinessImage() {
   const [image, setImage] = useState(null);

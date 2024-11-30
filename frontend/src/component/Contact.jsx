@@ -1,5 +1,5 @@
 import React from "react";
-import CustomerNavBar from "./CustomerNavBar"; // Adjust the path as needed
+import CustomerNavBar from "./Customer/CustomerNavBar"; // Adjust the path as needed
 import "../styles.css";
 
 function Contact() {

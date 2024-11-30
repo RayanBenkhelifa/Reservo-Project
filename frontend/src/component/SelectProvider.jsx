@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import '../styles.css'; // Ensure your CSS file is linked
+import React, { useState, useEffect } from "react";
+import "../styles.css"; // Ensure your CSS file is linked
 
 const SelectProvider = () => {
   // State to store the providers
@@ -12,18 +12,18 @@ const SelectProvider = () => {
       const providersData = [
         {
           _id: 1,
-          name: 'Provider 1',
-          availability: '9:00 AM - 12:00 PM',
+          name: "Provider 1",
+          availability: "9:00 AM - 12:00 PM",
         },
         {
           _id: 2,
-          name: 'Provider 2',
-          availability: '1:00 PM - 5:00 PM',
+          name: "Provider 2",
+          availability: "1:00 PM - 5:00 PM",
         },
         {
           _id: 3,
-          name: 'Provider 3',
-          availability: '2:00 PM - 6:00 PM',
+          name: "Provider 3",
+          availability: "2:00 PM - 6:00 PM",
         },
       ];
       setProviders(providersData);

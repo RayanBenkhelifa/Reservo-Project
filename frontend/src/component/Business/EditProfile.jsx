@@ -3,8 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./BusinessNavBar";
 import UploadBusinessImage from "./UploadBusinessImage";
-import Modal from "./Modal";
-import "../styles.css";
+import Modal from "../Modal";
 
 function EditProfile() {
   const [profileData, setProfileData] = useState({

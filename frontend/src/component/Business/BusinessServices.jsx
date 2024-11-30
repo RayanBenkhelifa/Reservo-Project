@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles.css";
-import { AuthContext } from "./AuthContext";
+import { AuthContext } from "../AuthContext";
 import Navbar from "./BusinessNavBar";
 
 function BusinessServices() {

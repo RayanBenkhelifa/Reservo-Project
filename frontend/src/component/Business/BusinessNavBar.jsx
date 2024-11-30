@@ -1,7 +1,7 @@
 // Navbar.js
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "./AuthContext"; // Import AuthContext
+import { AuthContext } from "../AuthContext"; // Import AuthContext
 import { FaSignOutAlt } from "react-icons/fa"; // Import logout icon
 
 function Navbar() {

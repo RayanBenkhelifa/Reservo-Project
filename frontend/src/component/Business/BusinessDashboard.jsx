@@ -2,11 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Pie } from "react-chartjs-2"; // Import Pie chart from Chart.js
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js"; // Import necessary components for Pie chart
-import "../styles.css";
-import { AuthContext } from "./AuthContext";
+import { AuthContext } from "../AuthContext";
 import Navbar from "./BusinessNavBar";
 import UploadBusinessImage from "./UploadBusinessImage";
-import Modal from "./Modal"; // We'll create a simple Modal component
+import Modal from "../Modal"; // We'll create a simple Modal component
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);

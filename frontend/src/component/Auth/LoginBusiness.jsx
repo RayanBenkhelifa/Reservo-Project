@@ -1,21 +1,19 @@
 import React, { useState, useContext } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // For navigation and redirecting after login
-import "../styles.css";
-import { AuthContext } from "./AuthContext"; // Import the AuthContext
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../AuthContext"; // Import AuthContext
 
-function LoginCustomer() {
+function LoginBusiness() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const location = useLocation();
-  const { login } = useContext(AuthContext); // Get login function from AuthContext
+  const { login } = useContext(AuthContext);
 
-  // Handle form submission
   const handleLogin = async (e) => {
     e.preventDefault();
+
     try {
-      const response = await fetch("/auth/login/customer", {
+      const response = await fetch("/auth/login/businessOwner", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -27,21 +25,16 @@ function LoginCustomer() {
       const data = await response.json();
 
       if (response.ok) {
-        // Update auth state
         localStorage.setItem("userId", data.userId);
         localStorage.setItem("userType", data.userType);
         localStorage.setItem("username", data.username); // Store username
         localStorage.setItem("email", data.email); // Store email
-        login(data.userType);
 
-        // Handle redirection logic
-        const { from } = location.state || {};
-        if (from) {
-          navigate(from);
-        } else {
-          navigate("/");
-        }
+        // Update auth state
+        login(data.userType);
+        navigate("/business-dashboard");
       } else {
+        console.log("Login failed:", data.message);
         setError(data.message || "Login failed");
       }
     } catch (err) {
@@ -53,12 +46,12 @@ function LoginCustomer() {
   return (
     <div className="login-container">
       <div className="login-box">
-        <h2>Welcome Back, Customer!</h2>
+        <h2>Welcome Back, Business Owner!</h2>
         <form onSubmit={handleLogin}>
           <input
             type="email"
             name="email"
-            placeholder="Email"
+            placeholder="Business Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -72,14 +65,11 @@ function LoginCustomer() {
             required
           />
           {error && <p className="error">{error}</p>}
-          <a href="/forgot-password" className="forgot-password">
-            Forgot Password?
-          </a>
           <button type="submit" className="btn">
             Login
           </button>
           <p>
-            Don't have an account? <a href="/signup-customer">Sign up now</a>
+            Don't have an account? <a href="/signup-business">Sign up now</a>
           </p>
         </form>
       </div>
@@ -87,4 +77,4 @@ function LoginCustomer() {
   );
 }
 
-export default LoginCustomer;
+export default LoginBusiness;

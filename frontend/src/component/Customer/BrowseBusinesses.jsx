@@ -2,11 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import CustomerNavBar from "./CustomerNavBar";
-import "../styles.css"; // Ensure your CSS reflects the new class names
 // Import FontAwesome icons (if not already included)
 import { FaMapMarkerAlt, FaClock, FaStar } from "react-icons/fa";
 // Import the default image
-import defaultImage from "../img/default.jpg";
+import defaultImage from "../../img/default.jpg";
 
 function BrowseBusinesses() {
   const [businesses, setBusinesses] = useState([]);

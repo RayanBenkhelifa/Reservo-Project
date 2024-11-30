@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import BusinessNavBar from "./BusinessNavBar";  // Import the Navbar component
-import "../styles.css";  // Ensure you import the correct styles
+import BusinessNavBar from "./BusinessNavBar"; // Import the Navbar component
 
 const ReviewFeedback = () => {
   const [reviews, setReviews] = useState([]);
@@ -23,9 +22,9 @@ const ReviewFeedback = () => {
 
         const data = await response.json();
         setReviews(data.reviews);
-        const storedFeedbackStatus = JSON.parse(localStorage.getItem("submittedFeedback")) || {};
+        const storedFeedbackStatus =
+          JSON.parse(localStorage.getItem("submittedFeedback")) || {};
         setSubmittedFeedback(storedFeedbackStatus);
-
       } catch (error) {
         setError(error.message);
       } finally {
@@ -72,10 +71,13 @@ const ReviewFeedback = () => {
       }));
 
       // Store the updated feedback submission status in localStorage
-      localStorage.setItem("submittedFeedback", JSON.stringify({
-        ...submittedFeedback,
-        [reviewId]: true,
-      }));
+      localStorage.setItem(
+        "submittedFeedback",
+        JSON.stringify({
+          ...submittedFeedback,
+          [reviewId]: true,
+        })
+      );
 
       alert("Feedback sent successfully!");
     } catch (error) {
@@ -107,7 +109,9 @@ const ReviewFeedback = () => {
               <tbody>
                 {reviews.map((review) => (
                   <tr key={review._id}>
-                    <td>{review.customer ? review.customer.name : "Unknown"}</td>
+                    <td>
+                      {review.customer ? review.customer.name : "Unknown"}
+                    </td>
                     <td>{review.businessRating || "N/A"}</td>
                     <td>{review.providerRating || "N/A"}</td>
                     <td>{review.comment || "No comment provided"}</td>
@@ -118,10 +122,19 @@ const ReviewFeedback = () => {
                         <>
                           <textarea
                             value={feedbacks[review._id] || ""}
-                            onChange={(e) => handleFeedbackChange(review._id, e.target.value)}
+                            onChange={(e) =>
+                              handleFeedbackChange(review._id, e.target.value)
+                            }
                             placeholder="Write your feedback here..."
                           />
-                          <button onClick={() => handleFeedbackSubmit(review._id, review.customer._id)}>
+                          <button
+                            onClick={() =>
+                              handleFeedbackSubmit(
+                                review._id,
+                                review.customer._id
+                              )
+                            }
+                          >
                             Send Feedback
                           </button>
                         </>

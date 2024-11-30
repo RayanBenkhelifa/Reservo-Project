@@ -5,28 +5,28 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import BusinessProvider from "./component/BusinessProvider";
-import BusinessDashboard from "./component/BusinessDashboard";
-import BusinessServices from "./component/BusinessServices";
+import BusinessProvider from "./component/Customer/BusinessProvider";
+import BusinessDashboard from "./component/Business/BusinessDashboard";
+import BusinessServices from "./component/Business/BusinessServices";
 import Home from "./component/Home";
-import LoginBusiness from "./component/LoginBusiness";
-import LoginCustomer from "./component/LoginCustomer";
-import SignupBusiness from "./component/SignupBusiness";
-import SignupCustomer from "./component/SignupCustomer";
-import BusinessDetails from "./component/BusinessDetails";
+import LoginBusiness from "./component/Auth/LoginBusiness";
+import LoginCustomer from "./component/Auth/LoginCustomer";
+import SignupBusiness from "./component/Auth/SignupBusiness";
+import SignupCustomer from "./component/Auth/SignupCustomer";
+import ForgotPassword from "./component/Auth/ForgotPassword";
+import BusinessDetails from "./component/Customer/BusinessDetails";
 import UserType from "./component/UserType";
-import EditProfile from "./component/EditProfile";
-import ForgotPassword from "./component/ForgotPassword";
+import EditProfile from "./component/Business/EditProfile";
 import Contact from "./component/Contact";
-import BrowseBusinesses from "./component/BrowseBusinesses";
+import BrowseBusinesses from "./component/Customer/BrowseBusinesses";
 import SelectProvider from "./component/SelectProvider";
-import TimeSlots from "./component/TimeSlots";
-import SuccessPage from "./component/SuccessPage";
-import BookingConfirmation from "./component/BookingConfirmation";
-import AddProvider from "./component/AddProvider";
-import ReviewAndPayment from "./component/ReviewAndPayment";
-import CustomerBookings from "./component/CustomerBookings";
-import ReviewFeedback from "./component/ReviewFeedback"; // Import the new ReviewFeedback component
+import TimeSlots from "./component/Customer/TimeSlots";
+import SuccessPage from "./component/Customer/SuccessPage";
+import BookingConfirmation from "./component/Customer/BookingConfirmation";
+import AddProvider from "./component/Business/AddProvider";
+import ReviewAndPayment from "./component/Customer/ReviewAndPayment";
+import CustomerBookings from "./component/Customer/CustomerBookings";
+import ReviewFeedback from "./component/Business/ReviewFeedback"; // Import the new ReviewFeedback component
 import { AuthContext } from "./component/AuthContext";
 import "./styles.css";
 

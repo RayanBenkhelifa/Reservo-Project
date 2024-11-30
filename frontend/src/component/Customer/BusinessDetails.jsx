@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom"; // Use Link for navigation
 import CustomerNavBar from "./CustomerNavBar"; // Adjust the path as needed
-import "../styles.css"; // Ensure your CSS file is linked
 
 const BusinessDetails = () => {
   const { businessId } = useParams(); // Get the business id from the URL

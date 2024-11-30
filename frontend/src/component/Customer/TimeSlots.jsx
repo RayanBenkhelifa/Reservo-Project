@@ -1,6 +1,6 @@
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
-import { AuthContext } from "./AuthContext";
+import { AuthContext } from "../AuthContext";
 import CustomerNavBar from "./CustomerNavBar"; // Adjust the path as needed
 
 const TimeSlots = () => {

@@ -1137,6 +1137,23 @@ button.btn:hover {
   font-size: 14px;
 }
 
+.read-more-btn {
+  background: none;
+  border: none;
+  color: #007bff;
+  /* Retain the original color */
+  font-size: 14px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.read-more-btn:hover {
+  color: #0056b3;
+  /* Slightly darker shade for hover */
+  font-weight: bold;
+  /* Indicates hover with subtle emphasis */
+}
+
 .business-card-content .business-location,
 .business-card-content .business-operating-hours {
   display: flex;

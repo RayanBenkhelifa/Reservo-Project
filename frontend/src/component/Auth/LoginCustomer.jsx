@@ -70,7 +70,7 @@ function LoginCustomer() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          {error && <p className="error">{error}</p>}
+          {error && <p className="error-message">{error}</p>}
           <a href="/forgot-password" className="forgot-password">
             Forgot Password?
           </a>

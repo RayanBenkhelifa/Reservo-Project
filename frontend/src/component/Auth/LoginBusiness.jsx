@@ -64,7 +64,7 @@ function LoginBusiness() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          {error && <p className="error">{error}</p>}
+          {error && <p className="error-message">{error}</p>}
           <button type="submit" className="btn">
             Login
           </button>

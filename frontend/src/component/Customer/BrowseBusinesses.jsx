@@ -12,6 +12,7 @@ function BrowseBusinesses() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [ratings, setRatings] = useState({});
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     const fetchBusinessesAndRatings = async () => {
@@ -82,6 +83,9 @@ function BrowseBusinesses() {
     return acc;
   }, {});
 
+  const handleToggle = () => {
+    setIsExpanded(!isExpanded);
+  };
   return (
     <>
       <CustomerNavBar />
@@ -137,10 +141,20 @@ function BrowseBusinesses() {
                         {business.category}
                       </p>
                       <p className="business-description">
-                        {business.description.length > 100
+                        {isExpanded
+                          ? business.description
+                          : business.description.length > 100
                           ? business.description.substring(0, 100) + "..."
                           : business.description}
                       </p>
+                      {business.description.length > 100 && (
+                        <button
+                          onClick={handleToggle}
+                          className="read-more-btn"
+                        >
+                          {isExpanded ? "Read Less" : "Read More"}
+                        </button>
+                      )}
                       <p className="business-location">
                         <FaMapMarkerAlt /> {business.location}
                       </p>

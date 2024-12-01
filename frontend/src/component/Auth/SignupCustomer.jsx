@@ -100,16 +100,11 @@ function SignupCustomer() {
             required
           />
 
-          <div className="terms">
-            <input type="checkbox" required /> I agree to the{" "}
-            <a href="#">Terms and Conditions</a>
-          </div>
-
           <button type="submit" className="btn">
             Sign Up
           </button>
 
-          {error && <p className="error">{error}</p>}
+          {error && <p className="error-message">{error}</p>}
 
           <p>
             Already have an account? <a href="/login-customer">Login now</a>

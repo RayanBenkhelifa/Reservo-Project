@@ -144,9 +144,9 @@ function SignupBusiness() {
             <option value="" disabled>
               Select Business Type
             </option>
-            <option value="barber">Barber Shop</option>
-            <option value="salon">Salon</option>
-            <option value="spa">Spa</option>
+            <option value="Barber">Barber Shop</option>
+            <option value="Salon">Salon</option>
+            <option value="Spa">Spa</option>
           </select>
 
           <textarea

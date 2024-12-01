@@ -51,34 +51,3 @@ mongoose
     app.listen(PORT, () => console.log(`Web server listening on port ${PORT}`));
   })
   .catch((error) => console.log(error));
-
-// Handle success page route
-// app.get('/success', async (req, res) => {
-//   const sessionId = req.query.session_id;
-
-//   try {
-//     const booking = await Booking.findOne({ stripeSessionId: sessionId });
-
-//     if (!booking) {
-//       return res.status(404).json({ error: 'Booking not found' });
-//     }
-
-//     // Update payment status to completed
-//     booking.paymentStatus = 'completed';
-//     await booking.save();
-
-//     res.render('success', { booking });
-//   } catch (error) {
-//     console.error('Error updating payment status:', error);
-//     res.status(500).json({ error: 'Failed to complete payment' });
-//   }
-// });
-
-// Handle cancel page route
-// app.get("/cancel", (req, res) => {
-//   res.render("cancel"); // Render cancel page
-// });
-// app.get("/payment/verify-session", paymentController.verifySession);
-
-
-// Register review routes

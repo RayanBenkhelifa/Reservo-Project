@@ -13,6 +13,19 @@ const BusinessDetails = () => {
   useEffect(() => {
     const fetchBusinessDetails = async () => {
       try {
+        // Fetch business details
+        const businessResponse = await fetch(
+          `/customer/businesses/${businessId}`
+        );
+        const businessData = await businessResponse.json();
+
+        if (businessResponse.ok) {
+          setBusiness(businessData);
+        } else {
+          setError("Failed to fetch business details");
+          setLoading(false);
+          return;
+        }
         const response = await fetch(
           `/customer/businesses/${businessId}/services`
         );
@@ -49,8 +62,15 @@ const BusinessDetails = () => {
       <div className="container">
         <header className="business-header">
           <h1>{business?.businessName || "Business Name"}</h1>
-          <p>Location: {business?.location || "Location"}</p>
-          <p>Opening Hours: {business?.openingHours || "Opening Hours"}</p>
+          <p>
+            <span>Location: </span>
+            {business?.location || "Location"}
+          </p>
+          <p>
+            <span>Opening Hours: </span>
+            {business?.operatingHours.start || "Opening Hours"} ---{" "}
+            {business?.operatingHours.end || "Opening Hours"}
+          </p>
         </header>
 
         <section id="services" className="service-category">

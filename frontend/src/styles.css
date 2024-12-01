@@ -1058,11 +1058,15 @@ button.btn:hover {
   color: #5d5fef;
   margin-bottom: 20px;
 }
+
 .business-list {
   display: flex;
-  flex-wrap: wrap; /* Allow items to wrap to the next row */
-  gap: 20px; /* Space between cards */
-  justify-content: flex-start; /* Align items to the left */
+  flex-wrap: wrap;
+  /* Allow items to wrap to the next row */
+  gap: 20px;
+  /* Space between cards */
+  justify-content: flex-start;
+  /* Align items to the left */
 }
 
 /* Business Card Styling */
@@ -1071,7 +1075,8 @@ button.btn:hover {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  width: calc(33.333% - 20px); /* 3 cards per row on large screens */
+  width: calc(33.333% - 20px);
+  /* 3 cards per row on large screens */
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -1164,7 +1169,8 @@ button.btn:hover {
 
 /* Skeleton Loading Styles */
 .skeleton-card {
-  flex: 1 1 calc(33.333% - 20px); /* Match card width */
+  flex: 1 1 calc(33.333% - 20px);
+  /* Match card width */
   background-color: #f0f0f0;
   overflow: hidden;
 }
@@ -1215,9 +1221,11 @@ button.btn:hover {
   0% {
     background-color: #e0e0e0;
   }
+
   50% {
     background-color: #cfcfcf;
   }
+
   100% {
     background-color: #e0e0e0;
   }
@@ -1226,21 +1234,25 @@ button.btn:hover {
 /* Responsive Styling */
 @media (max-width: 992px) {
   .business-card {
-    flex: 1 1 calc(50% - 20px); /* 2 cards per row */
+    flex: 1 1 calc(50% - 20px);
+    /* 2 cards per row */
   }
 
   .skeleton-card {
-    flex: 1 1 calc(50% - 20px); /* Match card width for skeletons */
+    flex: 1 1 calc(50% - 20px);
+    /* Match card width for skeletons */
   }
 }
 
 @media (max-width: 600px) {
   .business-card {
-    flex: 1 1 100%; /* 1 card per row */
+    flex: 1 1 100%;
+    /* 1 card per row */
   }
 
   .skeleton-card {
-    flex: 1 1 100%; /* Match card width for skeletons */
+    flex: 1 1 100%;
+    /* Match card width for skeletons */
   }
 }
 
@@ -1749,16 +1761,20 @@ button.confirm-booking-btn:hover {
   border-radius: 8px;
   padding: 20px;
   text-align: center;
-  width: 15%;  /* Decreased width to make the cards smaller */
-  margin: 10px;  /* Decreased margin to reduce the space between the cards */
+  width: 15%;
+  /* Decreased width to make the cards smaller */
+  margin: 10px;
+  /* Decreased margin to reduce the space between the cards */
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .stat-card-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;  /* Adjust gap between cards */
-  justify-content: center;  /* Center the cards within the container */
+  gap: 12px;
+  /* Adjust gap between cards */
+  justify-content: center;
+  /* Center the cards within the container */
 }
 
 
@@ -1769,8 +1785,10 @@ button.confirm-booking-btn:hover {
   border-radius: 8px;
   padding: 20px;
   text-align: center;
-  width: 70%;  /* Smaller width to bring cards closer */
-  margin: 5px;  /* Reduced margin for closer positioning */
+  width: 70%;
+  /* Smaller width to bring cards closer */
+  margin: 5px;
+  /* Reduced margin for closer positioning */
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
@@ -1843,18 +1861,23 @@ button.confirm-booking-btn:hover {
 /* Business Logo Container */
 .business-logo-container {
   position: relative;
-  width: 100px; /* Adjust size */
-  height: 100px; /* Adjust size */
-  margin-left: auto; /* Pushes it to the far right */
+  width: 100px;
+  /* Adjust size */
+  height: 100px;
+  /* Adjust size */
+  margin-left: auto;
+  /* Pushes it to the far right */
   cursor: pointer;
-  display: block; /* Ensures it's on a new line */
+  display: block;
+  /* Ensures it's on a new line */
 }
 
 .business-logo {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 50%; /* Make it circular */
+  border-radius: 50%;
+  /* Make it circular */
 }
 
 .business-logo-placeholder {
@@ -1873,7 +1896,8 @@ button.confirm-booking-btn:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+  background: rgba(0, 0, 0, 0.5);
+  /* Semi-transparent overlay */
   color: #fff;
   display: flex;
   align-items: center;
@@ -1894,7 +1918,8 @@ button.confirm-booking-btn:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); /* Dark overlay */
+  background-color: rgba(0, 0, 0, 0.7);
+  /* Dark overlay */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1906,7 +1931,8 @@ button.confirm-booking-btn:hover {
   padding: 30px;
   border-radius: 12px;
   position: relative;
-  width: 500px; /* Adjust as needed */
+  width: 500px;
+  /* Adjust as needed */
   max-width: 90%;
 }
 
@@ -1918,4 +1944,46 @@ button.confirm-booking-btn:hover {
   border: none;
   font-size: 28px;
   cursor: pointer;
+}
+
+.business-header {
+  background-color: #f4f4f4;
+  /* Light background for contrast */
+  padding: 20px 30px;
+  /* Add space around the content */
+  border-radius: 10px;
+  /* Smooth rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* Subtle shadow for depth */
+  text-align: center;
+  /* Center-align text */
+  margin-bottom: 20px;
+  /* Space below the header */
+}
+
+.business-header h1 {
+  font-size: 2rem;
+  /* Larger font for the title */
+  color: #333;
+  /* Dark gray for readability */
+  margin-bottom: 10px;
+  /* Space between title and other text */
+  font-weight: bold;
+  /* Make the title stand out */
+}
+
+.business-header p {
+  font-size: 1rem;
+  /* Standard font size for details */
+  color: #555;
+  /* Medium gray for subtle details */
+  margin: 5px 0;
+  /* Uniform spacing between paragraphs */
+}
+
+.business-header p span {
+  font-weight: bold;
+  /* Bold text for labels */
+  color: #333;
+  /* Darker color for better visibility */
 }

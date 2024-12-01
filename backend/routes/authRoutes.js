@@ -15,5 +15,4 @@ router.get('/check-auth', authController.checkAuth);
 router.get('/profile', verifySession, authController.getProfile);
 router.post('/logout', authController.logout);
 
-
 module.exports = router;

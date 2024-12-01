@@ -45,16 +45,18 @@ const addProvider = async (req, res) => {
     const businessId = req.userId;
 
     if (!providerName || !serviceIds || serviceIds.length === 0) {
-      return res.status(400).json({ error: "Missing required fields" });
+      return res.status(400).json({ message: "All fields are required." });
     }
 
+    // Fetch the business owner and their services
     const business = await BusinessOwner.findById(businessId).populate(
       "services"
     );
     if (!business) {
-      return res.status(404).json({ error: "Business not found" });
+      return res.status(404).json({ message: "Business not found." });
     }
 
+    // Validate that the service IDs belong to the business owner
     const validServiceIds = serviceIds.filter((serviceId) => {
       return business.services.some(
         (service) => service._id.toString() === serviceId.toString()
@@ -62,26 +64,36 @@ const addProvider = async (req, res) => {
     });
 
     if (validServiceIds.length !== serviceIds.length) {
-      return res
-        .status(400)
-        .json({ error: "Some services are not part of this business" });
+      return res.status(400).json({
+        message: "Some services are not part of your business.",
+      });
     }
 
+    // Create new provider
     const newProvider = new Provider({
       name: providerName,
       services: validServiceIds,
     });
 
+    // Save the provider
     await newProvider.save();
+
+    // Add the provider to the business owner's providers array
     business.providers.push(newProvider._id);
     await business.save();
 
-    res
-      .status(201)
-      .json({ message: "Provider added successfully", provider: newProvider });
+    // Populate services before sending response
+    await newProvider.populate("services");
+
+    console.log("Provider added successfully:", newProvider);
+
+    res.status(201).json({
+      message: "Provider added successfully.",
+      provider: newProvider,
+    });
   } catch (error) {
     console.error("Error adding provider:", error);
-    res.status(500).json({ error: "Failed to add provider" });
+    res.status(500).json({ message: "Server error. Please try again later." });
   }
 };
 
@@ -471,6 +483,7 @@ const getBusinessImageUrl = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
 const getBusinessProviders = async (req, res) => {
   try {
     const businessOwnerId = req.userId;
@@ -501,7 +514,6 @@ const getBusinessProviders = async (req, res) => {
   }
 };
 
-// Edit Provider
 const editProvider = async (req, res) => {
   try {
     const businessOwnerId = req.userId;
@@ -525,6 +537,22 @@ const editProvider = async (req, res) => {
         "Provider not found or does not belong to the business owner."
       );
       return res.status(404).json({ message: "Provider not found." });
+    }
+
+    // Check for existing bookings with paymentStatus not in ['failed', 'canceled']
+    const existingBookings = await Booking.find({
+      provider: providerId,
+      paymentStatus: { $nin: ["failed", "canceled"] },
+    });
+
+    console.log("Existing bookings found:", existingBookings);
+
+    if (existingBookings.length > 0) {
+      console.error("Cannot edit provider with active bookings.");
+      return res.status(400).json({
+        message:
+          "Cannot edit provider with active bookings. Please cancel or complete all bookings before editing.",
+      });
     }
 
     // Update the provider
@@ -554,7 +582,6 @@ const editProvider = async (req, res) => {
   }
 };
 
-// Delete Provider
 const deleteProvider = async (req, res) => {
   try {
     const businessOwnerId = req.userId;
@@ -573,6 +600,22 @@ const deleteProvider = async (req, res) => {
         "Provider not found or does not belong to the business owner."
       );
       return res.status(404).json({ message: "Provider not found." });
+    }
+
+    // Check for existing bookings with paymentStatus not in ['failed', 'canceled']
+    const existingBookings = await Booking.find({
+      provider: providerId,
+      paymentStatus: { $nin: ["failed", "canceled"] },
+    });
+
+    console.log("Existing bookings found:", existingBookings);
+
+    if (existingBookings.length > 0) {
+      console.error("Cannot delete provider with active bookings.");
+      return res.status(400).json({
+        message:
+          "Cannot delete provider with active bookings. Please cancel or complete all bookings before deleting.",
+      });
     }
 
     // Remove the provider from the business owner's providers array
@@ -723,7 +766,7 @@ module.exports = {
   getBusinessProviders,
   getBusinessProfile,
   editBusinessProfile,
-  getUpNextAppointments, // Added this function
+  getUpNextAppointments,
   uploadBusinessImage,
   getBusinessImage,
   getBusinessOwnerDetails,

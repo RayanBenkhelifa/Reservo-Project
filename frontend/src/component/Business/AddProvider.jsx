@@ -1,120 +1,98 @@
-// components/AddProvider.jsx
+// AddProvider.jsx
 
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../AuthContext";
 import Navbar from "./BusinessNavBar";
+import { AuthContext } from "../AuthContext";
 
-function AddProvider() {
-  const [services, setServices] = useState([]);
+const AddProvider = () => {
   const [providers, setProviders] = useState([]);
+  const [services, setServices] = useState([]);
   const [providerName, setProviderName] = useState("");
-  const [selectedServices, setSelectedServices] = useState([]);
+  const [selectedServiceIds, setSelectedServiceIds] = useState([]);
+  const [error, setError] = useState("");
   const [editingProviderId, setEditingProviderId] = useState(null);
+
   const { authState } = useContext(AuthContext);
   const navigate = useNavigate();
 
   // Authentication check
   useEffect(() => {
-    console.log("AuthState:", authState);
     if (!authState.isAuthenticated || authState.userType !== "businessOwner") {
-      console.log(
-        "User not authenticated or not a business owner. Redirecting to login."
-      );
       navigate("/login-business");
     }
   }, [authState.isAuthenticated, authState.userType, navigate]);
 
-  // Fetch services for the business
-  const fetchServices = async () => {
+  // Fetch services and providers
+  const fetchServicesAndProviders = async () => {
     try {
-      console.log("Fetching services from /business/services");
-      const response = await fetch("/business/services", {
-        method: "GET",
-        credentials: "include", // Include cookies for authentication
-      });
+      const [servicesResponse, providersResponse] = await Promise.all([
+        fetch("/business/services", {
+          method: "GET",
+          credentials: "include",
+        }),
+        fetch("/business/providers", {
+          method: "GET",
+          credentials: "include",
+        }),
+      ]);
 
-      console.log("Received response for services:", response);
+      const servicesData = await servicesResponse.json();
+      const providersData = await providersResponse.json();
 
-      if (response.status === 401) {
-        console.error("Unauthorized access - redirecting to login.");
-        navigate("/login-business");
-        return;
+      if (servicesResponse.ok) {
+        setServices(servicesData.services);
+      } else {
+        setError(servicesData.message || "Failed to fetch services.");
       }
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch services: ${response.statusText}`);
+      if (providersResponse.ok) {
+        setProviders(providersData.providers);
+      } else {
+        setError(providersData.message || "Failed to fetch providers.");
       }
-
-      const data = await response.json();
-      console.log("Fetched services:", data.services); // For debugging
-      setServices(data.services); // Adjust according to your backend response
-    } catch (error) {
-      console.error("Error fetching services:", error);
-    }
-  };
-
-  // Fetch providers for the business
-  const fetchProviders = async () => {
-    try {
-      console.log("Fetching providers from /business/providers");
-      const response = await fetch("/business/providers", {
-        method: "GET",
-        credentials: "include", // Include cookies for authentication
-      });
-
-      console.log("Received response for providers:", response);
-
-      if (response.status === 401) {
-        console.error("Unauthorized access - redirecting to login.");
-        navigate("/login-business");
-        return;
-      }
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch providers: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      console.log("Fetched providers:", data.providers); // For debugging
-      setProviders(data.providers);
-    } catch (error) {
-      console.error("Error fetching providers:", error);
+    } catch (err) {
+      console.error("Error fetching data:", err);
+      setError("An error occurred while fetching data. Please try again.");
     }
   };
 
   useEffect(() => {
-    fetchServices();
-    fetchProviders();
+    fetchServicesAndProviders();
   }, []);
 
-  // Handle form submit for adding or editing provider
+  // Handle form submission for adding or editing a provider
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!providerName || selectedServices.length === 0) {
-      alert("Please enter a provider name and select at least one service.");
+    if (!providerName || selectedServiceIds.length === 0) {
+      setError("Please fill out all required fields.");
       return;
     }
 
     try {
       if (editingProviderId) {
         // Editing existing provider
-        console.log("Editing provider:", editingProviderId);
         const response = await fetch("/business/edit-provider", {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
-          credentials: "include", // Include cookies
+          credentials: "include",
           body: JSON.stringify({
             providerId: editingProviderId,
             providerName,
-            serviceIds: selectedServices,
+            serviceIds: selectedServiceIds,
           }),
         });
 
-        console.log("Received response for edit provider:", response);
+        const data = await response.json();
+
+        if (response.status === 400 || response.status === 404) {
+          // Display the error message returned by the server
+          alert(data.message);
+          return;
+        }
 
         if (response.status === 401) {
           console.error("Unauthorized access - redirecting to login.");
@@ -123,11 +101,8 @@ function AddProvider() {
         }
 
         if (!response.ok) {
-          throw new Error(`Failed to update provider: ${response.statusText}`);
+          throw new Error(`Failed to edit provider: ${response.statusText}`);
         }
-
-        const data = await response.json();
-        console.log("Provider updated successfully:", data);
 
         // Update providers list
         setProviders((prevProviders) =>
@@ -135,22 +110,30 @@ function AddProvider() {
             provider._id === data.provider._id ? data.provider : provider
           )
         );
+
+        // Reset form
+        resetForm();
       } else {
         // Adding new provider
-        console.log("Adding new provider");
         const response = await fetch("/business/add-provider", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          credentials: "include", // Include cookies
+          credentials: "include",
           body: JSON.stringify({
             providerName,
-            serviceIds: selectedServices,
+            serviceIds: selectedServiceIds,
           }),
         });
 
-        console.log("Received response for add provider:", response);
+        const data = await response.json();
+
+        if (response.status === 400 || response.status === 404) {
+          // Display the error message returned by the server
+          alert(data.message);
+          return;
+        }
 
         if (response.status === 401) {
           console.error("Unauthorized access - redirecting to login.");
@@ -162,39 +145,31 @@ function AddProvider() {
           throw new Error(`Failed to add provider: ${response.statusText}`);
         }
 
-        const data = await response.json();
-        console.log("Provider added successfully:", data);
-
         // Update providers list
         setProviders((prevProviders) => [...prevProviders, data.provider]);
-      }
 
-      // Reset form
-      setProviderName("");
-      setSelectedServices([]);
-      setEditingProviderId(null);
+        // Reset form
+        resetForm();
+      }
     } catch (error) {
-      console.error("Error adding/updating provider:", error);
+      console.error("Error submitting provider:", error);
+      alert(
+        "An error occurred while submitting the provider. Please try again."
+      );
     }
   };
 
-  const handleCheckboxChange = (serviceId) => {
-    setSelectedServices((prevSelected) => {
-      if (prevSelected.includes(serviceId)) {
-        // If already selected, remove it
-        return prevSelected.filter((id) => id !== serviceId);
-      } else {
-        // If not selected, add it
-        return [...prevSelected, serviceId];
-      }
-    });
+  const resetForm = () => {
+    setProviderName("");
+    setSelectedServiceIds([]);
+    setEditingProviderId(null);
+    setError("");
   };
 
   const handleEdit = (provider) => {
-    console.log("Editing provider:", provider);
     setEditingProviderId(provider._id);
     setProviderName(provider.name);
-    setSelectedServices(provider.services.map((service) => service._id));
+    setSelectedServiceIds(provider.services.map((service) => service._id));
   };
 
   const handleDelete = async (providerId) => {
@@ -203,13 +178,18 @@ function AddProvider() {
     }
 
     try {
-      console.log("Deleting provider:", providerId);
       const response = await fetch(`/business/delete-provider/${providerId}`, {
         method: "DELETE",
         credentials: "include",
       });
 
-      console.log("Received response for delete provider:", response);
+      const data = await response.json();
+
+      if (response.status === 400 || response.status === 404) {
+        // Display the error message returned by the server
+        alert(data.message);
+        return;
+      }
 
       if (response.status === 401) {
         console.error("Unauthorized access - redirecting to login.");
@@ -221,18 +201,32 @@ function AddProvider() {
         throw new Error(`Failed to delete provider: ${response.statusText}`);
       }
 
-      // Update providers list
+      // Remove the deleted provider from the list
       setProviders((prevProviders) =>
         prevProviders.filter((provider) => provider._id !== providerId)
       );
     } catch (error) {
       console.error("Error deleting provider:", error);
+      alert("An error occurred while deleting the provider. Please try again.");
+    }
+  };
+
+  const handleServiceSelection = (serviceId) => {
+    if (selectedServiceIds.includes(serviceId)) {
+      // Deselect service
+      setSelectedServiceIds((prevServiceIds) =>
+        prevServiceIds.filter((id) => id !== serviceId)
+      );
+    } else {
+      // Select service
+      setSelectedServiceIds((prevServiceIds) => [...prevServiceIds, serviceId]);
     }
   };
 
   return (
     <div className="dashboard-container">
       <Navbar />
+
       <div className="main-content">
         <header className="main-header">
           <h1>{editingProviderId ? "Edit Provider" : "Add a New Provider"}</h1>
@@ -245,7 +239,7 @@ function AddProvider() {
 
         {/* Provider Form */}
         <section id="provider-form" className="form-card">
-          <form onSubmit={handleSubmit} id="providerForm">
+          <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="providerName">Provider Name</label>
               <input
@@ -260,20 +254,27 @@ function AddProvider() {
             </div>
 
             <div className="form-group">
-              <label>Services</label>
-              <div className="checkbox-group">
-                {services.map((service) => (
-                  <label key={service._id} className="checkbox-label">
-                    <input
-                      type="checkbox"
-                      value={service._id}
-                      checked={selectedServices.includes(service._id)}
-                      onChange={() => handleCheckboxChange(service._id)}
-                    />
-                    {service.serviceName}
-                  </label>
-                ))}
-              </div>
+              <label>Assign Services</label>
+              {services.length === 0 ? (
+                <p>No services available. Please add services first.</p>
+              ) : (
+                <div className="services-list">
+                  {services.map((service) => (
+                    <div key={service._id} className="service-item">
+                      <input
+                        type="checkbox"
+                        id={`service-${service._id}`}
+                        value={service._id}
+                        checked={selectedServiceIds.includes(service._id)}
+                        onChange={() => handleServiceSelection(service._id)}
+                      />
+                      <label htmlFor={`service-${service._id}`}>
+                        {service.serviceName}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <button type="submit" className="btn">
@@ -284,15 +285,13 @@ function AddProvider() {
               <button
                 type="button"
                 className="btn cancel-btn"
-                onClick={() => {
-                  setEditingProviderId(null);
-                  setProviderName("");
-                  setSelectedServices([]);
-                }}
+                onClick={resetForm}
               >
                 Cancel
               </button>
             )}
+
+            {error && <p className="error">{error}</p>}
           </form>
         </section>
 
@@ -305,7 +304,7 @@ function AddProvider() {
             <table>
               <thead>
                 <tr>
-                  <th>Name</th>
+                  <th>Provider Name</th>
                   <th>Services</th>
                   <th>Actions</th>
                 </tr>
@@ -342,6 +341,6 @@ function AddProvider() {
       </div>
     </div>
   );
-}
+};
 
 export default AddProvider;

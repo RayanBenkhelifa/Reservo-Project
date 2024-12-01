@@ -105,12 +105,13 @@ function BusinessDashboard() {
       fetchWeeklyStats();
     }
   }, [authState.isAuthenticated, authState.userType, navigate]);
+
   // Function to handle image upload success
   const handleImageUploadSuccess = (newImageUrl) => {
     setBusinessImageUrl(newImageUrl);
     setShowUploadModal(false); // Close the modal after upload
   };
-  // Pie chart configuration
+
   // Pie chart configuration
   const pieChartConfig = {
     labels: pieChartData.map((data) => data.label), // Service names as labels
@@ -119,7 +120,6 @@ function BusinessDashboard() {
         label: "Reserved Services",
         data: pieChartData.map((data) => data.value), // Number of reservations for each service
         backgroundColor: pieChartData.map((_, index) => {
-          // Assign a color based on the index (first service in blue, second in red, etc.)
           const colors = [
             "#5d5fef", // Blue
             "#e3342f", // Red
@@ -130,7 +130,6 @@ function BusinessDashboard() {
             "#8e44ad", // Purple
             "#2ecc71", // Lime Green
           ];
-          // Cycle through colors or use the same set for multiple services
           return colors[index % colors.length];
         }),
         borderColor: "#fff", // White border for each slice
@@ -234,16 +233,19 @@ function BusinessDashboard() {
 
         {/* Weekly stats */}
         <section id="weekly-stats" className="stats-bar">
-          {/* Total Appointments stat */}
-          <div className="stat-card stat-card-appointments">
-            <h3 className="stat-title">Total Appointments</h3>
-            <p className="stat-value">{stats.totalAppointments}</p>
-          </div>
+          {/* Wrap stat cards in a container */}
+          <div className="stat-card-container">
+            {/* Total Appointments stat */}
+            <div className="stat-card">
+              <h3 className="stat-title">Total Appointments</h3>
+              <p className="stat-value">{stats.totalAppointments}</p>
+            </div>
 
-          {/* Total Revenue stat */}
-          <div className="stat-card stat-card-revenue">
-            <h3 className="stat-title">Total Revenue</h3>
-            <p className="stat-value">SAR {stats.totalRevenue.toFixed(2)}</p>
+            {/* Total Revenue stat */}
+            <div className="stat-card">
+              <h3 className="stat-title">Total Revenue</h3>
+              <p className="stat-value">SAR {stats.totalRevenue.toFixed(2)}</p>
+            </div>
           </div>
 
           {/* Pie Chart for Reserved Services */}

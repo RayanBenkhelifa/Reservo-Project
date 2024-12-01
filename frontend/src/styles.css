@@ -1749,9 +1749,32 @@ button.confirm-booking-btn:hover {
   border-radius: 8px;
   padding: 20px;
   text-align: center;
-  width: 30%;
+  width: 15%;  /* Decreased width to make the cards smaller */
+  margin: 10px;  /* Decreased margin to reduce the space between the cards */
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
+
+.stat-card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;  /* Adjust gap between cards */
+  justify-content: center;  /* Center the cards within the container */
+}
+
+
+/* New Styles for .stat-card */
+.stat-card {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  width: 70%;  /* Smaller width to bring cards closer */
+  margin: 5px;  /* Reduced margin for closer positioning */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+
 
 .stat-title {
   font-size: 16px;
@@ -1763,16 +1786,6 @@ button.confirm-booking-btn:hover {
   font-size: 24px;
   font-weight: bold;
   color: #333;
-}
-
-.stat-value.positive {
-  color: #4caf50;
-  /* Green for positive improvement */
-}
-
-.stat-value.negative {
-  color: #f44336;
-  /* Red for negative improvement */
 }
 
 .review-feedback-table {
@@ -1809,20 +1822,13 @@ button.confirm-booking-btn:hover {
   transform: scale(0.98);
 }
 
-/* Stats container */
-#weekly-stats {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 20px;
-  flex-wrap: wrap;
-}
+
 
 /* Pie Chart Container */
 #reserved-services-pie-chart {
-  width: 80%;
+  width: 70%;
   max-width: 500px;
-  height: 200px;
+  height: 210px;
   margin: 10px auto;
   padding: 0px 120px 120px 120px;
   flex-basis: 45%;

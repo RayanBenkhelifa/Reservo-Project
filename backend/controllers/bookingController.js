@@ -21,11 +21,23 @@ const transporter = nodemailer.createTransport({
 
 // Send confirmation email
 const sendConfirmationEmail = async (customerEmail, bookingDetails) => {
+  const { serviceName, providerName, businessName, date, startTime } = bookingDetails;
+
   const mailOptions = {
-    from: "reservoreminder@hotmail.com", // Use your verified sender email
+    from: "reservoreminder@hotmail.com", // Your verified sender email
     to: customerEmail,
-    subject: "Booking Confirmation - Reservo",
-    text: `Your booking has been confirmed.\n\nDetails:\nService: ${bookingDetails.serviceName}\nProvider: ${bookingDetails.providerName}\nDate: ${bookingDetails.date}\nTime: ${bookingDetails.startTime}`,
+    subject: "Booking Confirmation",
+    text: `Dear Customer,
+
+Your booking at ${businessName} is confirmed!
+
+Details:
+Service: ${serviceName}
+Provider: ${providerName}
+Date: ${date}
+Time: ${startTime}
+
+Thank you for choosing us!`,
   };
 
   try {
@@ -36,13 +48,20 @@ const sendConfirmationEmail = async (customerEmail, bookingDetails) => {
   }
 };
 
-// Send reminder email 1 hour before the appointment
 const sendReminderEmail = async (customerEmail, bookingDetails) => {
+  const { serviceName, providerName, businessName, date, startTime } = bookingDetails;
+
   const mailOptions = {
-    from: "reservoreminder@hotmail.com", // Use your verified sender email
+    from: "reservoreminder@hotmail.com", // Your verified sender email
     to: customerEmail,
-    subject: "Reminder - Upcoming Appointment in 1 Hour",
-    text: `Reminder: Your appointment is scheduled in 1 hour.\n\nDetails:\nService: ${bookingDetails.serviceName}\nProvider: ${bookingDetails.providerName}\nDate: ${bookingDetails.date}\nTime: ${bookingDetails.startTime}`,
+    subject: "Reminder - Upcoming Appointment",
+    text: `Reminder: Your appointment at ${businessName} is scheduled after 1 hour.
+
+Details:
+Service: ${serviceName}
+Provider: ${providerName}
+Date: ${date}
+Time: ${startTime}`,
   };
 
   try {
@@ -100,6 +119,20 @@ function parseTime12Hour(timeStr) {
     hours += 12;
   }
   if (modifier === "AM" && hours === 12) {
+    hours = 0;
+  }
+
+  return { hours, minutes };
+}
+// Helper function to parse 'h:mm A' format to 24-hour format
+function parseTime12to24(time12h) {
+  const [time, modifier] = time12h.split(' '); // Split time and AM/PM
+  let [hours, minutes] = time.split(':').map(Number);
+
+  if (modifier.toUpperCase() === 'PM' && hours !== 12) {
+    hours += 12;
+  }
+  if (modifier.toUpperCase() === 'AM' && hours === 12) {
     hours = 0;
   }
 
@@ -280,6 +313,7 @@ const createBooking = async (req, res) => {
     const bookingDetails = {
       serviceName: service.serviceName,
       providerName: provider.name,
+      businessName: business.businessName, // Added line
       date: selectedDate,
       startTime,
     };
@@ -287,18 +321,44 @@ const createBooking = async (req, res) => {
     if (paymentOption === "venue") {
       // Send confirmation email immediately
       await sendConfirmationEmail(customer.email, bookingDetails);
+// Schedule or send reminder email
+const appointmentDate = new Date(selectedDate); // Assuming selectedDate is a valid date string
+if (isNaN(appointmentDate.getTime())) {
+  console.error('Invalid appointment date');
+} else {
+  // Parse startTime from 'h:mm A' format to hours and minutes
+  const { hours, minutes } = parseTime12to24(startTime);
 
-      // Schedule reminder email
-      const appointmentTime = new Date(`${selectedDate} ${startTime}`);
-      const reminderTime = new Date(appointmentTime.getTime() - 60 * 60 * 1000); // 1 hour before
-      const timeUntilReminder = reminderTime - new Date();
+  // Set the hours and minutes on the appointmentDate
+  appointmentDate.setHours(hours, minutes, 0, 0); // Set time to hours and minutes
 
-      if (timeUntilReminder > 0) {
-        setTimeout(async () => {
-          await sendReminderEmail(customer.email, bookingDetails);
-        }, timeUntilReminder);
-      }
+  const appointmentTime = appointmentDate; // Now appointmentTime is the full Date object
 
+  const reminderTime = new Date(appointmentTime.getTime() -  60 * 60 * 1000); // 12 hours before
+  const now = new Date();
+  const timeUntilReminder = reminderTime - now;
+
+  console.log('Current time:', now);
+  console.log('Appointment time:', appointmentTime);
+  console.log('Reminder time:', reminderTime);
+  console.log('Time until reminder (ms):', timeUntilReminder);
+
+  if (timeUntilReminder > 0) {
+    console.log('Scheduling reminder email in', timeUntilReminder, 'ms');
+    setTimeout(() => {
+      sendReminderEmail(customer.email, bookingDetails)
+        .then(() => console.log('Reminder email sent successfully'))
+        .catch(error => console.error('Error sending reminder email:', error));
+    }, timeUntilReminder);
+  } else if (appointmentTime > now) {
+    console.log('Appointment is within the next 12 hours, sending reminder email immediately.');
+    sendReminderEmail(customer.email, bookingDetails)
+      .then(() => console.log('Reminder email sent successfully'))
+      .catch(error => console.error('Error sending reminder email:', error));
+  } else {
+    console.log('Appointment is in the past, not sending reminder email.');
+  }
+}
       res.json({
         message: "Booking created successfully",
         bookingId: newBooking._id,
@@ -349,36 +409,63 @@ const handleStripeSuccess = async (req, res) => {
     if (!booking) {
       return res.status(404).json({ error: "Booking not found" });
     }
-
+    
     // Verify that the payment was successful
     if (session.payment_status === "paid") {
       // Update payment status to completed
       booking.paymentStatus = "completed";
       await booking.save();
-
+      
       // Send confirmation email
       const customer = await Customer.findById(booking.customer);
       const service = await Service.findById(booking.service);
       const provider = await Provider.findById(booking.provider);
+      const business = await BusinessOwner.findById(booking.businessOwner);
 
       const bookingDetails = {
         serviceName: service.serviceName,
         providerName: provider.name,
+        businessName: business.businessName, // Added line
         date: booking.date,
         startTime: booking.startTime,
       };
 
-      await sendConfirmationEmail(customer.email, bookingDetails);
-
-      // Schedule reminder email
-      const appointmentTime = new Date(`${booking.date} ${booking.startTime}`);
-      const reminderTime = new Date(appointmentTime.getTime() - 60 * 60 * 1000); // 1 hour before
-      const timeUntilReminder = reminderTime - new Date();
-
-      if (timeUntilReminder > 0) {
-        setTimeout(async () => {
-          await sendReminderEmail(customer.email, bookingDetails);
-        }, timeUntilReminder);
+      await sendConfirmationEmail(customer.email, bookingDetails);const appointmentDate = new Date(booking.date); // booking.date is a Date object
+      if (isNaN(appointmentDate.getTime())) {
+        console.error('Invalid appointment date');
+      } else {
+        // Parse startTime from 'h:mm A' format to hours and minutes
+        const { hours, minutes } = parseTime12to24(booking.startTime);
+      
+        // Set the hours and minutes on the appointmentDate
+        appointmentDate.setHours(hours, minutes, 0, 0); // Set time to hours and minutes
+      
+        const appointmentTime = appointmentDate; // Now appointmentTime is the full Date object
+      
+        const reminderTime = new Date(appointmentTime.getTime() -  60 * 60 * 1000); // 12 hours before
+        const now = new Date();
+        const timeUntilReminder = reminderTime - now;
+      
+        console.log('Current time:', now);
+        console.log('Appointment time:', appointmentTime);
+        console.log('Reminder time:', reminderTime);
+        console.log('Time until reminder (ms):', timeUntilReminder);
+      
+        if (timeUntilReminder > 0) {
+          console.log('Scheduling reminder email in', timeUntilReminder, 'ms');
+          setTimeout(() => {
+            sendReminderEmail(customer.email, bookingDetails)
+              .then(() => console.log('Reminder email sent successfully'))
+              .catch(error => console.error('Error sending reminder email:', error));
+          }, timeUntilReminder);
+        } else if (appointmentTime > now) {
+          console.log('Appointment is within the next 12 hours, sending reminder email immediately.');
+          sendReminderEmail(customer.email, bookingDetails)
+            .then(() => console.log('Reminder email sent successfully'))
+            .catch(error => console.error('Error sending reminder email:', error));
+        } else {
+          console.log('Appointment is in the past, not sending reminder email.');
+        }
       }
 
       // Redirect to booking confirmation page on the frontend
@@ -445,6 +532,7 @@ const getBookingDetails = async (req, res) => {
       .populate("service")
       .populate("provider")
       .populate("customer")
+      .populate("businessOwner")
 
 
     if (!booking) {

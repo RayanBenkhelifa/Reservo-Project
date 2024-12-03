@@ -80,9 +80,16 @@ const BusinessDetails = () => {
               services.map((service) => (
                 <div className="service-card" key={service._id}>
                   <h3>{service.serviceName}</h3>
-                  <p>Description: {service.description}</p>
-                  <p>Duration: {service.duration} minutes</p>
-                  <p>Price: ${service.price}</p>
+                  <p>
+                    <span>Description:</span> {service.description}
+                  </p>
+                  <p>
+                    {" "}
+                    <span>Duration:</span> {service.duration} minutes
+                  </p>
+                  <p>
+                    <span>Price:</span> {service.price} SAR{" "}
+                  </p>
 
                   {/* Pass businessId, serviceId, and serviceDuration to BusinessProvider */}
                   <Link

@@ -278,18 +278,20 @@ function BusinessServices() {
                     <td>{service.duration}</td>
                     <td>{service.price}</td>
                     <td>
-                      <button
-                        className="btn edit-btn"
-                        onClick={() => handleEdit(service)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="btn delete-btn"
-                        onClick={() => handleDelete(service._id)}
-                      >
-                        Delete
-                      </button>
+                      <div className="action-buttons">
+                        <button
+                          className="btn edit-btn"
+                          onClick={() => handleEdit(service)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="btn delete-btn"
+                          onClick={() => handleDelete(service._id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

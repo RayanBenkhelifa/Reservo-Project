@@ -20,6 +20,7 @@ const BookingConfirmationPage = () => {
 
           if (response.ok && data.success) {
             setBookingDetails(data.booking);
+            console.log(bookingDetails);
           } else {
             console.error("Failed to fetch booking details:", data.error);
           }
@@ -53,6 +54,9 @@ const BookingConfirmationPage = () => {
         {isBookingConfirmed ? (
           <>
             <p>Thank you for your booking!</p>
+            <p>
+              <strong>Business Name:</strong> {bookingDetails.businessName}
+            </p>
             <p>
               <strong>Service:</strong> {bookingDetails.serviceName}
             </p>

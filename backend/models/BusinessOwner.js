@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-// Check if the BusinessOwner model already exists before creating it
 const businessOwnerSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
@@ -21,7 +20,7 @@ const businessOwnerSchema = new mongoose.Schema({
     default: "", // Default to an empty string if no image is uploaded
   },
   imageMimeType: {
-    type: String, // MIME type of the image
+    type: String, 
     default: "", // Default to an empty string if no image is uploaded
   },
 });

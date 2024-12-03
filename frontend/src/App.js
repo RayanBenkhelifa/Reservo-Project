@@ -15,11 +15,10 @@ import SignupBusiness from "./component/Auth/SignupBusiness";
 import SignupCustomer from "./component/Auth/SignupCustomer";
 import ForgotPassword from "./component/Auth/ForgotPassword";
 import BusinessDetails from "./component/Customer/BusinessDetails";
-import UserType from "./component/UserType";
 import EditProfile from "./component/Business/EditProfile";
 import Contact from "./component/Contact";
+import UserType from "./component/UserType";
 import BrowseBusinesses from "./component/Customer/BrowseBusinesses";
-import SelectProvider from "./component/SelectProvider";
 import TimeSlots from "./component/Customer/TimeSlots";
 import SuccessPage from "./component/Customer/SuccessPage";
 import BookingConfirmation from "./component/Customer/BookingConfirmation";
@@ -27,6 +26,7 @@ import AddProvider from "./component/Business/AddProvider";
 import ReviewAndPayment from "./component/Customer/ReviewAndPayment";
 import CustomerBookings from "./component/Customer/CustomerBookings";
 import ReviewFeedback from "./component/Business/ReviewFeedback"; // Import the new ReviewFeedback component
+import Footer from "./component/Footer"; 
 import { AuthContext } from "./component/AuthContext";
 import "./styles.css";
 
@@ -127,7 +127,6 @@ function App() {
             }
           />
 
-          <Route path="/select-provider/:id" element={<SelectProvider />} />
           <Route
             path="/business-details/:businessId"
             element={<BusinessDetails />}
@@ -168,6 +167,8 @@ function App() {
           {/* Handle unknown routes */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
+        <Footer /> {/* Footer will appear on all pages */}
+
       </div>
     </Router>
   );

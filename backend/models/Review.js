@@ -1,7 +1,5 @@
-// models/Review.js
 const mongoose = require('mongoose');
 
-// Review Schema
 const reviewSchema = new mongoose.Schema({
     customer: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer', required: true },
     businessOwner: { type: mongoose.Schema.Types.ObjectId, ref: 'BusinessOwner', required: true },

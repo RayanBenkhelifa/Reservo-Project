@@ -46,11 +46,6 @@ function Home() {
           </div>
         </div>
       </section>
-      <footer className="footer">
-        <div className="container">
-          <p>Â© 2024 Reservo. All rights reserved.</p>
-        </div>
-      </footer>
     </>
   );
 }

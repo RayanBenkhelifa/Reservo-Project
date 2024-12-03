@@ -319,18 +319,20 @@ const AddProvider = () => {
                         .join(", ")}
                     </td>
                     <td>
-                      <button
-                        className="btn edit-btn"
-                        onClick={() => handleEdit(provider)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="btn delete-btn"
-                        onClick={() => handleDelete(provider._id)}
-                      >
-                        Delete
-                      </button>
+                      <div className="action-buttons">
+                        <button
+                          className="btn edit-btn"
+                          onClick={() => handleEdit(provider)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="btn delete-btn"
+                          onClick={() => handleDelete(provider._id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

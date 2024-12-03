@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// Check if the Customer model already exists before creating it
 const CustomerSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },

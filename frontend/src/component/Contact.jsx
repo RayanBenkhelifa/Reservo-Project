@@ -24,12 +24,6 @@ function Contact() {
           </form>
         </div>
       </section>
-
-      <footer className="footer">
-        <div className="container">
-          <p>© 2024 Reservo. All rights reserved.</p>
-        </div>
-      </footer>
     </>
   );
 }

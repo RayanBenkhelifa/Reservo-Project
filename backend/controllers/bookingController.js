@@ -111,19 +111,16 @@ const getAvailableSlots = async (req, res) => {
   try {
     const { providerId, selectedDate, serviceDuration } = req.body;
 
-    console.log("Selected Date:", selectedDate);
 
     // Get today's date at midnight (local time)
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    console.log("Today (midnight):", today);
 
     // Parse selectedDate into a Date object
     const [year, month, day] = selectedDate.split("-").map(Number);
     const selectedDateObj = new Date(year, month - 1, day);
 
-    console.log("Selected Date Object:", selectedDateObj);
 
     // Compare selectedDate with today
     if (selectedDateObj < today) {
@@ -156,7 +153,7 @@ const getAvailableSlots = async (req, res) => {
     if (selectedDateObj.getTime() === today.getTime()) {
       const currentTime = new Date();
 
-      console.log("Current Time:", currentTime);
+
 
       // Filter out past time slots
       timeSlots = timeSlots.filter((slot) => {
@@ -167,16 +164,13 @@ const getAvailableSlots = async (req, res) => {
         const slotTime = new Date(selectedDateObj);
         slotTime.setHours(hours, minutes, 0, 0);
 
-        console.log(`Slot Time for "${slot}":`, slotTime);
 
         // Compare slotTime with currentTime
         const isFuture = slotTime > currentTime;
-        console.log(`Is "${slot}" in the future?`, isFuture);
 
         return isFuture;
       });
 
-      console.log("Filtered Time Slots:", timeSlots);
     }
 
     // Fetch existing bookings for the selected date
@@ -186,7 +180,6 @@ const getAvailableSlots = async (req, res) => {
       paymentStatus: { $nin: ["canceled"] }, // Exclude canceled bookings
     });
 
-    console.log("Bookings on Selected Date:", bookingsOnDate);
 
     // Filter out booked slots
     const availableSlots = filterBookedSlots(
@@ -195,10 +188,6 @@ const getAvailableSlots = async (req, res) => {
       serviceDuration
     );
 
-    console.log(
-      "Available Slots after filtering booked slots:",
-      availableSlots
-    );
 
     res.status(200).json({
       message: "Available slots fetched successfully",
@@ -222,13 +211,6 @@ const createBooking = async (req, res) => {
       items,
     } = req.body;
 
-    console.log("EEEEEEEEEEEEEE",customerId,
-      providerId,
-      serviceId,
-      selectedDate,
-      startTime,
-      paymentOption,
-      items)
     const service = await Service.findById(serviceId);
     const provider = await Provider.findById(providerId);
 
@@ -459,9 +441,11 @@ const getBookingDetails = async (req, res) => {
 
   try {
     const booking = await Booking.findById(bookingId)
+    .populate('businessOwner')
       .populate("service")
       .populate("provider")
-      .populate("customer");
+      .populate("customer")
+
 
     if (!booking) {
       return res
@@ -470,6 +454,7 @@ const getBookingDetails = async (req, res) => {
     }
 
     const bookingDetails = {
+      businessName: booking.businessOwner.businessName, // Updated line
       serviceName: booking.service.serviceName,
       providerName: booking.provider.name,
       date: booking.date,
@@ -538,45 +523,64 @@ const updateBookingStatus = async (req, res) => {
 };
 
 // Controller to get customer bookings
+// Controller to get customer bookings
 const getCustomerBookings = async (req, res) => {
   const customerId = req.userId;
 
   try {
-    const now = new Date();
-    now.setHours(0, 0, 0, 0); // Optional: Set to midnight to compare dates only
-
-    // Fetch upcoming bookings
-    const upcomingBookings = await Booking.find({
+    // Fetch all bookings (both past and upcoming)
+    const allBookings = await Booking.find({
       customer: customerId,
-      date: { $gte: now },
-      paymentStatus: { $ne: "canceled" },
+      paymentStatus: { $ne: 'canceled' },
     })
       .populate({
-        path: "service",
-        select: "serviceName duration",
+        path: 'service',
+        select: 'serviceName duration',
       })
-      .populate("provider", "name")
-      .populate("businessOwner", "businessName")
+      .populate('provider', 'name')
+      .populate('businessOwner', 'businessName') // Ensure businessName is populated
       .lean();
 
-    // Fetch past bookings
-    const pastBookings = await Booking.find({
-      customer: customerId,
-      date: { $lt: now },
-      paymentStatus: { $ne: "canceled" },
-    })
-      .populate({
-        path: "service",
-        select: "serviceName duration",
-      })
-      .populate("provider", "name")
-      .populate("businessOwner", "businessName")
-      .lean();
+    const now = new Date(); // Current date and time in local time zone
+
+    const upcomingBookings = [];
+    const pastBookings = [];
+
+    allBookings.forEach((booking) => {
+      const date = booking.date;
+
+      // Extract hours and minutes from the startTime
+      let [hoursStr, minutesStr] = booking.startTime.split(':');
+      let hours = parseInt(hoursStr);
+      let minutes = parseInt(minutesStr);
+
+      // Handle AM/PM if startTime includes it (e.g., '2:30 PM')
+      if (/AM|PM/i.test(booking.startTime)) {
+        const period = booking.startTime.slice(-2).toUpperCase();
+        if (period === 'PM' && hours < 12) hours += 12;
+        if (period === 'AM' && hours === 12) hours = 0;
+      }
+
+      // Get local date components
+      const year = date.getFullYear();
+      const month = date.getMonth(); // Note: months are 0-indexed (0-11)
+      const day = date.getDate();
+
+      // Create bookingDateTime in local time
+      const bookingDateTime = new Date(year, month, day, hours, minutes, 0);
+
+      // Compare bookingDateTime with now
+      if (bookingDateTime >= now) {
+        upcomingBookings.push(booking);
+      } else {
+        pastBookings.push(booking);
+      }
+    });
 
     res.json({ upcomingBookings, pastBookings });
   } catch (error) {
-    console.error("Error fetching bookings:", error);
-    res.status(500).json({ message: "Error fetching bookings." });
+    console.error('Error fetching bookings:', error);
+    res.status(500).json({ message: 'Error fetching bookings.' });
   }
 };
 

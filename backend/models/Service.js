@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// Check if the Service model already exists before creating it
 const serviceSchema = new mongoose.Schema({
     serviceName: { type: String, required: true },
     description: String,

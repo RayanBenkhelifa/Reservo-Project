@@ -117,18 +117,24 @@ const CustomerBookings = () => {
         <table className="table">
           <thead>
             <tr>
+              <th>Business Name</th> {/* New column for Business Name */}
               <th>Service</th>
               <th>Provider</th>
               <th>Date</th>
               <th>Time</th>
               <th>Duration</th>
-              <th>Status</th>
+              <th>Payment Status</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {upcomingBookings.map((booking) => (
               <tr key={booking._id}>
+                <td>
+                  {booking.businessOwner
+                    ? booking.businessOwner.businessName
+                    : "Business not available"}
+                </td>
                 <td>
                   {booking.service
                     ? booking.service.serviceName
@@ -148,18 +154,20 @@ const CustomerBookings = () => {
                 </td>
                 <td>{booking.paymentStatus}</td>
                 <td>
-                  <button
-                    onClick={() => handleCancelBooking(booking._id)}
-                    className="btn cancel-btn"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={() => handleRescheduleBooking(booking)}
-                    className="btn reschedule-btn"
-                  >
-                    Reschedule
-                  </button>
+                  <div className="booking-actions">
+                    <button
+                      onClick={() => handleCancelBooking(booking._id)}
+                      className="btn cancel-btn"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={() => handleRescheduleBooking(booking)}
+                      className="btn reschedule-btn"
+                    >
+                      Reschedule
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -171,6 +179,7 @@ const CustomerBookings = () => {
         <table className="appointments-table">
           <thead>
             <tr>
+              <th>Business Name</th> {/* New column for Business Name */}
               <th>Service</th>
               <th>Provider</th>
               <th>Date</th>
@@ -181,6 +190,11 @@ const CustomerBookings = () => {
           <tbody>
             {pastBookings.map((booking) => (
               <tr key={booking._id}>
+                <td>
+                  {booking.businessOwner
+                    ? booking.businessOwner.businessName
+                    : "Business not available"}
+                </td>
                 <td>
                   {booking.service
                     ? booking.service.serviceName

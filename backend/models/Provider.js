@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-// Check if the Provider model already exists before creating it
 const providerSchema = new mongoose.Schema({
   name: { type: String, required: true },
   services: [{ type: mongoose.Schema.Types.ObjectId, ref: "Service" }],

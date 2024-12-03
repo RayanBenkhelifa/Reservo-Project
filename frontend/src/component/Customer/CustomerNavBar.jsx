@@ -53,9 +53,18 @@ const CustomerNavBar = () => {
           </Link>
           {authState.isAuthenticated ? (
             <>
-              <Link to="/customer-bookings" className="nav-link">
-                Manage Bookings
-              </Link>
+              {/* Conditionally render the link based on userType */}
+              {authState?.userType === "customer" && (
+                <Link to="/customer-bookings" className="nav-link">
+                  Manage Bookings
+                </Link>
+              )}
+              {authState?.userType === "businessOwner" && (
+                <Link to="/business-dashboard" className="nav-link">
+                  Business Dashboard
+                </Link>
+              )}
+              {/* Profile Menu */}
               <div className="profile-menu" ref={profileRef}>
                 <button onClick={toggleDropdown} className="profile-button">
                   <FaUserCircle className="profile-icon" />

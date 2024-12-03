@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// Check if the Booking model already exists before creating it
 const bookingSchema = new mongoose.Schema({
     customer: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer', required: true },
     provider: { type: mongoose.Schema.Types.ObjectId, ref: 'Provider', required: true },
